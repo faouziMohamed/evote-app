@@ -1,0 +1,30 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-rational-order",
+    "stylelint-config-prettier",
+    "stylelint-prettier/recommended"
+  ],
+  "plugins": [
+    "stylelint-group-selectors",
+    "stylelint-order",
+    "stylelint-config-rational-order/plugin",
+    "stylelint-a11y"
+  ],
+  "rules": {
+    "a11y/no-outline-none": true,
+    "a11y/selector-pseudo-class-focus": true,
+    "block-no-empty": true,
+    "prettier/prettier": true,
+    "plugin/stylelint-group-selectors": true,
+    "order/properties-order": [],
+    "plugin/rational-order": [
+      true,
+      {
+        "border-in-box-model": true,
+        "empty-line-between-groups": true
+      }
+    ],
+    "shorthand-property-no-redundant-values": true
+  }
+}
