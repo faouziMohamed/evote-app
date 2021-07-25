@@ -5,12 +5,13 @@ import logger from 'morgan';
 import path from 'path';
 
 import indexRouter from './resources/index';
-// import { initMockUser, User } from './resources/users/user.model';
+// import { User } from './resources/users/users.model';
 import usersRouter from './resources/users/users.router';
+// import { addRandomUserToDB } from './resources/users/users.utils';
 
 const app = express();
 
-// initMockUser(User);
+// addRandomUserToDB(9, User);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -22,7 +23,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/api/users', usersRouter);
+app.use('/api/u', usersRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

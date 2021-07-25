@@ -1,24 +1,26 @@
 import { sendError, sendSucces } from '../../utils/crud';
 import User from './users.model';
-
-// Get user document from the database using it username or userId
-const getOneUser = async (model, id = null, userName = null) => {
-  const query = id ? { _id: id } : { userName };
-  const user = await model.findOne(query, { password: false }).exec();
-  return user;
-};
+import {
+  findUserById,
+  findUserByUsername,
+  getMessage,
+  getOneUser,
+  getUserDataFromRequest,
+  verifyRequiredFields,
+  verifyUserExists,
+} from './users.utils';
 
 export const getUserById = (model) => async (req, res) => {
   try {
     const { id } = req.query;
 
     if (!id) {
-      return sendError(res, 401, 'Missing parameters, user id is required');
+      return sendError(res, 401, getMessage('uid'));
     }
 
-    const user = await getOneUser(model, id);
+    const user = await findUserById(model, id);
     if (!user) {
-      return sendError(res, 404, 'User not found');
+      return sendError(res, 404, getMessage({ reason: 404 }));
     }
     return sendSucces(res, 200, user);
   } catch (err) {
@@ -32,43 +34,26 @@ export const activateOneAccount = (model) => async (req, res) => {
   try {
     const { id } = req.query;
     if (!id) {
-      return sendError(
-        res,
-        401,
-        'Missing parameters, user id id required to activate the account',
-      );
+      return sendError(res, 401, getMessage('uidRqd'));
     }
 
-    const user = await getOneUser(model, id);
+    const user = await findUserByUsername(model, id);
     if (!user) {
-      return sendError(res, 404, 'User not found');
+      return sendError(res, 404, getMessage({ reason: 404 }));
     }
 
-    const { userName, email, password, isPDG, birthDate, firstName, lastName } =
-      req.body;
-    if (
-      !userName ||
-      !email ||
-      !password ||
-      !birthDate ||
-      !firstName ||
-      !lastName
-    ) {
-      return sendError(res, 400, 'Missing parameters');
+    if (verifyRequiredFields(req.body)) {
+      return sendError(res, 400, getMessage({ reason: 'fieldsRqd' }));
     }
 
-    const userData = {
-      userName,
-      email,
-      password,
-      birthDate,
-      name: { first: firstName, last: lastName },
-      hasAccountActivated: true,
-      isPDG: isPDG || false,
-    };
+    const userData = getUserDataFromRequest(req);
+    Object.keys(userData).forEach((key) => {
+      user[key] = userData[key];
+    });
+    // Using this method in order to call the pre save hook
+    await user.save();
 
-    await user.update(userData);
-    return sendSucces(res, 204, 'Account activated');
+    return sendSucces(res, 204, getMessage({ reason: 'activated' }));
   } catch (err) {
     return sendError(res, 400, err.message);
   }
@@ -78,11 +63,11 @@ export const getOneUserData = (model) => async (req, res) => {
   try {
     const { userName } = req.params;
     if (!userName) {
-      return sendError(res, 400, 'Missing parameters');
+      return sendError(res, 400, getMessage(400));
     }
     const user = await getOneUser(model, null, userName);
     if (!user) {
-      return sendError(res, 404, 'User not found');
+      return sendError(res, 404, getMessage({ reason: 404 }));
     }
     return sendSucces(res, 200, 'Account information', user);
   } catch (err) {
@@ -90,23 +75,20 @@ export const getOneUserData = (model) => async (req, res) => {
   }
 };
 
-// Add new User to the database with all fields not null in the schema
+// Add new User to the database : only admin can add new user
 export const createOneUser = (model) => async (req, res) => {
   try {
-    const { userName, email, password, isPDG, birthDate } = req.body;
-    if (!userName || !email || !password || !birthDate) {
-      return sendError(res, 400, 'Missing parameters');
+    if (verifyRequiredFields(req.body)) {
+      return sendError(res, 400, getMessage({ reson: 400 }));
     }
-
-    const userData = {
-      userName,
-      email,
-      password,
-      birthDate,
-      isPDG: isPDG || false,
-    };
-    const user = await model.create(userData);
-    return sendSucces(res, 201, 'Account created but not activated', user);
+    const userData = getUserDataFromRequest(req);
+    const userExists = await verifyUserExists({ model, userData });
+    if (userExists) {
+      return sendError(res, 400, getMessage(userExists));
+    }
+    await model.create(userData);
+    const message = getMessage({ reason: 'nactivated' });
+    return sendSucces(res, 201, message);
   } catch (err) {
     return sendError(res, 400, err.message);
   }
@@ -114,8 +96,8 @@ export const createOneUser = (model) => async (req, res) => {
 
 const controllers = (model) => ({
   activateOneAccount: activateOneAccount(model),
-  getOneUserData: getOneUserData(model),
   createOneUser: createOneUser(model),
+  getOneUserData: getOneUserData(model),
 });
 
 export default controllers(User);

@@ -2,21 +2,24 @@ import { Router } from 'express';
 
 import {
   activateOneAccount,
-  // createOneUser,
+  createOneUser,
   getOneUserData,
   getUserById,
 } from './users.controllers';
-import { User } from './users.model';
+import { User as UserModel } from './users.model';
 
 const router = Router();
 
-router.route('/').get(getUserById(User)).post(activateOneAccount(User));
+// handle GET && PUT (UPDATE) to /api/u/?id=:id&otherParams=:o
+router
+  .route('/')
+  .get(getUserById(UserModel))
+  .put(activateOneAccount(UserModel));
 
-/* GET users listing. */
-router.route('/:userName').get(getOneUserData(User));
-// .put(activateOneAccount)
-// .post(createOneUser);
+// handle POST to /api/u/create
+router.route('/create').post(createOneUser(UserModel));
 
-// router.route('/:userName').get(getOneUserData);
+// handle GET, POST, UPDATE to /api/u/:userName
+router.route('/:userName').get(getOneUserData(UserModel));
 
 export default router;

@@ -1,7 +1,12 @@
-import bcrypt from 'bcrypt';
 import { startCase, toLower } from 'lodash';
 import { model, Schema } from 'mongoose';
-import { names, uniqueNamesGenerator as nameGen } from 'unique-names-generator';
+
+import {
+  comparePassword,
+  encryptPassword,
+  lowerCaseEmail,
+  makeFieldLowercase,
+} from './users.utils';
 
 const userSchema = new Schema(
   {
@@ -9,7 +14,7 @@ const userSchema = new Schema(
       type: String,
       unique: true,
       required: [true, 'User name is required'],
-      maxLength: [50, 'User name must be less than 50 characters'],
+      maxLength: [50, 'User name must be less than 50 characters, got {VALUE}'],
       default: '',
     },
     email: {
@@ -69,40 +74,10 @@ userSchema.pre('save', function hashPassword(next) {
     next();
     return;
   }
-  bcrypt.genSalt(10, (err, salt) => {
-    if (err) {
-      next(err);
-      return;
-    }
-    bcrypt.hash(user.password, salt, (error, hash) => {
-      if (error) {
-        next(error);
-        return;
-      }
-      user.password = hash;
-      next();
-    });
-  });
+  encryptPassword(next, user);
 });
 
-const makeFieldLowercase = (field, user) => {
-  if (user.isModified(field)) {
-    return user[field].toLowerCase();
-  }
-  return user;
-};
-
-userSchema.pre('save', function lowerCaseEmail(next) {
-  const user = this;
-  user.email = makeFieldLowercase('email', user);
-  next();
-});
-
-userSchema.pre('save', function lowercaseUserName(next) {
-  const user = this;
-  user.userName = makeFieldLowercase('userName', user);
-  next();
-});
+userSchema.pre('save', lowerCaseEmail);
 
 userSchema.pre('save', function capitaliseNames(next) {
   const user = this;
@@ -113,42 +88,12 @@ userSchema.pre('save', function capitaliseNames(next) {
   next();
 });
 
-userSchema.methods.comparePassword = function comparePassword(password) {
-  const hashedPassword = this.password;
-  return new Promise((resolve, reject) => {
-    bcrypt.compare(password, hashedPassword, (err, isMatch) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(isMatch);
-    });
-  });
-};
+userSchema.pre('save', function lowercaseUserName(next) {
+  const user = this;
+  makeFieldLowercase('userName', user);
+  next();
+});
 
-const generateName = () =>
-  nameGen({
-    dictionaries: [names],
-    length: 1,
-    style: 'lowerCase',
-  });
-
-export const newUser = (UserModel) =>
-  new UserModel({
-    userName: generateName(),
-    email: `${generateName()}@glpc.ma`,
-    password: '123456789',
-    name: {
-      first: generateName(),
-      last: generateName(),
-    },
-    birthDate: new Date(),
-  });
-
-export const initMockUser = (howMany = 5, UserModel) => {
-  for (let i = 0; i < howMany; i++) {
-    UserModel.create(newUser(UserModel));
-  }
-};
+userSchema.methods.comparePassword = comparePassword;
 
 export const User = model('User', userSchema);
