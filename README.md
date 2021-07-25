@@ -15,7 +15,7 @@ A simulation of online voting using basic nodejs, express and openPGP for encryp
       # Or using the ssh link
       git git@github.com:faouziMohamed/evote-app.git
     ```
-1. Change to directory to `evote-app` and install dependencies:
+1. Change directory to `evote-app` and install dependencies:
     ```bash
       cd evote-app
     ```
