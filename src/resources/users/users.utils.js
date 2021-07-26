@@ -22,7 +22,13 @@ export const newUser = (UserModel) =>
 
 export const addRandomUserToDB = (howMany = 5, UserModel) => {
   for (let i = 0; i < howMany; i++) {
-    UserModel.create(newUser(UserModel));
+    try {
+      UserModel.create(newUser(UserModel));
+    } catch (e) {
+      console.log(e);
+    } finally {
+      console.log(`User ${i + 1} added to DB`);
+    }
   }
 };
 
@@ -105,11 +111,13 @@ export function getUserDataFromRequest(req) {
     userName,
     email,
     password,
-    isPDG,
+    isPdg,
+    isAdmin,
     birthDate,
-    hasAccountActivated,
+    hasVoted,
     firstName,
     lastName,
+    accountActivated,
   } = req.body;
 
   const userData = {
@@ -118,8 +126,10 @@ export function getUserDataFromRequest(req) {
     password,
     name: { first: firstName, last: lastName },
     birthDate,
-    isPDG: isPDG || false,
-    hasAccountActivated: hasAccountActivated || false,
+    isPdg: isPdg || false,
+    isAdmin: isAdmin || false,
+    hasVoted: hasVoted || false,
+    accountActivated: accountActivated || false,
   };
   return userData;
 }

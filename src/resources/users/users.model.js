@@ -47,9 +47,10 @@ const userSchema = new Schema(
       },
     },
     birthDate: { type: Date, required: true, default: '' },
-    isPDG: { type: Boolean, default: false },
+    isPdg: { type: Boolean, default: false },
+    isAdmin: { type: Boolean, default: false },
     hasVoted: { type: Boolean, default: false },
-    hasAccountActivated: { type: Boolean, default: false },
+    accountActivated: { type: Boolean, default: false },
   },
   { timeStamp: true },
 );

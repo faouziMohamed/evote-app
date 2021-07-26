@@ -3,8 +3,8 @@ module.exports = {
     es2021: true,
   },
   extends: ['airbnb-base', 'prettier', 'plugin:promise/recommended'],
+  parser: '@babel/eslint-parser',
   parserOptions: {
-    ecmaVersion: 12,
     sourceType: 'module',
   },
   rules: {
@@ -19,6 +19,7 @@ module.exports = {
     'promise/catch-or-return': 'error',
     'no-console': 'warn',
     'no-alert': 'error',
+    'no-empty': 'error',
     'no-implicit-coercion': 'warn',
     'no-var': 'warn',
     'no-empty-function': 'warn',

@@ -14,8 +14,6 @@
     "./**/*.css",
     "./**/*.md"
   ],
-  "env": {
-    "NODE_ENV": "development"
-  },
+
   "ext": "js,json,css,ejs"
 }

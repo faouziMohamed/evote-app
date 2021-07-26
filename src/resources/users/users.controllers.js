@@ -4,7 +4,6 @@ import {
   findUserById,
   findUserByUsername,
   getMessage,
-  getOneUser,
   getUserDataFromRequest,
   verifyRequiredFields,
   verifyUserExists,
@@ -13,7 +12,6 @@ import {
 export const getUserById = (model) => async (req, res) => {
   try {
     const { id } = req.query;
-
     if (!id) {
       return sendError(res, 401, getMessage('uid'));
     }
@@ -32,25 +30,28 @@ export const getUserById = (model) => async (req, res) => {
 // User id is already present to the database or will be added by a adminitrator
 export const activateOneAccount = (model) => async (req, res) => {
   try {
+    // Ensure the user id passed in params
     const { id } = req.query;
     if (!id) {
       return sendError(res, 401, getMessage('uidRqd'));
     }
 
-    const user = await findUserByUsername(model, id);
+    // Ensure the user exists
+    const user = await findUserById(model, id);
     if (!user) {
       return sendError(res, 404, getMessage({ reason: 404 }));
     }
 
+    // Ensure that required fields are present in the request body
     if (verifyRequiredFields(req.body)) {
       return sendError(res, 400, getMessage({ reason: 'fieldsRqd' }));
     }
 
+    // Update user document with the passed data
     const userData = getUserDataFromRequest(req);
     Object.keys(userData).forEach((key) => {
       user[key] = userData[key];
     });
-    // Using this method in order to call the pre save hook
     await user.save();
 
     return sendSucces(res, 204, getMessage({ reason: 'activated' }));
@@ -65,7 +66,7 @@ export const getOneUserData = (model) => async (req, res) => {
     if (!userName) {
       return sendError(res, 400, getMessage(400));
     }
-    const user = await getOneUser(model, null, userName);
+    const user = await findUserByUsername(model, userName);
     if (!user) {
       return sendError(res, 404, getMessage({ reason: 404 }));
     }

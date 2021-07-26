@@ -8,6 +8,7 @@ import 'regenerator-runtime/runtime';
 import http from 'http';
 
 import app from '../app';
+import Config from '../config/config';
 import { connectDB } from '../utils/db';
 
 /**
@@ -32,7 +33,7 @@ const normalizePort = (val) => {
 /**
  * Get port from environment and store in Express.
  */
-const port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(Config.PORT || '3000');
 app.set('port', port);
 
 /**
