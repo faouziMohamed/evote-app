@@ -1,6 +1,6 @@
 import openpgp from 'openpgp';
 
-export class Message {
+export class MessageEncryption {
   #message = {};
 
   #messageEncrypted = {};
