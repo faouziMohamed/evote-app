@@ -34,12 +34,23 @@ A simulation of online voting using basic nodejs, express and openPGP for encryp
      ```bash
      yarn
      ```
-
+1. For testing purpose create a file called `.env` in the root of the project (`evote-app`) and paste the following content:  
+    This file will not be stagged into Git, Keep it only localy.
+    ```plain
+      JWT_SECRET = 'superPassword'
+      JWT_EXPIRY = '30d'
+      JWT_ALGORITHM = 'HS256'
+      PORT = '3000'
+      DB_URL = 'mongodb://localhost:27017/evote-app'
+    ```
 1. Then run tests on local typing:
    |npm |-| yarn|
    |-----|-|----|
    |`npm run dev`|Or|`yarn dev`|
 1. Open in your browser the url http://localhost:3000 to see result
+
+### PROGRESS
+For now only **RESTFULL API** are being built, use a tool like [Insomnia](https://insomnia.rest/download "Go to download page of Insomnia") or [Postman](https://www.postman.com/downloads/ "Download page of Postman") to test API routes.
 
 ## 🆗 That's it!!!
 
