@@ -16,6 +16,11 @@ module.exports = {
       },
       { usePrettierrc: true },
     ],
+    'lines-between-class-members': [
+      'error',
+      'always',
+      { exceptAfterSingleLine: true },
+    ],
     'promise/catch-or-return': 'error',
     'no-console': 'warn',
     'no-alert': 'error',
