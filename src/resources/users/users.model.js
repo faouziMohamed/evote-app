@@ -46,6 +46,11 @@ const userSchema = new Schema(
         maxLength: [100, 'Last name must be less than 100 characters'],
       },
     },
+    cin: {
+      type: Number,
+      required: true,
+      unique: true,
+    },
     birthDate: { type: Date, required: true, default: '' },
     isPdg: { type: Boolean, default: false },
     isAdmin: { type: Boolean, default: false },

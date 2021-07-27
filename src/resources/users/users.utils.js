@@ -1,6 +1,35 @@
 import bcrypt from 'bcrypt';
 import { names, uniqueNamesGenerator as nameGen } from 'unique-names-generator';
 
+import BaseConfig from '../../config/config';
+
+export class StaticData {
+  static cin = Number(10000);
+  static numberUserAdded = Number(0);
+  static getNewCin() {
+    // eslint-disable-next-line no-plusplus
+    return this.cin++;
+  }
+
+  static setCin(cin) {
+    this.cin = cin;
+    this.setNumberUserAdded(cin);
+  }
+
+  static setNumberUserAdded(numberUserAdded) {
+    this.numberUserAdded = numberUserAdded;
+  }
+
+  static incrementNumberAdded() {
+    // eslint-disable-next-line no-plusplus
+    this.numberUserAdded++;
+  }
+
+  static getNumberUserAdded() {
+    return this.numberUserAdded;
+  }
+}
+
 const generateName = () =>
   nameGen({
     dictionaries: [names],
@@ -8,28 +37,41 @@ const generateName = () =>
     style: 'lowerCase',
   });
 
-export const newUser = (UserModel) =>
-  new UserModel({
+export const newUser = (UserModel) => {
+  const user = new UserModel({
     userName: generateName(),
-    email: `${generateName()}@glpc.ma`,
+    email: `${generateName()}@${generateName()}-glpc.ma`,
     password: '123456789',
     name: {
       first: generateName(),
       last: generateName(),
     },
+    cin: StaticData.getNewCin(),
     birthDate: new Date(),
   });
+  try {
+    UserModel.create(user);
+    StaticData.incrementNumberAdded();
+    return user;
+  } catch (err) {
+    return null;
+  }
+};
 
-export const addRandomUserToDB = (howMany = 5, UserModel) => {
+export const addRandomUserToDB = async (howMany = 5, UserModel) => {
+  const users = await UserModel.find({}).sort({ cin: -1 }).limit(1).exec();
+  const _ = users.length && StaticData.setCin(users[0].cin + 1);
+  let user;
+  // eslint-disable-next-line no-console
+  console.log(StaticData.getNumberUserAdded());
   for (let i = 0; i < howMany; i++) {
-    try {
-      UserModel.create(newUser(UserModel));
-    } catch (e) {
-      console.log(e);
-    } finally {
-      console.log(`User ${i + 1} added to DB`);
+    user = newUser(UserModel);
+    if (!user) return !1;
+    if (BaseConfig.env === 'development') {
+      console.log(`User ${StaticData.getNumberUserAdded()} added`);
     }
   }
+  return true;
 };
 
 export const makeFieldLowercase = (field, document) => {
@@ -86,16 +128,17 @@ export const findUserById = async (model, id) =>
   model.findOne({ _id: id }).exec();
 
 // Get user document from the database using it username or userId
-export const getOneUser = async (
+export const findOneUser = async ({
   model,
   id = null,
   userName = null,
   email = null,
-) => {
+}) => {
   const user =
     (id && (await findUserById(model, id))) ||
     (userName && (await findUserByUsername(model, userName))) ||
-    (email && (await findUserByEmail(model, email)));
+    (email && (await findUserByEmail(model, email))) ||
+    null;
   return user;
 };
 
@@ -142,11 +185,16 @@ const message = {
   emailUsed: 'The email is already used',
   userNameUsed: 'The user name is already used',
   fieldsRqd: 'Missing parameters, some fields are required',
+  passErr: 'Incorrect Password',
+  201: 'Account created but not activated',
   404: 'User not found',
+  401: 'Connect and retry the operation',
   400: 'Missing parameters',
   403: 'User already activated',
+  500: 'Internal server error',
 };
-export const getMessage = ({ reason }) => message[reason] || 'Unexpected error';
+export const getMessage = ({ reason }) =>
+  ({ message: message[reason] } || 'Unexpected error');
 
 export const verifyUserExists = async ({ model, userData }) => {
   const { email, userName } = userData;
