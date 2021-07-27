@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="<%= description %>" />
+    <link rel="stylesheet" href="/css/login.css" />
+    <title><%= title %> | <%= appName %></title>
+  </head>
+  <body class="main-body">
+    <section class="body-content">
+      <h1 class="title"><%= pageTitle %></h1>
+
+      <form action="/signup" method="post" class="auth-form">
+        <section class="form-content">
+          <div class="row-content identifiant">
+            <label for="userName" class="label-auth">
+              <%= usernameLabel %> :
+            </label>
+            <input
+              type="text"
+              id="userName"
+              name="userName"
+              class="input-field pass-auth"
+            />
+          </div>
+
+          <div class="row-content identifiant">
+            <label for="email" class="label-auth"> <%= emailLabel %> : </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="input-field pass-auth"
+            />
+          </div>
+
+          <div class="row-content identifiant">
+            <label for="cin" class="label-auth"> <%= cinLabel %> : </label>
+            <input
+              type="number"
+              id="cin"
+              name="cin"
+              class="input-field pass-auth"
+            />
+          </div>
+
+          <div class="row-content password">
+            <label for="password" class="label-auth">
+              <%= passwordLabel %> :
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="input-field pass-auth"
+            />
+          </div>
+          <div class="row-content btn-row">
+            <button class="reset-btn" type="reset"><%= resetBtn %></button>
+            <button class="submit-btn" type="submit"><%= submitBtn %></button>
+          </div>
+        </section>
+      </form>
+    </section>
+  </body>
+</html>
