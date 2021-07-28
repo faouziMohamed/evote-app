@@ -1,0 +1,80 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+body {
+  background-image: url('../images/vote.jpg');
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+body,
+html {
+  height: 100%;
+}
+.all-body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  opacity: 0.5;
+}
+.wrap-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+.title-evote,
+.text-evote {
+  color: white;
+}
+.text-evote {
+  font-size: 30px;
+}
+.title-evote {
+  font-size: 130px;
+}
+.all-title {
+  text-align: center;
+}
+.navigation {
+  position: absolute;
+  z-index: 101;
+  display: flex;
+  width: 100%;
+}
+.logo-img {
+  flex-grow: 0;
+}
+.wrap-link {
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 18px;
+}
+.login {
+  text-decoration: none;
+  color: white;
+  padding: 10px;
+  background-color: rgb(132, 204, 180);
+  font-size: 20px;
+  border-radius: 10%;
+}
+.log-up {
+  background-color: rgb(214, 148, 109);
+  margin-right: 10px;
+}
+.login:hover {
+  text-decoration: underline;
+}
