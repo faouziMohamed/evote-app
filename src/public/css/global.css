@@ -19,6 +19,7 @@ a:visited {
   text-decoration: none;
 }
 
-:is(a, a:visited):hover {
+:is(a, a:visited):hover,
+:is(a, a:visited):focus {
   text-decoration: underline;
 }
