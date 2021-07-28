@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=PT+Sans&display=swap');
-@import url('https://pro.fontawesome.com/releases/v5.15.2/css/all.css');
+/* @import url('https://pro.fontawesome.com/releases/v5.15.2/css/all.css'); */
 
 *,
 *::before,
@@ -10,13 +9,8 @@
 }
 
 html {
-  height: 100vh;
-}
-
-a,
-a:visited {
-  color: #022045;
-  text-decoration: none;
+  height: 100%;
+  width: 100%;
 }
 
 :is(a, a:visited):hover,
