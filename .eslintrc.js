@@ -1,6 +1,7 @@
 module.exports = {
   env: {
     es2021: true,
+    browser: true,
   },
   extends: ['airbnb-base', 'prettier', 'plugin:promise/recommended'],
   parser: '@babel/eslint-parser',
