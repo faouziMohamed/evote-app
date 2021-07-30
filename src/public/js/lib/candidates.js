@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 import { getDataFromCookie, redirectTo } from './index.js';
 
-export const getCandidates = () => {
+export const getCandidatesEvent = () => {
   const ul = document.querySelector('.list-candidates');
   if (!ul) return;
 
@@ -12,7 +12,6 @@ export const getCandidates = () => {
     } catch (e) {
       redirectTo('/login');
     }
-
     fetch('/api/candidates/all', {
       method: 'GET',
       headers: {
@@ -24,10 +23,10 @@ export const getCandidates = () => {
         ul.innerHTML = '';
         const { data } = res;
         data.forEach((item) => {
-          const { candidate } = item;
+          const { details } = item;
           const li = document.createElement('li');
-          const name = { ...candidate.name };
-          const path = `/candidate/${candidate.cin}`;
+          const name = { ...details.name };
+          const path = `/candidate/${details.cin}`;
           li.innerHTML = `<a href="${path}">${name.first} ${name.last}</a>`;
           ul.appendChild(li);
         });

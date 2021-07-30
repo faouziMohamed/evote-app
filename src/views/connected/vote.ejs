@@ -1,0 +1,32 @@
+<main class="main-content">
+  <!-- prettier-ignore -->
+  <% candidates.forEach((c) =>{ %> 
+    <% let name, cin; %> 
+    <% name=`${c.first}
+    ${c.last}`; cin=c.cin; %> 
+    <%- include('vote-partials/candidateCard',{name, cin});%> 
+  <% }) ;%>
+
+  <div class="candidate-card">
+    <div class="candidate-card-item candidate-img-wrapper">
+      <i class="fad fa-user candidate-icon"></i>
+      <!-- <img src="/images/vote.jpg" width="200" class="candidate-img" alt="photo"> -->
+    </div>
+    <div class="candidate-card-item candidate-description">
+      <div class="candidate-desc-wrapper">
+        <h1>Faouzi Mohamed</h1>
+        <small class="candidate-desc">Etudiant en Master GLPC</small>
+      </div>
+    </div>
+    <div class="candidate-card-item vote-wrapper">
+      <div class="checkbox-input-wrapper">
+        <small class="prevent-before-vote">Activate here →</small>
+        <label id="switch" class="switch">
+          <input type="checkbox" id="slider" class="hidden vote-checkbox" />
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <button class="vote-btn">Vote now</button>
+    </div>
+  </div>
+</main>

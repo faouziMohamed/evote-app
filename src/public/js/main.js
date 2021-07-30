@@ -1,4 +1,5 @@
 /* eslint-disable import/extensions */
+import { getCandidatesEvent } from './lib/candidates.js';
 import {
   handleAutoTypingTexts,
   handleHeaderMenu,
@@ -9,4 +10,5 @@ import {
   handleHeaderMenu();
   handleUserVote();
   handleAutoTypingTexts();
+  getCandidatesEvent();
 })();
