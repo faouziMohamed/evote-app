@@ -1,35 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page | Evote</title>
+    <link
+      rel="shortcut icon"
+      href="/images/logo/favicon-32x32.png"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" type="text/css" href="/css/home.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home Page | Evote</title>
-  <link rel="stylesheet" href="/css/home.css">
-</head>
-
-<body>
-  <div class="all-body"></div>
-  <div class="navigation">
-    <div class="logo-img">
-      <a href="#"><img src="/images/e-vote-ws.svg" width="100" alt="Logo"></a>
+  <body>
+    <div class="all-body"></div>
+    <div class="navigation">
+      <div class="logo-img">
+        <a href="/">
+          <img src="/images/e-vote-ws.svg" width="100" alt="Logo" />
+        </a>
+      </div>
+      <div class="wrap-link">
+        <a href="/signup" class="login log-up">Sign Up</a>
+        <a href="/login" class="login log-in">Log in</a>
+      </div>
     </div>
-    <div class="wrap-link">
-      <a href="#" class="login log-up">Sign Up</a>
-      <a href="#" class="login log-in">Log in</a>
+    <div class="wrap-title">
+      <div class="all-title">
+        <h1 class="title-evote">Evote</h1>
+        <p class="text-evote">
+          Online vote,
+          <span
+            class="txt-rotate"
+            data-period="2000"
+            data-rotate='[ "Crypted.", "Secured." ]'
+          >
+          </span>
+        </p>
+      </div>
     </div>
-  </div>
-  <div class="wrap-title">
-    <div class="all-title">
-      <h1 class="title-evote">Evote</h1>
-      <p class="text-evote">App for vote,
-        <span class="txt-rotate" data-period="2000" data-rotate='[ "Crypted.", "Secured." ]'></span>
-      </p>
-    </div>
-  </div>
-  <script src="/js/autotext.js" type="module" async></script>
-
-</body>
-
+    <script src="/js/autotext.js" type="text/javascript" async></script>
+  </body>
 </html>
