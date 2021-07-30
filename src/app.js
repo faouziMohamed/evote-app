@@ -7,6 +7,7 @@ import path from 'path';
 
 import { protect } from './resources/auth/auth.controllers';
 import authRouter from './resources/auth/auth.router';
+import voteRouter from './resources/connected/votes.router';
 import indexRouter from './resources/index';
 // import { User } from './resources/users/users.model';
 import usersRouter from './resources/users/users.router';
@@ -26,6 +27,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/vote', voteRouter);
 app.use('/api', protect);
 app.use(authRouter);
 app.use('/api/u', usersRouter);
