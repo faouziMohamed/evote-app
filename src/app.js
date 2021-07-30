@@ -2,7 +2,6 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import expressLayout from 'express-ejs-layouts';
-// import { addRandomUserToDB } from './resources/users/users.utils';
 import createError from 'http-errors';
 import logger from 'morgan';
 import path from 'path';
@@ -18,9 +17,10 @@ import voteRouter from './resources/connected/votes.router';
 import indexRouter from './resources/index';
 // import { User } from './resources/users/users.model';
 import usersRouter from './resources/users/users.router';
+// import { addRandomUserToDB } from './resources/users/users.utils';
 
 const app = express();
-// addRandomUserToDB(100, User).catch(() => {});
+// addRandomUserToDB(200, User).catch(() => {});
 // view engine setup
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
