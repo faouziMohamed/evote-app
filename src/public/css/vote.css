@@ -2,8 +2,8 @@
 
 * {
   box-sizing: border-box;
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 
 body,
@@ -18,11 +18,11 @@ html {
 }
 
 .main-content {
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 0.6em;
   align-items: center;
+  overflow-y: auto;
 }
 
 .candidate-card-item:not(:first-child):not(:last-child) {
@@ -32,12 +32,12 @@ html {
 .candidate-card {
   display: flex;
   flex-direction: column;
-  background-color: #828a94;
   gap: 2px;
-  margin-block-start: 5px;
+  width: 90%;
   border: 1px solid #2b60ff82;
   border-radius: 13px;
-  width: 90%;
+  background-color: #828a94;
+  margin-block-start: 5px;
 }
 
 .candidate-card-item {
@@ -47,8 +47,8 @@ html {
   padding-block: 0.5em;
 }
 .candidate-card-item:first-child {
-  border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
 .candidate-card-item:last-child {
   border-top-left-radius: 0;
@@ -56,29 +56,30 @@ html {
 }
 
 .candidate-img-wrapper {
-  padding: 0.5em;
   display: flex;
   justify-content: center;
   min-width: 0;
+  padding: 0.5em;
 }
 .candidate-img {
-  border-radius: 13px;
   width: 100%;
+  border-radius: 13px;
 }
 .candidate-icon {
+  display: block;
+  flex-basis: 120px;
   color: #070066;
   font-size: 100px;
-  display: block;
   text-align: center;
-  flex-basis: 120px;
 }
 
 .candidate-description {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   padding-inline: 0.4em;
+
   /* background-color: #50ff7c; */
 }
 .candidate-desc-wrapper {
@@ -90,19 +91,18 @@ html {
 }
 .candidate-desc {
   display: block;
+  max-width: 250px;
+  overflow: hidden;
   color: #20232c;
   font-style: italic;
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 250px;
 }
 .vote-wrapper {
   display: flex;
-  justify-content: center;
   flex-direction: column;
   align-items: center;
-  /* background-color: #ffff50; */
+  justify-content: center;
 }
 .check {
   display: flex;
@@ -114,21 +114,22 @@ html {
 
 .vote-btn {
   display: block;
-  background-color: #38b70b;
-  border: none;
+  display: inline-block;
   padding: 1em 2em;
+  border: none;
+  border-radius: 2px;
   color: white;
   font-weight: bolder;
+  font-size: 1em;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
-  font-size: 1em;
+  background-color: #38b70b;
+  background-image: linear-gradient(189deg, #189718, #31c113, #1d6005);
   cursor: not-allowed;
   opacity: 0.5;
-  border-radius: 2px;
-  background-image: linear-gradient(189deg, #189718, #31c113, #1d6005);
 }
-.vote-btn:hover {
+.vote-btn:hover,
+.vote-btn:focus {
   background-color: rgb(33, 114, 86);
 }
 .enabled {
@@ -139,24 +140,23 @@ html {
 @media (min-width: 500px) {
   .main-content {
     flex-direction: row;
-    justify-content: center;
-    /* align-items: center; */
     flex-wrap: wrap;
+    justify-content: center;
   }
 
   .candidate-card {
     display: flex;
-    height: 450px;
+    flex: 1 1 30%;
     flex-direction: column;
-    border-radius: 13px;
     width: 100%;
     max-width: 300px;
-    flex: 1 1 30%;
+    height: 450px;
+    border-radius: 13px;
   }
   .candidate-img-wrapper {
+    flex: 1 1 auto;
     align-items: center;
     justify-content: center;
-    flex: 1 1 auto;
     height: 170px;
   }
 
@@ -168,8 +168,8 @@ html {
   }
   .candidate-card-item:first-child {
     border-top-right-radius: 13px;
-    border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
   }
   .candidate-card-item:last-child {
     border-top-left-radius: 0;
@@ -191,37 +191,37 @@ html {
   flex-direction: column;
 }
 
-.hidden {
+.opaqued {
   opacity: 0;
 }
 .prevent-before-vote {
-  font-size: 0.8em;
   display: block;
+  font-size: 0.8em;
 }
 
-/*Objects in the web site : theme toogler, toTop button and burger button */
+/* Objects in the web site : theme toogler, toTop button and burger button */
 .switch {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   width: 4px;
-  position: relative;
 }
 .vote-checkbox {
   position: absolute;
 }
 
-/*End Enxtending theme variables*/
+/* End Enxtending theme variables */
 
 /* The slider */
 .slider {
   display: flex;
-  align-items: center;
   flex-basis: 100%;
+  align-items: center;
   height: 10px;
-  transition: 0.4s;
   cursor: pointer;
+  transition: 0.4s;
 }
 
 input:focus + .slider {
@@ -230,28 +230,67 @@ input:focus + .slider {
 
 .slider::before {
   --size: 25px;
-  content: '';
+
   display: flex;
   align-items: center;
-  height: var(--size);
-  box-shadow: 1px 1px 15px #69dc2f;
   width: var(--size);
+  height: var(--size);
   border: 1px solid rgb(0, 139, 163);
-  transform: translateX(0px);
   font-size: 209%;
-  transition: 0.4s;
   font-family: 'Font Awesome 5 Pro', sans-serif;
+  box-shadow: 1px 1px 15px #69dc2f;
+  transform: translateX(0);
+  transition: 0.4s;
+  content: '';
 }
 
 input:checked + .slider::before {
   --size: 25px;
-  content: '\f00c';
+
   display: flex;
-  font-size: 180%;
   align-items: center;
-  height: var(--size);
   width: var(--size);
+  height: var(--size);
   border: 1px solid rgb(116, 124, 122);
-  background-color: rgb(197, 253, 200);
   color: rgb(0, 72, 0);
+  font-size: 180%;
+  background-color: rgb(197, 253, 200);
+  content: '\f00c';
+}
+
+@media (max-height: 570px) {
+  .main-content {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    max-width: none;
+    background-color: #070066;
+  }
+
+  .candidate-card {
+    flex: 0 0 auto;
+    flex-direction: row;
+    width: 80%;
+    max-width: none;
+    height: auto;
+    height: 175px;
+    max-height: none;
+  }
+  .candidate-card-item:first-child {
+    border-radius: 13px 0 0 13px;
+  }
+  .candidate-card-item:last-child {
+    padding: 1rem;
+    border-radius: 0 13px 13px 0;
+  }
+
+  .candidate-img-wrapper {
+    align-items: stretch;
+    height: auto;
+  }
+  .candidate-img {
+    padding-inline: 4px;
+    flex: 0.4 0 15rem;
+    border-radius: 13px;
+  }
 }

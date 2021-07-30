@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="shortcut icon"
+      href="/images/logo/favicon-32x32.png"
+      type="image/x-icon"
+    />
     <meta name="description" content="<%= description %>" />
     <link rel="stylesheet" href="/css/login.css" />
     <title><%= title %> | <%= appName %></title>
@@ -22,7 +27,9 @@
               type="text"
               id="userName"
               name="userName"
+              minlength="2"
               class="input-field pass-auth"
+              required
             />
           </div>
 
@@ -33,16 +40,20 @@
               id="email"
               name="email"
               class="input-field pass-auth"
+              required
             />
           </div>
 
           <div class="row-content identifiant">
             <label for="cin" class="label-auth"> <%= cinLabel %> : </label>
             <input
-              type="number"
               id="cin"
+              type="number"
+              title="Numbers only, please."
               name="cin"
+              pattern="\d*"
               class="input-field pass-auth"
+              required
             />
           </div>
 
@@ -55,6 +66,20 @@
               id="password"
               name="password"
               class="input-field pass-auth"
+              required
+            />
+          </div>
+
+          <div class="row-content">
+            <label for="birthDate" class="label-auth">
+              <%= birthdateLabel %> :
+            </label>
+            <input
+              type="date"
+              id="birthDate"
+              name="birthDate"
+              class="input-field"
+              required
             />
           </div>
           <div class="row-content btn-row">
@@ -64,5 +89,6 @@
         </section>
       </form>
     </section>
+    <!-- <script type="text/javascript" src="validator.min.js"></script> -->
   </body>
 </html>
