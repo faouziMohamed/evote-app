@@ -1,4 +1,4 @@
-class TxtRotate {
+export default class TxtRotate {
   constructor(el, toRotate, period) {
     this.toRotate = toRotate;
     this.el = el;
@@ -46,23 +46,23 @@ class TxtRotate {
   }
 }
 
-window.addEventListener('load', () => {
-  const elements = document.getElementsByClassName('txt-rotate');
-  for (let i = 0; i < elements.length; i++) {
-    const toRotate = elements[i].dataset.rotate;
-    const { period } = elements[i].dataset;
-    if (toRotate) {
-      const txtRotate = new TxtRotate(
-        elements[i],
-        JSON.parse(toRotate),
-        period,
-      );
-      txtRotate.run();
-    }
-  }
-  // INJECT CSS
-  const css = document.createElement('style');
-  css.setAttribute('type', 'text/css');
-  css.innerHTML = '.txt-rotate > .wrap { border-right: 0.08em solid #666 }';
-  document.body.appendChild(css);
-});
+export const handleAutoTypingTexts = () => {
+  window.addEventListener('load', () => {
+    const elements = document.querySelectorAll('.txt-rotate');
+    if (!elements) return;
+    elements.forEach((el) => {
+      const toRotate = el.dataset.rotate;
+      const { period } = el.dataset;
+      if (toRotate) {
+        const txtRotate = new TxtRotate(el, JSON.parse(toRotate), period);
+        txtRotate.run();
+      }
+    });
+
+    // INJECT CSS
+    const css = document.createElement('style');
+    css.setAttribute('type', 'text/css');
+    css.innerHTML = '.txt-rotate > .wrap { border-right: 0.08em solid #666 }';
+    document.body.appendChild(css);
+  });
+};
