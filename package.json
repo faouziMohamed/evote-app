@@ -71,5 +71,8 @@
     "./**/*.{js}": "eslint --cache --fix",
     "./styles/*.css": "stylelint --fix",
     "./**/*.{js,json,md,css,ejs,html}": "prettier --write"
+  },
+  "engines": {
+    "node": "14.17.3"
   }
 }

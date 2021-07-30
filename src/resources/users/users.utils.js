@@ -52,7 +52,7 @@ const generateName = () =>
 export const newUser = (UserModel) => {
   const numberCandidate = StaticData.candidateNumber;
   const isTrue = Math.round(Math.random() * 10) % 2 === 0;
-  const addACandidate = numberCandidate < 20 && isTrue;
+  const addACandidate = numberCandidate < 5 && isTrue;
   if (addACandidate) StaticData.incNumberCandidateAdded();
 
   const user = new UserModel({

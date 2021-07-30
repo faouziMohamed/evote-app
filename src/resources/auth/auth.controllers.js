@@ -142,15 +142,25 @@ export const loginPOST = async (req, res) => {
 export const loginGET = (req, res) => {
   const lang = 'en';
   res.render('auth/login.ejs', {
+    layout: false,
     ...CMSAuth[lang].login,
     ...CMSAuth[lang].meta,
+    metadata: {
+      title: CMSAuth[lang].login.title,
+      description: CMSAuth[lang].login.description,
+    },
   });
 };
 
 export const signupGET = (req, res) => {
   const lang = 'en';
   res.render('auth/signup.ejs', {
+    layout: false,
     ...CMSAuth[lang].signup,
     ...CMSAuth[lang].meta,
+    metadata: {
+      title: CMSAuth[lang].signup.title,
+      description: CMSAuth[lang].signup.description,
+    },
   });
 };
