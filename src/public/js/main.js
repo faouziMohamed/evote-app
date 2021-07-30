@@ -1,4 +1,6 @@
 /* eslint-disable import/extensions */
+import { handleAutoTypingTexts } from './autotext.js';
+import { handleHeaderMenu, handleUserVote } from './lib.js';
 import { getDataFromCookie, redirectTo } from './lib/lib.js';
 
 const ul = document.querySelector('.list-candidates');
@@ -32,3 +34,9 @@ document.querySelector('.getCandidate').addEventListener('click', () => {
     })
     .catch(() => {});
 });
+
+(() => {
+  handleHeaderMenu();
+  handleUserVote();
+  handleAutoTypingTexts();
+})();

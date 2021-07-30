@@ -6,7 +6,6 @@ import createError from 'http-errors';
 import logger from 'morgan';
 import path from 'path';
 
-import indexRouter from './resources';
 import { protect } from './resources/auth/auth.controllers';
 import authenticationRouter from './resources/auth/auth.router';
 import {
@@ -14,6 +13,8 @@ import {
   routerAPI as candidateRouterAPI,
 } from './resources/candidates/candidates.router';
 import connectedUserRouter from './resources/connected/connected.router';
+import voteRouter from './resources/connected/votes.router';
+import indexRouter from './resources/index';
 // import { User } from './resources/users/users.model';
 import usersRouter from './resources/users/users.router';
 
@@ -45,6 +46,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/vote', voteRouter);
 app.use('/api', protect);
 app.use('/api/u', usersRouter);
 app.use('/api/candidates', candidateRouterAPI);
