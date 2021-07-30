@@ -1,28 +1,13 @@
 import { Router } from 'express';
+import { body } from 'express-validator';
 
-import CMSAuth from './auth.cms';
-import { signin, signup } from './auth.controllers';
+import { loginGET, loginPOST, signupGET, signupPOST } from './auth.controllers';
 
 const router = Router();
 
-router
-  .route('/login')
-  .get((req, res) => {
-    const lang = 'en';
-    res.render('auth/login.ejs', {
-      ...CMSAuth[lang].login,
-      ...CMSAuth[lang].appName,
-    });
-  })
-  .post(signin);
+router.route('/login').get(loginGET).post(loginPOST);
 router
   .route('/signup')
-  .get((req, res) => {
-    const lang = 'en';
-    res.render('auth/signup.ejs', {
-      ...CMSAuth[lang].signup,
-      ...CMSAuth[lang].meta,
-    });
-  })
-  .post(signup);
+  .get(signupGET)
+  .post(body('email').isEmail(), body('cin').not().isEmpty(), signupPOST);
 export default router;
