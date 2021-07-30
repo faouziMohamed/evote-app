@@ -14,7 +14,7 @@
     "build": "npm run clean && babel ./src --out-dir dist --copy-files",
     "start": "npm run prod ",
     "dev": "NODE_ENV=development nodemon --exec npm run restart",
-    "prod": "NODE_ENV=production npm run build && node ./dist/bin/www.js"
+    "prod": "NODE_ENV=production node ./dist/bin/www.js"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
