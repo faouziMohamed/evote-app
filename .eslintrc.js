@@ -27,6 +27,7 @@ module.exports = {
     'no-alert': 'error',
     'no-empty': 'error',
     'no-implicit-coercion': 'warn',
+    'no-underscore-dangle': 'off',
     'no-var': 'warn',
     'no-empty-function': 'warn',
     'no-confusing-arrow': ['error', { allowParens: true }],
