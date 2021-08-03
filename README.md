@@ -49,9 +49,6 @@ A simulation of online voting using basic nodejs, express and openPGP for encryp
    |`npm run dev`|Or|`yarn dev`|
 1. Open in your browser the url http://localhost:3000 to see result
 
-### PROGRESS
-For now only **RESTFULL API** are being built, use a tool like [Insomnia](https://insomnia.rest/download "Go to download page of Insomnia") or [Postman](https://www.postman.com/downloads/ "Download page of Postman") to test API routes.
-
 ## 🆗 That's it!!!
 
 LICENSE [MIT](LICENSE)
