@@ -1,7 +1,9 @@
+import Debug from 'debug';
 import { config } from 'dotenv';
 import { nanoid } from 'nanoid';
 
 config();
+export const debug = Debug('votes:server');
 const env = process.env.NODE_ENV;
 
 const baseConfig = {
@@ -17,6 +19,7 @@ const baseConfig = {
     expiry: process.env.JWT_EXPIRY || '15d', // 15 days,
     algorithm: 'HS256',
   },
-  DB_URL: process.env.DB_URL,
+  DB_URL:
+    env === 'production' ? process.env.DB_URL_PROD : process.env.DB_URL_DEV,
 };
 export default baseConfig;

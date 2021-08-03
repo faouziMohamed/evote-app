@@ -1,16 +1,12 @@
+import bcrypt from 'bcrypt';
 import { startCase, toLower } from 'lodash';
 import { model, Schema } from 'mongoose';
 
-import {
-  comparePassword,
-  encryptPassword,
-  lowerCaseEmail,
-  makeFieldLowercase,
-} from './users.utils';
+import { encryptPassword } from './users.utils';
 
 const userSchema = new Schema(
   {
-    userName: {
+    username: {
       type: String,
       unique: true,
       required: [true, 'User name is required'],
@@ -61,17 +57,16 @@ const userSchema = new Schema(
   { timeStamp: true },
 );
 
-userSchema.index({ userName: 1, email: 1 }, { unique: true });
+userSchema.index({ username: 1, email: 1 }, { unique: true });
 
-userSchema.virtual('userNamePath').get(function userNamePath() {
-  const { userName, _id } = this;
-  const path = userName || _id;
-  return `/users/${path}`;
+userSchema.virtual('usernamePath').get(function usernamePath() {
+  const { username, _id } = this;
+  const path = username || _id;
+  return `/user/${path}`;
 });
 
 userSchema.virtual('idPath').get(function idPath() {
-  // eslint-disable-next-line no-underscore-dangle
-  return `/users/${this._id}`;
+  return `/user/${this._id}`;
 });
 
 // Everytime a user is saved or the password is changed, hash the password
@@ -84,7 +79,12 @@ userSchema.pre('save', function hashPassword(next) {
   encryptPassword(next, user);
 });
 
-userSchema.pre('save', lowerCaseEmail);
+userSchema.pre('save', async function lowerCaseEmail(next) {
+  const user = this;
+  const { email } = user;
+  user.set({ email: email.toLowerCase() });
+  next();
+});
 
 userSchema.pre('save', function capitaliseNames(next) {
   const user = this;
@@ -95,12 +95,17 @@ userSchema.pre('save', function capitaliseNames(next) {
   next();
 });
 
-userSchema.pre('save', function lowercaseUserName(next) {
+userSchema.pre('save', function lowercaseusername(next) {
   const user = this;
-  makeFieldLowercase('userName', user);
+  if (user.isModified('username')) {
+    user.username.toLowerCase();
+  }
   next();
 });
 
-userSchema.methods.comparePassword = comparePassword;
-
+userSchema.methods.comparePassword = async function comparePassword(password) {
+  const hashedPassword = this.password;
+  const isMatch = await bcrypt.compare(password, hashedPassword);
+  return isMatch;
+};
 export const User = model('User', userSchema);

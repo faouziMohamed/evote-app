@@ -3,15 +3,19 @@ import { validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
 
 import Config from '../../config/config';
-import { sendError } from '../../utils/crud';
 import {
   findOneUser,
+  findUserByEmail,
+  findUserByUsername,
   getMessage,
   getUserDataFromRequest,
-  verifyRequiredFields,
-  verifyUserExists,
+  hasNoMissingField,
 } from '../users/users.utils';
-import CMSAuth from './auth.cms';
+import {
+  getAuthErrorMessage,
+  getAuthSuccessMessage,
+  getPageData,
+} from './auth.cms';
 
 export const newToken = (user) => {
   const token = jwt.sign({ id: user.id }, Config.jwt.secret, {
@@ -51,40 +55,55 @@ export const protect = async (req, res, next) => {
     res.status(403).end();
   }
 };
-export const signupPOST = async (req, res) => {
+
+const aRequiredFieldIsUsed = async (req, fields) => {
+  const { username, email } = fields;
+  let userFound = await findUserByUsername(User, username);
+  if (userFound) {
+    req.flash('error', getAuthErrorMessage('usernameUsed'));
+    return true;
+  }
+
+  userFound = await findUserByEmail(User, email);
+  if (userFound) {
+    req.flash('error', getAuthErrorMessage('emailUsed'));
+    return true;
+  }
+  return false;
+};
+
+export const registerPOST = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    const noMissingField = verifyRequiredFields(req.body);
-    if (!noMissingField) {
-      return res.status(400).json(getMessage({ reason: 400 }));
-    }
-    const { userName, email, cin } = req.body;
-    const userNameUsed = await verifyUserExists({
-      model: User,
-      userData: { userName },
-    });
-    if (userNameUsed) {
-      return res.status(400).json(getMessage({ reason: 'userNameUsed' }));
+      req.flash('error', getAuthErrorMessage('validation'));
+      res.redirect('/register');
+      return;
     }
 
-    const emailUsed = await verifyUserExists({
-      model: User,
-      userData: { email },
-    });
-    if (emailUsed) {
-      return res.status(400).json(getMessage({ reason: 'emailUsed' }));
+    if (!hasNoMissingField(req.body)) {
+      req.flash('error', getAuthErrorMessage('requiredFields'));
+      res.redirect('/register');
+      return;
     }
 
+    const { username, email, cin } = req.body;
     const user = await findOneUser({ model: User, cin });
     if (!user) {
-      return res.status(404).json(getMessage({ reason: 404 }));
+      req.flash('error', getMessage({ reason: 404 }));
+      res.redirect('/register');
+      return;
+    }
+
+    if (await aRequiredFieldIsUsed(req, { username, email })) {
+      res.redirect('/register');
+      return;
     }
 
     if (user.accountActivated) {
-      return res.status(400).json(getMessage({ reason: 403 }));
+      req.flash('error', getAuthErrorMessage('accountAlreadyActivated'));
+      res.redirect('/register');
+      return;
     }
 
     // Update user data
@@ -95,72 +114,54 @@ export const signupPOST = async (req, res) => {
     user.accountActivated = true;
     user.save();
 
-    const token = newToken(user);
-    res.cookie('jwtAccesToken', token, {
-      httpOnly: false,
-      secure: Config.env === 'production',
-      maxAge: Config.session.maxAge,
-      expiry: Config.session.expiry,
-      sameSite: true,
-    });
-    return res.redirect('/dashboard');
+    req.flash('success', getAuthSuccessMessage('activationSuccess'));
+    res.redirect('/login');
   } catch (err) {
-    return res.status(500).json(err);
+    res.status(500).end();
   }
 };
 
-export const loginPOST = async (req, res) => {
-  try {
-    const { userName, password } = req.body;
-
-    if (!userName || !password) {
-      return res.status(400).json(getMessage({ reason: 400 }));
+export const verifyPostingDataMiddleWare =
+  (req, res, next) => (err, user, info) => {
+    if (err) {
+      return next(err);
     }
-    const user = await findOneUser({ model: User, userName, password: true });
-
     if (!user) {
-      return res.status(404).json(getMessage({ reason: 404 }));
+      if (info) {
+        const { username, password } = req.body;
+        let message;
+        if (!username && !password) {
+          message = getAuthErrorMessage('requiredFields');
+        } else {
+          message = !username
+            ? getAuthErrorMessage('username')
+            : getAuthErrorMessage('password');
+        }
+        req.flash('error', message);
+      }
+      return res.redirect('/login');
     }
-    const match = await user.comparePassword(password);
-    if (!match) {
-      return sendError(res, 401, getMessage({ reason: 'passErr' }));
-    }
-    const token = newToken(user);
-    res.cookie('jwtAccesToken', token, {
-      httpOnly: false,
-      secure: Config.env === 'production',
-      maxAge: Config.session.maxAge,
-      expiry: Config.session.expiry,
-      sameSite: true,
+
+    return req.logIn(user, (error) => {
+      if (error) return res.redirect('/login');
+      return res.redirect('/vote');
     });
-    return res.status(302).redirect('/dashboard');
-  } catch (err) {
-    return res.json(err);
-  }
-};
+  };
 
 export const loginGET = (req, res) => {
   const lang = 'en';
-  res.render('auth/login.ejs', {
-    layout: false,
-    ...CMSAuth[lang].login,
-    ...CMSAuth[lang].meta,
-    metadata: {
-      title: CMSAuth[lang].login.title,
-      description: CMSAuth[lang].login.description,
-    },
-  });
+  const pageName = 'login';
+  const pageData = getPageData(pageName, lang);
+  [pageData.error] = req.flash('error');
+  [pageData.success] = req.flash('success');
+  res.render('auth/login', pageData);
 };
 
-export const signupGET = (req, res) => {
+export const registerGET = (req, res) => {
   const lang = 'en';
-  res.render('auth/signup.ejs', {
-    layout: false,
-    ...CMSAuth[lang].signup,
-    ...CMSAuth[lang].meta,
-    metadata: {
-      title: CMSAuth[lang].signup.title,
-      description: CMSAuth[lang].signup.description,
-    },
-  });
+  const pageName = 'register';
+  const pageData = getPageData(pageName, lang);
+  [pageData.error] = req.flash('error');
+  [pageData.success] = req.flash('success');
+  res.render('auth/register', pageData);
 };

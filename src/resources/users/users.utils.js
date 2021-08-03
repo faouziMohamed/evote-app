@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { names, uniqueNamesGenerator as nameGen } from 'unique-names-generator';
 
-import BaseConfig from '../../config/config';
+import Config from '../../config/config';
 import CandidatesModel from '../candidates/candidates.model';
 
 export class StaticData {
@@ -56,7 +56,7 @@ export const newUser = (UserModel) => {
   if (addACandidate) StaticData.incNumberCandidateAdded();
 
   const user = new UserModel({
-    userName: generateName(),
+    username: generateName(),
     email: `${generateName()}@${generateName()}-glpc.ma`,
     password: '123456789',
     name: {
@@ -91,27 +91,13 @@ export const addRandomUserToDB = async (howMany = 5, UserModel) => {
   for (let i = 0; i < howMany; i++) {
     user = newUser(UserModel);
     if (!user) return !1;
-    if (BaseConfig.env === 'development') {
+    if (Config.env === 'development') {
       // eslint-disable-next-line no-console
       console.log(`User ${StaticData.getNumberUserAdded()} added`);
     }
   }
   return true;
 };
-
-export const makeFieldLowercase = (field, document) => {
-  if (document.isModified(field)) {
-    return document[field].toLowerCase();
-  }
-  return document;
-};
-
-export async function lowerCaseEmail(next) {
-  const user = this;
-  const { email } = user;
-  user.set({ email: email.toLowerCase() });
-  next();
-}
 
 export function encryptPassword(next, user) {
   bcrypt.genSalt(10, (err, salt) => {
@@ -130,29 +116,16 @@ export function encryptPassword(next, user) {
   });
 }
 
-export function comparePassword(password) {
-  const hashedPassword = this.password;
-  return new Promise((resolve, reject) => {
-    bcrypt.compare(password, hashedPassword, (err, isMatch) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(isMatch);
-    });
-  });
-}
-
-export const findUserByEmail = async (model, email, password) =>
+export const findUserByEmail = async (model, email, password = false) =>
   model.findOne({ email }, password && '+password').exec();
 
-export const findUserByUsername = async (model, userName, password) =>
-  model.findOne({ userName }, password && '+password').exec();
+export const findUserByUsername = async (model, username, password = false) =>
+  model.findOne({ username }, password && '+password').exec();
 
-export const findUserById = async (model, id, password) =>
+export const findUserById = async (model, id, password = false) =>
   model.findById(id, password && '+password').exec();
 
-export const findUserByCIN = async (model, cin, password) =>
+export const findUserByCIN = async (model, cin, password = false) =>
   model.findOne({ cin }, password && '+password').exec();
 
 // Get user document from the database using it username or userId
@@ -160,28 +133,28 @@ export const findOneUser = async ({
   model,
   id = null,
   cin = null,
-  userName = null,
+  username = null,
   email = null,
   password = false,
 }) => {
   const user =
     (id && (await findUserById(model, id, password))) ||
     (cin && (await findUserByCIN(model, cin, password))) ||
-    (userName && (await findUserByUsername(model, userName, password))) ||
+    (username && (await findUserByUsername(model, username, password))) ||
     (email && (await findUserByEmail(model, email, password))) ||
     null;
   return user;
 };
 
-export function verifyRequiredFields(fields) {
-  const { userName, email, password, birthDate, cin } = fields;
+export function hasNoMissingField(fields) {
+  const { username, email, password, birthDate, cin } = fields;
 
-  return (userName && cin && email && password && birthDate && true) || false;
+  return (username && cin && email && password && birthDate && true) || false;
 }
 
 export function getUserDataFromRequest(req) {
   const {
-    userName,
+    username,
     email,
     cin,
     password,
@@ -193,7 +166,7 @@ export function getUserDataFromRequest(req) {
   } = req.body;
 
   const userData = {
-    userName,
+    username,
     email,
     password,
     cin,
@@ -212,7 +185,7 @@ const message = {
   activated: 'Account activated',
   nactivated: 'Account created but not activated',
   emailUsed: 'The email is already used',
-  userNameUsed: 'The user name is already used',
+  usernameUsed: 'The user name is already used',
   fieldsRqd: 'Missing parameters, some fields are required',
   passErr: 'Incorrect Password',
   201: 'Account created but not activated',
@@ -226,12 +199,12 @@ export const getMessage = ({ reason }) =>
   ({ message: message[reason] } || 'Unexpected error');
 
 export const verifyUserExists = async ({ model, userData }) => {
-  const { email, userName, cin } = userData;
+  const { email, username, cin } = userData;
 
   const user =
     (await findUserByCIN(model, cin)) ||
     (await findUserByEmail(model, email)) ||
-    (await findUserByUsername(model, userName)) ||
+    (await findUserByUsername(model, username)) ||
     null;
   if (user && user.accountActivated) {
     return { reason: 403 };

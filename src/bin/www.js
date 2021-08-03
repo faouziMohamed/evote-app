@@ -8,8 +8,8 @@ import 'regenerator-runtime/runtime';
 import http from 'http';
 
 import app from '../app';
-import Config from '../config/config';
-import { connectDB } from '../utils/db';
+import Config, { debug } from '../config/config';
+import { connectDB } from '../config/db';
 
 /**
  * Normalize a port into a number, string, or false.
@@ -29,7 +29,6 @@ const normalizePort = (val) => {
 
   return false;
 };
-
 /**
  * Get port from environment and store in Express.
  */
@@ -49,11 +48,11 @@ const onError = (error) => {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(`${bind} requires elevated privileges`);
+      debug(`${bind} requires elevated privileges`);
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error(`${bind} is already in use`);
+      debug(`${bind} is already in use`);
       process.exit(1);
       break;
     default:
@@ -71,12 +70,12 @@ const onListening = async () => {
   try {
     await connectDB();
   } catch (err) {
-    console.error(err);
+    debug(err);
   }
 
   const addr = server.address();
   const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
-  console.log(`Listening on ${bind}`);
+  debug(`Listening on ${bind}`);
 };
 
 /**

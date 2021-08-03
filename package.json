@@ -13,32 +13,43 @@
     "restart": "babel-node ./src/bin/www.js --trace-deprecation",
     "build": "npm run clean && babel ./src --out-dir dist --copy-files",
     "start": "npm run prod ",
-    "dev": "NODE_ENV=development nodemon --exec npm run restart",
+    "dev": "DEBUG=votes:* NODE_ENV=development nodemon --exec npm run restart",
     "prod": "NODE_ENV=production npm run build && node ./dist/bin/www.js"
   },
   "dependencies": {
+    "@babel/cli": "^7.14.8",
+    "@babel/core": "^7.14.8",
     "bcrypt": "^5.0.1",
+    "compression": "^1.7.4",
+    "connect-flash": "^0.1.1",
+    "connect-mongo": "^4.4.1",
+    "connect-redis": "^6.0.0",
     "cookie-parser": "^1.4.5",
+    "core-js": "^3.16.0",
     "cors": "^2.8.5",
     "debug": "^4.3.2",
     "dotenv": "^10.0.0",
     "ejs": "~3.1.6",
-    "express": "~4.16.1",
+    "express": "~4.17.1",
     "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.17.2",
     "express-validator": "^6.12.1",
-    "http-errors": "~1.6.3",
+    "helmet": "^4.6.0",
+    "http-errors": "~1.8.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
     "mongoose": "^5.13.3",
-    "morgan": "~1.9.1",
+    "morgan": "~1.10.0",
     "nanoid": "^3.1.23",
     "openpgp": "^5.0.0-5",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "redis": "^3.1.2",
     "regenerator-runtime": "^0.13.7",
+    "rimraf": "^3.0.2",
     "unique-names-generator": "^4.6.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.14.8",
-    "@babel/core": "^7.14.8",
     "@babel/eslint-parser": "^7.14.7",
     "@babel/node": "^7.14.7",
     "@babel/plugin-proposal-class-properties": "^7.14.5",
@@ -61,7 +72,6 @@
     "stylelint": "^13.13.1",
     "stylelint-a11y": "^1.2.3",
     "stylelint-config-prettier": "^8.0.2",
-    "stylelint-config-rational-order": "^0.1.2",
     "stylelint-config-standard": "^22.0.0",
     "stylelint-group-selectors": "^1.0.8",
     "stylelint-order": "^4.1.0",
@@ -71,5 +81,18 @@
     "./**/*.{js}": "eslint --cache --fix",
     "./styles/*.css": "stylelint --fix",
     "./**/*.{js,json,md,css,ejs,html}": "prettier --write"
-  }
+  },
+  "description": "A simulation of online voting using basic nodejs, express and openPGP for encryption.",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/faouziMohamed/evote-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/faouziMohamed/evote-app/issues"
+  },
+  "homepage": "https://github.com/faouziMohamed/evote-app#readme"
 }

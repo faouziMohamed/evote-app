@@ -1,11 +1,21 @@
-import cookieParser from 'cookie-parser';
+// import { addRandomUserToDB } from './resources/users/users.utils';
+
+import './utils/passport';
+
+import compression from 'compression';
+import flash from 'connect-flash';
+import MongoStore from 'connect-mongo';
 import cors from 'cors';
 import express from 'express';
 import expressLayout from 'express-ejs-layouts';
+import session from 'express-session';
+// import helmet from 'helmet';
 import createError from 'http-errors';
 import logger from 'morgan';
+import passport from 'passport';
 import path from 'path';
 
+import Config from './config/config';
 import { protect } from './resources/auth/auth.controllers';
 import authenticationRouter from './resources/auth/auth.router';
 import {
@@ -17,16 +27,17 @@ import voteRouter from './resources/connected/votes.router';
 import indexRouter from './resources/index';
 // import { User } from './resources/users/users.model';
 import usersRouter from './resources/users/users.router';
-// import { addRandomUserToDB } from './resources/users/users.utils';
 
 const app = express();
 // addRandomUserToDB(200, User).catch(() => {});
+// app.use(helmet());
 // view engine setup
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
-app.use(expressLayout);
-app.set('layout', './connected/layout/layout');
+app.set('layout', 'connected/layout/layout');
+app.set('trusty proxy', Config.env === 'production' ? 1 : 0);
 
+app.use(expressLayout);
 app.use(logger('dev'));
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
@@ -37,15 +48,31 @@ app.use((req, res, next) => {
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept, Authorization',
   );
-  res.setHeader(
-    'Access-Control-Allow-Methods',
-    'GET, POST, PUT, DELETE, OPTIONS',
-  );
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT');
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
 
-app.use(cookieParser());
+app.use(
+  session({
+    name: 'evoteSID',
+    store: MongoStore.create({ mongoUrl: Config.DB_URL }),
+    secret: Config.session.secret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: Config.env === 'production',
+      httpOnly: true,
+      maxAge: Config.session.maxAge,
+      sameSite: 'strict',
+    },
+  }),
+);
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+// debug(passport.authenticate);
+app.use(compression()); //   Compress all routes
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
@@ -72,5 +99,4 @@ app.use((err, req, res) => {
   res.status(err.status || 500);
   res.render('error');
 });
-
 export default app;
