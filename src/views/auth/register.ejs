@@ -1,0 +1,66 @@
+<form action="/register" method="post" class="auth-form">
+  <section class="form-content">
+    <div class="row-content identifiant">
+      <input
+        type="text"
+        id="username"
+        name="username"
+        minlength="2"
+        pattern="[a-z_]{2,}"
+        placeholder="<%= usernameLabel %>"
+        class="input-field pass-auth"
+        required
+      />
+    </div>
+
+    <div class="row-content identifiant">
+      <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="<%= emailLabel %>"
+        class="input-field pass-auth"
+        required
+      />
+    </div>
+
+    <div class="row-content identifiant">
+      <input
+        id="cin"
+        type="number"
+        title="Numbers only, please."
+        name="cin"
+        pattern="\d*"
+        placeholder="<%= cinLabel %>"
+        class="input-field pass-auth"
+        required
+      />
+    </div>
+
+    <div class="row-content password">
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="<%= passwordLabel %>"
+        class="input-field pass-auth"
+        required
+      />
+    </div>
+
+    <div class="row-content identifiant">
+      <input
+        type="date"
+        id="birthDate"
+        name="birthDate"
+        placeholder="<%= birthdateLabel %>"
+        class="input-field"
+        required
+      />
+    </div>
+    <div class="row-content btn-row">
+      <button class="reset-btn" type="reset"><%= resetBtn %></button>
+      <button class="submit-btn" type="submit"><%= submitBtn %></button>
+    </div>
+  </section>
+</form>
