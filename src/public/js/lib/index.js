@@ -22,20 +22,6 @@ export const handleHeaderMenu = () => {
   listenMedia(media);
 };
 
-export const handleUserVote = () => {
-  const buttons = document.querySelectorAll('.vote-btn');
-  if (!buttons) return;
-  const inputs = document.querySelectorAll('.vote-checkbox');
-  inputs.forEach((input, index) => {
-    // eslint-disable-next-line no-param-reassign
-    input.checked = false;
-    buttons[index].classList.remove('enabled');
-    input.addEventListener('change', () => {
-      buttons[index].classList.toggle('enabled');
-    });
-  });
-};
-
 export const getDataFromCookie = (cookieName) =>
   document.cookie
     .split('; ')
@@ -47,3 +33,4 @@ export const redirectTo = (path) => {
 };
 
 export { handleAutoTypingTexts } from './autotext.js';
+export { handleUserVote } from './vote.js';

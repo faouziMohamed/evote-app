@@ -46,9 +46,9 @@
 
 .input-field {
   width: 100%;
-  height: 2em;
-  padding: 1em;
-  border-radius: 1em;
+  height: 2.6em;
+  padding-inline-start: 0.3rem;
+  border-radius: 0.4rem;
 }
 
 .row-content:not(:last-child) {
