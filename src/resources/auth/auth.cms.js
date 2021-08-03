@@ -49,6 +49,7 @@ const authPagesData = {
       passwordNotMatch: 'The password is not match',
       passwordTooShort: 'The password is too short',
       accountResetError: 'Your password has not been reset',
+      needToLogin: 'You need to login to access this page',
     },
     success: {
       accountActivated: 'Your account has been activated',

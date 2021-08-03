@@ -258,7 +258,7 @@ input:checked + .slider::before {
   content: '\f00c';
 }
 
-@media (max-height: 570px) {
+@media (max-height: 400px) {
   .main-content {
     flex-direction: column;
     flex-wrap: nowrap;

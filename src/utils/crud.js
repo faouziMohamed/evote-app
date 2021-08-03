@@ -2,8 +2,8 @@ export function sendError(res, code, message) {
   return res.status(code).json({ status: 'Error', ...message });
 }
 
-export function sendSucces(res, code, message, data = null) {
-  const msgObject = { status: 'Success', ...message };
+export function sendSucces(res, code, data = null) {
+  const msgObject = { status: 'Success' };
   if (data !== null) {
     msgObject.data = data;
   }

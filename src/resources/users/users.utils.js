@@ -128,7 +128,7 @@ export const findUserById = async (model, id, password = false) =>
 export const findUserByCIN = async (model, cin, password = false) =>
   model.findOne({ cin }, password && '+password').exec();
 
-// Get user document from the database using it username or userId
+// Get user document from the database using it username or userId or cin
 export const findOneUser = async ({
   model,
   id = null,

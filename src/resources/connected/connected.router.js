@@ -1,15 +1,11 @@
 import { Router } from 'express';
 
-const router = new Router();
+import addCandidatesRoutes from './candidates.router';
+import addDashboardRoute from './dashboard.router';
+import addVoteRoute from './votes.router';
 
-router.route('/dashboard').get((req, res) => {
-  res.render('connected/dashboard', {
-    title: 'Dashboard',
-    metadata: {
-      title: 'Dashboard',
-      description: 'Dashboard',
-    },
-  });
-});
-
-export default router;
+const connectedRouter = new Router();
+addDashboardRoute(connectedRouter);
+addCandidatesRoutes(connectedRouter);
+addVoteRoute(connectedRouter);
+export default connectedRouter;

@@ -1,8 +1,7 @@
 import { User } from '_users/users.model';
 import { validationResult } from 'express-validator';
-import jwt from 'jsonwebtoken';
 
-import Config from '../../config/config';
+import { debug } from '../../config/config';
 import {
   findOneUser,
   findUserByEmail,
@@ -17,40 +16,15 @@ import {
   getPageData,
 } from './auth.cms';
 
-export const newToken = (user) => {
-  const token = jwt.sign({ id: user.id }, Config.jwt.secret, {
-    expiresIn: Config.jwt.expiry || '30d',
-  });
-  return token;
-};
-
-export const verifyToken = (token) =>
-  new Promise((resolve, reject) => {
-    jwt.verify(token, Config.jwt.secret, (err, payload) => {
-      if (err) return reject(err);
-      return resolve(payload);
-    });
-  });
-export const protect = async (req, res, next) => {
-  const bearer = req.headers.authorization;
-  if (!bearer || !bearer.startsWith('Bearer ')) {
-    res.status(403).end();
-    return;
-  }
+export const protectRoute = async (req, res, next) => {
   try {
-    const token = bearer.replace('Bearer ', '');
-    const payload = await verifyToken(token);
-    const user = await findOneUser({
-      model: User,
-      id: payload.id,
-      password: true,
-    });
-    if (!user) {
-      res.status(404).json(getMessage({ reason: 404 }));
+    debug(req.user);
+    if (req.user) {
+      next();
       return;
     }
-    req.user = user;
-    next();
+    debug('None out there');
+    res.status(404).json(getMessage({ reason: 404 }));
   } catch (err) {
     res.status(403).end();
   }
@@ -148,7 +122,18 @@ export const verifyPostingDataMiddleWare =
     });
   };
 
+export const isAutenticated = (req, res, next) => {
+  debug('User is autenticated-----');
+  if (req.user) {
+    return res.redirect('/vote');
+  }
+  return next();
+};
+
 export const loginGET = (req, res) => {
+  debug(req.session);
+  debug(req.user);
+
   const lang = 'en';
   const pageName = 'login';
   const pageData = getPageData(pageName, lang);

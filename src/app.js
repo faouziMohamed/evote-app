@@ -16,17 +16,8 @@ import passport from 'passport';
 import path from 'path';
 
 import Config from './config/config';
-import { protect } from './resources/auth/auth.controllers';
-import authenticationRouter from './resources/auth/auth.router';
-import {
-  router as candidateRouter,
-  routerAPI as candidateRouterAPI,
-} from './resources/candidates/candidates.router';
-import connectedUserRouter from './resources/connected/connected.router';
-import voteRouter from './resources/connected/votes.router';
-import indexRouter from './resources/index';
+import { configureRoutes } from './resources/api-routes';
 // import { User } from './resources/users/users.model';
-import usersRouter from './resources/users/users.router';
 
 const app = express();
 // addRandomUserToDB(200, User).catch(() => {});
@@ -56,33 +47,29 @@ app.use((req, res, next) => {
 app.use(
   session({
     name: 'evoteSID',
-    store: MongoStore.create({ mongoUrl: Config.DB_URL }),
+    store: MongoStore.create({
+      mongoUrl: Config.DB_URL,
+      ttl: 60 * 60 * 24 * 15,
+    }),
     secret: Config.session.secret,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: {
       secure: Config.env === 'production',
-      httpOnly: true,
+      httpOnly: Config.env === 'production',
       maxAge: Config.session.maxAge,
-      sameSite: 'strict',
+      sameSite: true,
     },
   }),
 );
+
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
-// debug(passport.authenticate);
 app.use(compression()); //   Compress all routes
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/vote', voteRouter);
-app.use('/api', protect);
-app.use('/api/u', usersRouter);
-app.use('/api/candidates', candidateRouterAPI);
-app.use('/candidates', candidateRouter);
-app.use(authenticationRouter);
-app.use(connectedUserRouter);
+configureRoutes(app);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
