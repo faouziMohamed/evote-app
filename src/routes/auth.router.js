@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { body } from 'express-validator';
 import passport from 'passport';
 
 import {
@@ -8,7 +7,7 @@ import {
   registerGET,
   registerPOST,
   verifyPostingDataMiddleWare,
-} from './auth.controllers';
+} from '../controllers/auth.controllers';
 
 const router = Router();
 
@@ -20,8 +19,5 @@ router
     passport.authenticate('login', callBack)(req, res, next);
   });
 
-router
-  .route('/register')
-  .get(registerGET)
-  .post(body('email').isEmail(), body('cin').not().isEmpty(), registerPOST);
+router.route('/register').get(registerGET).post(registerPOST);
 export default router;

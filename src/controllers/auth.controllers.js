@@ -1,29 +1,23 @@
-import { User } from '_users/users.model';
-import { validationResult } from 'express-validator';
-
-import { debug } from '../../config/config';
-import {
-  findOneUser,
-  findUserByEmail,
-  findUserByUsername,
-  getMessage,
-  getUserDataFromRequest,
-  hasNoMissingField,
-} from '../users/users.utils';
 import {
   getAuthErrorMessage,
   getAuthSuccessMessage,
   getPageData,
-} from './auth.cms';
+} from '../data/auth.cms';
+import { getMessage } from '../utils/users.utils';
+import {
+  findUserByCIN,
+  findUserByEmail,
+  findUserByUsername,
+  getUserDataFromRequest,
+  hasNoMissingField,
+} from './users.controllers';
 
 export const protectRoute = async (req, res, next) => {
   try {
-    debug(req.user);
     if (req.user) {
       next();
       return;
     }
-    debug('None out there');
     res.status(404).json(getMessage({ reason: 404 }));
   } catch (err) {
     res.status(403).end();
@@ -32,13 +26,13 @@ export const protectRoute = async (req, res, next) => {
 
 const aRequiredFieldIsUsed = async (req, fields) => {
   const { username, email } = fields;
-  let userFound = await findUserByUsername(User, username);
+  let userFound = await findUserByUsername(username);
   if (userFound) {
     req.flash('error', getAuthErrorMessage('usernameUsed'));
     return true;
   }
 
-  userFound = await findUserByEmail(User, email);
+  userFound = await findUserByEmail(email);
   if (userFound) {
     req.flash('error', getAuthErrorMessage('emailUsed'));
     return true;
@@ -48,13 +42,6 @@ const aRequiredFieldIsUsed = async (req, fields) => {
 
 export const registerPOST = async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      req.flash('error', getAuthErrorMessage('validation'));
-      res.redirect('/register');
-      return;
-    }
-
     if (!hasNoMissingField(req.body)) {
       req.flash('error', getAuthErrorMessage('requiredFields'));
       res.redirect('/register');
@@ -62,7 +49,7 @@ export const registerPOST = async (req, res) => {
     }
 
     const { username, email, cin } = req.body;
-    const user = await findOneUser({ model: User, cin });
+    const user = await findUserByCIN(cin);
     if (!user) {
       req.flash('error', getMessage({ reason: 404 }));
       res.redirect('/register');
@@ -91,7 +78,7 @@ export const registerPOST = async (req, res) => {
     req.flash('success', getAuthSuccessMessage('activationSuccess'));
     res.redirect('/login');
   } catch (err) {
-    res.status(500).end();
+    res.status(500).json(err);
   }
 };
 
@@ -123,7 +110,6 @@ export const verifyPostingDataMiddleWare =
   };
 
 export const isAutenticated = (req, res, next) => {
-  debug('User is autenticated-----');
   if (req.user) {
     return res.redirect('/vote');
   }
@@ -131,9 +117,6 @@ export const isAutenticated = (req, res, next) => {
 };
 
 export const loginGET = (req, res) => {
-  debug(req.session);
-  debug(req.user);
-
   const lang = 'en';
   const pageName = 'login';
   const pageData = getPageData(pageName, lang);

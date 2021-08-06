@@ -1,13 +1,15 @@
-import { getAuthErrorMessage } from '../auth/auth.cms';
+import { debug } from '../config/config';
+import { getAuthErrorMessage } from '../data/auth.cms';
 
 export const checkAuthentication = (req, res, next) => {
+  debug(req.url);
   if (req.url === '/login' || req.url === '/register') {
     if (req.user) {
-      return res.redirect('/vote');
+      return res.status(307).redirect('/vote');
     }
   } else if (!req.user) {
     req.flash('error', getAuthErrorMessage('needToLogin'));
-    return res.redirect('/login');
+    return res.status(307).redirect('/login');
   }
   return next();
 };

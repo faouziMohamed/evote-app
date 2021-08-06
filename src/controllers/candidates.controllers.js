@@ -1,4 +1,4 @@
-import CandidatesModel from './candidates.model';
+import CandidatesModel from '../models/candidates.model';
 
 export const findAllCandidates = async () =>
   CandidatesModel.find({}, '-_id')

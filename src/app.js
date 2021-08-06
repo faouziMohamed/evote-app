@@ -16,11 +16,11 @@ import passport from 'passport';
 import path from 'path';
 
 import Config from './config/config';
-import { configureRoutes } from './resources/api-routes';
-// import { User } from './resources/users/users.model';
+import { configureRoutes } from './routes/api-routes';
+// import { addRandomUserToDB } from './utils/users.utils';
 
 const app = express();
-// addRandomUserToDB(200, User).catch(() => {});
+// addRandomUserToDB(200).catch(() => {});
 // app.use(helmet());
 // view engine setup
 app.set('views', path.join(__dirname, '/views'));

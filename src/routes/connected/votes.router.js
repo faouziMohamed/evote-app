@@ -1,4 +1,4 @@
-import { findAllCandidatesMin } from '../candidates/candidates.controllers';
+import { findAllCandidatesMin } from '../../controllers/candidates.controllers';
 
 export default function addVoteRoute(router) {
   router.route('/vote').get(async (req, res) => {

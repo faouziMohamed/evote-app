@@ -1,7 +1,7 @@
 import passport from 'passport';
 import { Strategy } from 'passport-local';
 
-import { User } from '../resources/users/users.model';
+import { User } from '../models/users.model';
 
 const loginVerification = (req, username, password, done) => {
   User.findOne({ username }, '+password', async (err, user) => {
@@ -14,22 +14,6 @@ const loginVerification = (req, username, password, done) => {
       return done(null, false, req.flash('error', 'Incorrect passord.'));
     }
     return done(null, user);
-  });
-};
-
-export const registerVerification = (req, cin, username, done) => {
-  User.findOne({ username }, async (err, user) => {
-    if (err) {
-      return done(err);
-    }
-    if (user) {
-      return done(
-        null,
-        false,
-        req.flash('error', 'Username is already taken.'),
-      );
-    }
-    return done(null, true);
   });
 };
 
