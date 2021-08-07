@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 export const handleHeaderMenu = () => {
   const input = document.querySelector('.checkbox-toggle-menu');
   if (!input) return;
@@ -32,5 +31,5 @@ export const redirectTo = (path) => {
   window.location.href = path;
 };
 
-export { handleAutoTypingTexts } from './autotext.js';
-export { handleUserVote } from './vote.js';
+export { handleAutoTypingTexts } from './autotext';
+export { handleUserVote } from './vote';

@@ -1,10 +1,9 @@
-/* eslint-disable import/extensions */
-import { getCandidatesEvent } from './internal/candidates.js';
+import { getCandidatesEvent } from './internal/candidates';
 import {
   handleAutoTypingTexts,
   handleHeaderMenu,
   handleUserVote,
-} from './internal/index.js';
+} from './internal/index';
 
 (() => {
   handleHeaderMenu();

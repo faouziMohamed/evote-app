@@ -1,6 +1,11 @@
 {
   "restartable": "rs",
-  "ignore": [".git", "node_modules/**/node_modules", "dist"],
+  "ignore": [
+    ".git",
+    "node_modules/**/node_modules",
+    "dist",
+    "src/**/openpgp.min.js"
+  ],
   "verbose": true,
   "execMap": {
     "js": "node"
