@@ -8,6 +8,7 @@ export default function addVoteRoute(router) {
       metadata: {
         title: 'Vote your favorite candidate',
         description: 'Vote your favorite candidate',
+        user: req.user,
       },
     });
   });

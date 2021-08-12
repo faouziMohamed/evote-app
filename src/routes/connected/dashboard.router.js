@@ -5,6 +5,7 @@ export default function addDashboardRoute(router) {
       metadata: {
         title: 'Dashboard',
         description: 'Dashboard',
+        user: req.user,
       },
     });
   });

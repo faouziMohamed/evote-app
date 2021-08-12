@@ -1,17 +1,30 @@
+/* eslint-disable import/named */
 import { Router } from 'express';
 
-import { protectRoute } from '../../controllers/auth.controllers';
+import { protectAPIRoute } from '../../controllers/auth.controllers';
 import {
-  getOneUserData,
-  getUserById,
+  getUserByCIN,
+  getUserByID,
+  getUserByUsername,
+  getUserWithCallback,
 } from '../../controllers/users.controllers';
+import { getAuthErrorMessage } from '../../data/auth.cms';
 
 const router = Router();
-router.use(protectRoute);
-// handle GET && PUT (UPDATE) to /api/u/?id=:id&otherParams=:o
-router.route('/').get(getUserById);
+router.use(protectAPIRoute);
 
-// handle GET, POST, UPDATE to /api/u/:userName
-router.route('/:username').get(getOneUserData);
+// handle the case that no value was provided for the
+router.route(['/cin/', '/id', '/username']).get((req, res) => {
+  res.status(400).json({ error: getAuthErrorMessage('noValuePassed') });
+});
+
+// handle GET, POST, UPDATE to /api/users/:id
+router.route('/id/:id').get(getUserWithCallback(getUserByID));
+
+// handle GET, POST, UPDATE to /api/users/:cin
+router.route('/cin/:cin').get(getUserWithCallback(getUserByCIN));
+
+// handle GET, POST, UPDATE to /api/users/:username
+router.route('/name/:username').get(getUserWithCallback(getUserByUsername));
 
 export default router;
