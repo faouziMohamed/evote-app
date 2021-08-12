@@ -27,6 +27,7 @@ export const getDataFromCookie = (cookieName) =>
     .find((token) => token.startsWith(cookieName))
     .split('=')[1];
 
+export const decodeCookie = (cookieName) => decodeURIComponent(cookieName);
 export const redirectTo = (path) => {
   window.location.href = path;
 };
