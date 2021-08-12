@@ -1,51 +1,100 @@
-import { User } from '../models/users.model';
-import { sendError, sendSucces } from '../utils/crud';
-import { getMessage } from '../utils/users.utils';
+import { getAuthErrorMessage } from '../data/auth.cms';
+import User from '../models/users.model';
 
-export const findUserByEmail = async (email, password = false) =>
-  User.findOne({ email }, password && '+password').exec();
+export const findUserByEmail = async (email, filter = {}, password = false) =>
+  User.findOne({ email }, password && '+password')
+    .select(filter)
+    .exec();
 
-export const findUserByUsername = async (username, password = false) =>
-  User.findOne({ username }, password && '+password').exec();
+export const findUserByUsername = async (
+  username,
+  filter = {},
+  password = false,
+) =>
+  User.findOne({ username }, password && '+password')
+    .select(filter)
+    .exec();
 
-export const findUserById = async (id, password = false) =>
-  User.findById(id, password && '+password').exec();
+export const findUserById = async (id, filter = {}, password = false) =>
+  User.findById(id, password && '+password')
+    .select(filter)
+    .exec();
 
-export const findUserByCIN = async (cin, password = false) =>
-  User.findOne({ cin }, password && '+password').exec();
+export const findUserByCIN = async (cin, filter = {}, password = false) =>
+  User.findOne({ cin }, password && '+password')
+    .select(filter)
+    .exec();
 
-export const getUserById = async (req, res) => {
-  try {
-    const { id } = req.query;
-    if (!id) {
-      return sendError(res, 401, getMessage('uid'));
-    }
-
-    const user = await findUserById(id);
-    if (!user) {
-      return sendError(res, 404, getMessage({ reason: 404 }));
-    }
-    return sendSucces(res, 200, user);
-  } catch (err) {
-    return sendError(res, 400, err.message);
-  }
-};
-
-export const getOneUserData = async (req, res) => {
+export const getUserByUsername = async (req, res, filter = {}) => {
   try {
     const { username } = req.params;
     if (!username) {
-      return sendError(res, 400, getMessage(400));
+      return () =>
+        res.status(400).json({ error: getAuthErrorMessage('missingUsername') });
     }
-    const user = await findUserByUsername(username);
-    if (!user) {
-      return sendError(res, 404, getMessage({ reason: 404 }));
-    }
-    return res.status(200).json(user);
+    return findUserByUsername(username, filter);
   } catch (err) {
-    return sendError(res, 400, err.message);
+    return res.status(400).json({ error: err.message });
   }
 };
+export const getUserByID = async (req, res, filter = {}) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return () =>
+        res.status(400).json({ error: getAuthErrorMessage('missingID') });
+    }
+    return findUserById(id, filter);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+};
+export const getUserByCIN = async (req, res, filter = {}) => {
+  try {
+    const { cin } = req.params;
+    if (!cin) {
+      return () =>
+        res.status(400).json({ error: getAuthErrorMessage('missingID') });
+    }
+    return findUserByCIN(cin, filter);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+};
+
+function filterByQueryParameters(query) {
+  const toKeep = { username: 1, email: 1, cin: 1 };
+  if (query.name) toKeep.name = 1;
+  if (query.vt_status) toKeep.hasVoted = 1;
+  if (query.log_status) toKeep.isFirstLogin = 1;
+  if (query.utype) toKeep.isCandidate = 1;
+  if (query.acc_status) toKeep.accountActivated = 1;
+  if (query.role) toKeep.isAdmin = 1;
+  if (query.pdg) toKeep.isPdg = 1;
+  return toKeep;
+}
+
+export function getUserWithCallback(userFinderCB) {
+  return async (req, res) => {
+    try {
+      const { query } = req;
+      const toKeep = filterByQueryParameters(query);
+      const user = await userFinderCB(req, res, toKeep);
+      if (!user) {
+        return res
+          .status(302)
+          .json({ error: getAuthErrorMessage('userNotFound') });
+      }
+      if (typeof user === 'function') {
+        return user();
+      }
+
+      return res.status(200).json({ data: user });
+    } catch (err) {
+      return res.status(400).json({ error: err.message });
+    }
+  };
+}
 
 export const verifyUserExists = async ({ email, username, cin }) => {
   const user =
