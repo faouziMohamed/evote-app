@@ -1,13 +1,12 @@
 // import { addRandomUserToDB } from './resources/users/users.utils';
 
-import './utils/passport';
-
 import compression from 'compression';
 import flash from 'connect-flash';
 import MongoStore from 'connect-mongo';
 import cors from 'cors';
 import express from 'express';
 import expressLayout from 'express-ejs-layouts';
+import minify from 'express-minify';
 import session from 'express-session';
 // import helmet from 'helmet';
 import createError from 'http-errors';
@@ -16,6 +15,7 @@ import passport from 'passport';
 import path from 'path';
 
 import Config from './config/config';
+import { usePassportLocalStrategy } from './controllers/passport';
 import { configureRoutes } from './routes/api-routes';
 // import { addRandomUserToDB } from './utils/users.utils';
 
@@ -46,7 +46,7 @@ app.use((req, res, next) => {
 
 app.use(
   session({
-    name: 'evoteSID',
+    name: 'user-session',
     store: MongoStore.create({
       mongoUrl: Config.DB_URL,
       ttl: 60 * 60 * 24 * 15,
@@ -64,11 +64,12 @@ app.use(
 );
 
 app.use(flash());
+usePassportLocalStrategy();
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(compression()); //   Compress all routes
+app.use(compression()); // Compress all routes
+app.use(minify());
 app.use(express.static(path.join(__dirname, 'public')));
-
 configureRoutes(app);
 
 // catch 404 and forward to error handler

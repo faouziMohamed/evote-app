@@ -1,25 +1,26 @@
 import Debug from 'debug';
-import { config } from 'dotenv';
 import { nanoid } from 'nanoid';
 
-config();
-export const debug = Debug('votes:server');
-const env = process.env.NODE_ENV;
+require('dotenv').config();
 
-const baseConfig = {
+export const debug = Debug('votes:server');
+const env = process.env.NODE_ENV || 'production';
+const APP_NAME = process.env.APP_NAME || 'E-Votes';
+
+const Config = {
   env,
-  PORT: process.env.PORT || 3000,
   session: {
-    secret: nanoid(2000),
-    expiry: 15 * 24 * 60 * 60 * 1000, // 15 days
-    maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
+    secret: process.env.SESSION_SECRET || nanoid(1000),
+    expiry: Number(process.env.SESSION_EXPIRY) || 15 * 24 * 60 * 60 * 1000, // 15 days
+    maxAge: Number(process.env.SESSION_MAXAGE) || 15 * 24 * 60 * 60 * 1000, // 15 days
   },
-  jwt: {
-    secret: process.env.JWT_SECRET,
-    expiry: process.env.JWT_EXPIRY || '15d', // 15 days,
-    algorithm: 'HS256',
-  },
+  PORT: Number(process.env.PORT) || 5000,
+  APP_NAME,
+  SERVER_NAME: process.env.SERVER_NAME || `${APP_NAME} - Server`,
+  SERVER_EMAIL: process.env.SERVER_EMAIL || 'server@pipita.anonaddy.me',
+  SERVER_PASSHPRASE: process.env.SERVER_PASSHPRASE || nanoid(1000),
+  PASSPHRASE_KEY: process.env.PASSPHRASE_KEY || nanoid(1000),
   DB_URL:
     env === 'production' ? process.env.DB_URL_PROD : process.env.DB_URL_DEV,
 };
-export default baseConfig;
+export default Config;

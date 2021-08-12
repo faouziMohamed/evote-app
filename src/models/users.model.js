@@ -2,8 +2,6 @@ import bcrypt from 'bcrypt';
 import { startCase, toLower } from 'lodash';
 import { model, Schema } from 'mongoose';
 
-// import { encryptPassword } from '../users/users.utils';
-
 const userSchema = new Schema(
   {
     username: {
@@ -49,7 +47,8 @@ const userSchema = new Schema(
     },
     birthDate: { type: Date, required: true, default: '' },
     isPdg: { type: Boolean, default: false },
-    isAdmin: { type: Boolean, default: false },
+    isAdministrator: { type: Boolean, default: false },
+    isFirstLogin: { type: Boolean, default: true },
     isCandidate: { type: Boolean, default: false },
     hasVoted: { type: Boolean, default: false },
     accountActivated: { type: Boolean, default: false },
@@ -115,4 +114,9 @@ userSchema.methods.comparePassword = async function comparePassword(password) {
   const isMatch = await bcrypt.compare(password, hashedPassword);
   return isMatch;
 };
-export const User = model('User', userSchema);
+
+userSchema.methods.isAdmin = function isAdmin() {
+  return this.isAdministrator;
+};
+
+export default model('User', userSchema);
