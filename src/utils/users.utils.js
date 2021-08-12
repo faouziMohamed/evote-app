@@ -2,7 +2,7 @@
 import { names, uniqueNamesGenerator as nameGen } from 'unique-names-generator';
 
 import CandidatesModel from '../models/candidates.model';
-import { User } from '../models/users.model';
+import User from '../models/users.model';
 
 class StaticData {
   static cin = Number(9999);
@@ -122,22 +122,3 @@ export const addRandomUserToDB = async (
   );
   return !1;
 };
-
-const message = {
-  uidRqd: 'Missing parameters, user id is required to activate the account',
-  uid: 'Missing parameters, user id is required',
-  activated: 'Account activated',
-  nactivated: 'Account created but not activated',
-  emailUsed: 'The email is already used',
-  usernameUsed: 'The user name is already used',
-  fieldsRqd: 'Missing parameters, some fields are required',
-  passErr: 'Incorrect Password',
-  201: 'Account created but not activated',
-  404: 'User not found',
-  401: 'Connect and retry the operation',
-  400: 'Missing parameters',
-  403: 'User account already activated',
-  500: 'Internal server error',
-};
-export const getMessage = ({ reason }) =>
-  ({ message: message[reason] } || 'Unexpected error');
