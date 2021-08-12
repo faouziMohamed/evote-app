@@ -4,7 +4,7 @@
     ".git",
     "node_modules/**/node_modules",
     "dist",
-    "src/**/openpgp.min.js"
+    "./**/openpgp.min.js"
   ],
   "verbose": true,
   "execMap": {
@@ -13,7 +13,7 @@
 
   "runOnChangeOnly": false,
   "watch": [
-    "src/**/*.js",
+    "./**/*.js",
     "./**/*.json",
     "./**/*.ejs",
     "./**/*.css",

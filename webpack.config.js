@@ -6,10 +6,11 @@ module.exports = {
   performance: {
     hints: false,
   },
+  cache: true,
   target: 'web',
   entry: {
     main: './src/public/js/main.js',
-    encryption: './src/public/js/encryption/gpgEncryptor.js',
+    encryption: './src/utils/lib/gpgEncryptor.js',
   },
   output: {
     path: path.resolve(__dirname, './src/public/js/'),
@@ -21,7 +22,8 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: { loader: 'babel-loader' },
+        loader: 'babel-loader',
+        options: { cacheCompression: false, cacheDirectory: true },
       },
     ],
   },
