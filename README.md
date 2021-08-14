@@ -35,14 +35,35 @@ A simulation of online voting using basic nodejs, express and openPGP for encryp
      yarn
      ```
 1. For testing purpose create a file called `.env` in the root of the project (`evote-app`) and paste the following content:  
-    This file will not be stagged into Git, Keep it only localy.
-    ```plain
-      JWT_SECRET = 'superPassword'
-      JWT_EXPIRY = '30d'
-      JWT_ALGORITHM = 'HS256'
-      PORT = '3000'
-      DB_URL = 'mongodb://localhost:27017/evote-app'
+    This file will not be stagged into Git, Keep it only localy. Note that random secret bellow are generated using [`nanoid`](https://www.npmjs.com/package/nanoid#usage 'nanoid npm page')
+    ```env
+      PORT = 3000
+      APP_NAME = 'evote-app'
+      DB_URL_DEV = 'mongodb://localhost:27017/evote-app'
+      # Change the uri bellow with a mongo cloud atlas uri for production  
+      DB_URL_PROD = 'mongodb://localhost:27017/evote-app'
+      SESSION_EXPIRY = 1296000000
+      SESSION_MAXAGE = 1296000000
+
+      SERVER_NAME = 'Web Server in node'
+      SERVER_EMAIL = 'server@webserver.ma'
+      SERVER_PASSHPRASE = 'U2FsdGVaJunkyRanDomSECRETuP'
+
+      COCENTER_NAME = 'Counting Center'
+      COCENTER_EMAIL = 'co.server@server.ma'
+      COCENTER_PASSHPRASE = 'CPutHere A RANDOM SECRET9yfDbhnBm51kSNpkL'
+
+      VALIDATION_CENTER_NAME = 'Validation Center'
+      VALIDATION_CENTER_EMAIL = 'validation.server@server.ma'
+      VALIDATION_CENTER_PASSHPRASE = 'your RANDOM SERCER HERE plLrtFj2T7S'
+
+      PASSPHRASE_KEY = 'RANDOMw22PiTFHSECRET0vQdZzUHQvIR98OWbVwpw9qZT_h'
+      SESSION_SECRET='cZk_slfK84QiDDo-vMARANDOM SECRET CODElKJRUs-v7QbxUW-4'
     ```
+1. Bundle javascript file for browser (using [webpack5](https://webpack.js.org/ 'Webpack official website')) by running : 
+   |npm |-| yarn|
+   |-----|-|----|
+   |`npm run wpack`|Or|`yarn wpack`|
 1. Then run tests on local typing:
    |npm |-| yarn|
    |-----|-|----|
