@@ -16,6 +16,7 @@ jobs:
         run: |
           npm install -g yarn
           yarn 
+          yarn wpack
           yarn build
       - name: deploy 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.4
