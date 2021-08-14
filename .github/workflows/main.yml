@@ -1,0 +1,14 @@
+name: Test and run
+on: [push]
+jobs: 
+  test-node-compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - run: npm install -g yarn
+      - run: yarn install
+      - run: yarn wpack
+      
