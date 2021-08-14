@@ -17,7 +17,7 @@
     "openPGP"
   ],
   "engines": {
-    "node": "14.17.4"
+    "node": ">=14"
   },
   "bugs": {
     "url": "https://github.com/faouziMohamed/evote-app/issues"
