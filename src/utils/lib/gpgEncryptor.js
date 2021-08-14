@@ -125,7 +125,7 @@ export default class GPGEncryptor {
    * @param {string} pubKey : The public key to encrypt the message with
    * @return Promise<string>
    * */
-  async encryptMessage(message, encryptionKey = '') {
+  async encryptMessage(message, encryptionKey) {
     GPGEncryptor.#typeAndContentVerification(message, 'Message to encrypt');
 
     if (this.#foreignPubKeys.indexOf(encryptionKey) === -1) {
@@ -173,6 +173,10 @@ export default class GPGEncryptor {
       message: messageObject,
       encryptionKeys: pubKey,
     });
+  }
+
+  static async readArmoredPublicKey(armoredPublicKey = '') {
+    return readKey({ armoredKey: armoredPublicKey });
   }
 
   static async decryptMessageStatic({

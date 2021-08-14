@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid';
 
 require('dotenv').config();
 
-export const debug = Debug('votes:server');
+export const debug = Debug('evote-app: ');
 const env = process.env.NODE_ENV || 'production';
 const APP_NAME = process.env.APP_NAME || 'E-Votes';
 
@@ -18,8 +18,14 @@ const Config = {
   APP_NAME,
   SERVER_NAME: process.env.SERVER_NAME || `${APP_NAME} - Server`,
   SERVER_EMAIL: process.env.SERVER_EMAIL || 'server@pipita.anonaddy.me',
-  SERVER_PASSHPRASE: process.env.SERVER_PASSHPRASE || nanoid(1000),
-  PASSPHRASE_KEY: process.env.PASSPHRASE_KEY || nanoid(1000),
+  SERVER_PASSHPRASE: process.env.SERVER_PASSHPRASE || nanoid(100),
+  PASSPHRASE_KEY: process.env.PASSPHRASE_KEY || nanoid(100),
+  COCENTER_NAME: process.env.COCENTER_NAME || 'Count Center',
+  COCENTER_EMAIL: process.env.COCENTER_EMAIL || 'count.server@server.ma',
+  COCENTER_PASSHPRASE: process.env.COCENTER_PASSHPRASE || nanoid(100),
+  VALCENTER_NAME: process.env.VALIDATION_CENTER_NAME || 'vc Center',
+  VALCENTER_EMAIL: process.env.VALIDATION_CENTER_EMAIL || 'vc.server@server.ma',
+  VALCENTER_PASSHPRASE: process.env.VALIDATION_CENTER_PASSHPRASE || nanoid(100),
   DB_URL:
     env === 'production' ? process.env.DB_URL_PROD : process.env.DB_URL_DEV,
 };

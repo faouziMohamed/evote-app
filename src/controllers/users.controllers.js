@@ -82,13 +82,12 @@ export function getUserWithCallback(userFinderCB) {
       const user = await userFinderCB(req, res, toKeep);
       if (!user) {
         return res
-          .status(302)
+          .status(404)
           .json({ error: getAuthErrorMessage('userNotFound') });
       }
       if (typeof user === 'function') {
         return user();
       }
-
       return res.status(200).json({ data: user });
     } catch (err) {
       return res.status(400).json({ error: err.message });

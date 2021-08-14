@@ -65,7 +65,8 @@ const authPagesData = {
       needToLogin: 'You need to login to access this page',
       needToLoginAPI: 'You need to login to access this resource',
       userNotFound: 'The user is not found!',
-      noValuePassed: 'Invalid request, please submit request with a value',
+      noValuePassed:
+        'Invalid request, please submit request with a value in parameter',
     },
     success: {
       accountActivated: 'Your account has been activated',
@@ -82,7 +83,6 @@ const authPagesData = {
   },
 };
 
-export default authPagesData;
 export const getPageData = (pageName, lang = 'en', layout = 'auth/layout') => ({
   layout,
   ...authPagesData[lang][pageName],
