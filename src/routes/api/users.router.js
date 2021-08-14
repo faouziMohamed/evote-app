@@ -13,7 +13,7 @@ import { getAuthErrorMessage } from '../../data/auth.cms';
 const router = Router();
 router.use(protectAPIRoute);
 
-// handle the case that no value was provided for the
+// handle the case that no value was provided
 router.route(['/cin/', '/id', '/username']).get((req, res) => {
   res.status(400).json({ error: getAuthErrorMessage('noValuePassed') });
 });

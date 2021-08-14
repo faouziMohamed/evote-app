@@ -118,5 +118,5 @@ userSchema.methods.comparePassword = async function comparePassword(password) {
 userSchema.methods.isAdmin = function isAdmin() {
   return this.isAdministrator;
 };
-
-export default model('User', userSchema);
+const User = model('User', userSchema);
+export default User;

@@ -22,7 +22,7 @@ router
 router.route('/new-pair').get((req, res) => {
   const lang = 'en';
   const pageName = 'newPair';
-  const pageData = getPageData(pageName, lang);
+  const pageData = getPageData(pageName, lang, false);
   [pageData.error] = req.flash('error');
   [pageData.success] = req.flash('success');
   pageData.user = req.user;

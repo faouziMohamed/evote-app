@@ -47,9 +47,10 @@ export default class TxtRotate {
 }
 
 export const handleAutoTypingTexts = () => {
+  const elements = document.querySelectorAll('.txt-rotate');
+  if (!elements) return;
+
   window.addEventListener('load', () => {
-    const elements = document.querySelectorAll('.txt-rotate');
-    if (!elements) return;
     elements.forEach((el) => {
       const toRotate = el.dataset.rotate;
       const { period } = el.dataset;

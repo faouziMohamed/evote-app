@@ -9,7 +9,8 @@ const keysSchema = new Schema(
     name: { type: String, required: true },
     publicArmoredKey: { type: String, required: true },
     privateArmoredKey: { type: String, required: true },
-    passphrase: { type: String, cdefault: '' },
+    passphrase: { type: String, default: '' },
+    knownEntities: [{ email: String, publicKey: String }],
   },
   { timeStamp: true },
 );
