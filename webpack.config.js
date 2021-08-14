@@ -10,7 +10,7 @@ module.exports = {
   target: 'web',
   entry: {
     main: './src/public/js/main.js',
-    encryption: './src/utils/lib/gpgEncryptor.js',
+    newPair: './src/public/js/lib/new-pair.js',
   },
   output: {
     path: path.resolve(__dirname, './src/public/js/'),

@@ -1,8 +1,10 @@
 {
-  "name": "votes",
+  "name": "server",
+  "author": "Faouzi Mohamed",
   "version": "1.0.0",
   "private": true,
   "description": "A simulation of online voting using basic nodejs, express and openPGP for encryption.",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/faouziMohamed/evote-app.git"
@@ -14,8 +16,9 @@
     "cryptography",
     "openPGP"
   ],
-  "author": "",
-  "license": "ISC",
+  "engines": {
+    "node": "14.17.3"
+  },
   "bugs": {
     "url": "https://github.com/faouziMohamed/evote-app/issues"
   },
@@ -32,7 +35,7 @@
     "restart": "babel-node ./src/bin/www.js --trace-deprecation",
     "build": "npm run clean && babel ./src --out-dir dist --copy-files",
     "start": "npm run prod",
-    "dev": "DEBUG=votes:* NODE_ENV=development nodemon --exec npm run restart",
+    "dev": "DEBUG='evote-app:*' NODE_ENV=development nodemon --exec npm run restart",
     "prod": "NODE_ENV=production npm run build && node ./dist/bin/www.js"
   },
   "dependencies": {
