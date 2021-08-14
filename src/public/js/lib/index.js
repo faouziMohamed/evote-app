@@ -6,5 +6,5 @@ export {
   getDataFromCookie,
   getFullName,
   redirectTo,
-} from './utils';
+} from './utils/utils';
 export { handleUserVote } from './vote';

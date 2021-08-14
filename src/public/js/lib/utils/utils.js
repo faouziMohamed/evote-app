@@ -12,3 +12,5 @@ export const decodeCookie = (cookieName) => decodeURIComponent(cookieName);
 export const redirectTo = (path) => {
   window.location.href = path;
 };
+
+export const reloadPage = () => window.location.reload();

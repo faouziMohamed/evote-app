@@ -32,7 +32,7 @@
     "prepare": "husky install",
     "clean": "rimraf dist",
     "wpack": "webpack --progress",
-    "restart": "babel-node ./src/bin/www.js --trace-deprecation",
+    "restart": "npm run wpack && babel-node ./src/bin/www.js --trace-deprecation",
     "build": "npm run clean && babel ./src --out-dir dist --copy-files",
     "start": "npm run prod",
     "dev": "DEBUG='evote-app:*' NODE_ENV=development nodemon --exec npm run restart",

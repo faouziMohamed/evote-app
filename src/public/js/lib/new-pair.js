@@ -1,25 +1,43 @@
 import { generateRandomString } from '../../../utils/lib/aes.utils';
 import GPGEncryptor from '../../../utils/lib/gpgEncryptor';
 import { decodeCookie, getDataFromCookie, getFullName } from './index';
+import {
+  ActionButton,
+  displayError,
+  displayMessage,
+  hideLoadSpinner,
+} from './utils/new-pair.utils';
+import { redirectTo, reloadPage } from './utils/utils';
 
-(async () => {
+runOnLoad().catch(displayError);
+
+async function runOnLoad() {
+  const btn = new ActionButton({ show: false });
+
   displayMessage('Fetching data...');
-  const cookie = getDataFromCookie('ps');
-  if (!cookie) {
-    return displayError('An error occured! Please reload the page to retry!');
+  const { UID, error: cookieErr } = getUIDFromCookie('ps');
+  if (cookieErr) {
+    btn.updateButton(() => window.location.reload(), 'Reload page', true);
+    return displayError(cookieErr);
   }
-
-  const { UID } = JSON.parse(decodeCookie(cookie));
-
+  const { isDone } = getCookie();
+  if (isDone) redirectTo('/vote');
   displayMessage('Establishing communication with the server...');
   const { data: serverArmoredPubKey, error: keyError } = await getServerPubKey(
     '/api/keys/public/server',
   );
-  if (keyError) return displayError(keyError);
+  if (keyError) {
+    btn.updateButton(() => reloadPage(), 'Reload page', true);
+    return displayError(keyError);
+  }
 
   displayMessage('Applying some security things...');
-  const { userData, error: userDataError } = await fetchUserData(UID);
-  if (userDataError) return displayError(userDataError);
+  const URL = `/api/users/id/${UID}?name=true&log_status=true`;
+  const { userData, error: userDataError } = await fetchUserData(URL);
+  if (userDataError) {
+    btn.updateButton(() => redirectTo('/register'), 'Activate account', true);
+    return displayError(userDataError);
+  }
 
   displayMessage('Generating encryptions keys...');
   const encryptor = await createNewPairKeys(userData);
@@ -33,12 +51,33 @@ import { decodeCookie, getDataFromCookie, getFullName } from './index';
     data: { encrypted },
   });
 
-  if (postError) return displayError(postError);
+  if (postError) {
+    btn.updateButton(() => redirectTo('/login'), 'Go to login page', true);
+    return displayError(postError);
+  }
+  hideLoadSpinner();
+  btn.updateButton(() => redirectTo('/vote'), 'Continue', false);
   return displayMessage(`Done!`);
-})();
+}
 
-async function fetchUserData(UID) {
-  return fetch(`/api/users/id/${UID}?name=true&log_status=true`)
+function getCookie() {
+  return JSON.parse(decodeCookie(getDataFromCookie('ps')));
+}
+
+function getUIDFromCookie(cookieName) {
+  try {
+    const cookie = getDataFromCookie(cookieName);
+    if (!cookie) {
+      return { error: 'An error occured! Please reload the page to retry!' };
+    }
+    return { UID: JSON.parse(decodeCookie(cookie)).UID };
+  } catch (e) {
+    return { error: 'An error occured! Please reload the page to retry!' };
+  }
+}
+
+async function fetchUserData(URL) {
+  return fetch(URL)
     .then(async (res) => {
       const { data, error } = await res.json();
       if (error) return { error };
@@ -78,29 +117,4 @@ async function postData({ url = '', data = {}, stringify = true }) {
 async function getServerPubKey(url) {
   const response = await fetch(url);
   return response.json();
-}
-
-function hideLoadSpinner(
-  loadSpinner = document.querySelector('.load-spinner'),
-) {
-  if (loadSpinner) loadSpinner.classList.add('hidden');
-}
-
-function displayMessage(
-  message,
-  type = 'success',
-  spinerTxt = document.querySelector('.loading-text'),
-) {
-  if (spinerTxt) {
-    if (type === 'error') spinerTxt.classList.add('error-msg');
-    if (type === 'warning') spinerTxt.classList.add('warning-msg');
-    spinerTxt.innerHTML = message;
-    return;
-  }
-  // eslint-disable-next-line no-console
-  console.log('Cannot display message');
-}
-function displayError(error, type = 'error') {
-  displayMessage(`${type === 'error' ? 'error' : 'warning'}: ${error}`, type);
-  hideLoadSpinner();
 }
