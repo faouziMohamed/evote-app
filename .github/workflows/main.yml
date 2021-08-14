@@ -1,14 +1,26 @@
 name: Test and run
-on: [push]
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - main
+    
 jobs: 
   test-node-compile:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Install and build
+        run: |
+          npm install -g yarn
+          yarn build
+      - name: deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
-          node-version: '14'
-      - run: npm install -g yarn
-      - run: yarn install
-      - run: yarn wpack
+          branch: release
+          folder: public
+      
+      
       
