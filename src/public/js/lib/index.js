@@ -1,6 +1,7 @@
-export { handleAutoTypingTexts } from './autotext';
 export { getCandidatesEvent } from './candidates';
-export { handleHeaderMenu } from './headerMenu';
+export { default as useHeader } from './header';
+export { useUserCard } from './header/headerUserCard';
+export { useAutoTypingTexts } from './home/autotext';
 export {
   decodeCookie,
   getDataFromCookie,

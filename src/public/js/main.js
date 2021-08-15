@@ -1,13 +1,13 @@
 import {
   getCandidatesEvent,
-  handleAutoTypingTexts,
-  handleHeaderMenu,
   handleUserVote,
+  useAutoTypingTexts,
+  useHeader,
 } from './lib/index';
 
-(async () => {
-  handleHeaderMenu();
+(() => {
+  useHeader();
   handleUserVote();
-  handleAutoTypingTexts();
+  useAutoTypingTexts();
   getCandidatesEvent();
 })();

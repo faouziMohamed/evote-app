@@ -1,21 +1,4 @@
-@import url('./header.layout.css');
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body,
-html {
-  height: 100%;
-  background-color: rgb(65, 163, 163);
-}
-
-.body-content {
-  display: flex;
-  flex-direction: column;
-}
+@import url('./connected.layout.css');
 
 .main-content {
   display: flex;
@@ -23,6 +6,12 @@ html {
   gap: 0.6em;
   align-items: center;
   overflow-y: auto;
+}
+.main-header {
+  border: 1px solid aliceblue;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .candidate-card-item:not(:first-child):not(:last-child) {
@@ -264,7 +253,7 @@ input:checked + .slider::before {
     flex-wrap: nowrap;
     justify-content: flex-start;
     max-width: none;
-    background-color: #070066;
+    /* background-color: #070066; */
   }
 
   .candidate-card {

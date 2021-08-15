@@ -5,10 +5,10 @@ export default function addVoteRoute(router) {
     const candidates = await findAllCandidatesMin();
     res.render('connected/vote', {
       candidates,
+      user: req.user,
       metadata: {
         title: 'Vote your favorite candidate',
         description: 'Vote your favorite candidate',
-        user: req.user,
       },
     });
   });

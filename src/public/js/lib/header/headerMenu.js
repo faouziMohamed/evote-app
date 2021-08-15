@@ -1,4 +1,4 @@
-export const handleHeaderMenu = () => {
+export const useHeaderMenu = () => {
   const input = document.querySelector('.checkbox-toggle-menu');
   if (!input) return;
   const ul = document.querySelector('.main-header-list');

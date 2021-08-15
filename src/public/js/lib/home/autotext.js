@@ -1,4 +1,4 @@
-export default class TxtRotate {
+class TxtRotate {
   constructor(el, toRotate, period) {
     this.toRotate = toRotate;
     this.el = el;
@@ -46,9 +46,9 @@ export default class TxtRotate {
   }
 }
 
-export const handleAutoTypingTexts = () => {
+export const useAutoTypingTexts = () => {
   const elements = document.querySelectorAll('.txt-rotate');
-  if (!elements) return;
+  if (!elements.length) return;
 
   window.addEventListener('load', () => {
     elements.forEach((el) => {

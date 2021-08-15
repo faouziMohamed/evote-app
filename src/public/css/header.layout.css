@@ -1,10 +1,5 @@
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@import url('./userMenuCard.header.css');
+
 .navigation {
   display: flex;
   align-items: center;
@@ -18,17 +13,16 @@
 .nav-bar {
   position: relative;
   display: flex;
-  flex-flow: column;
   flex-grow: 1;
   justify-content: flex-start;
 }
 
-/* toogle */
 .toggle-menu-wrapper {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  background-color: rgb(7, 0, 36);
+  background-color: #0b0037;
+  background-image: linear-gradient(to right, #01011b, #010e2b 40%, #03162f);
 }
 
 .menu-toggler-label {
@@ -86,16 +80,14 @@
 
 .menu-toggler-text {
   display: block;
-  flex: 1;
   align-self: stretch;
-  color: antiquewhite;
+  color: #faebd7;
   text-align: center;
   padding-block: 0.655em;
+  min-width: 100px;
+  cursor: pointer;
 }
 
-/* toogle */
-
-/* ul */
 .main-header-list {
   position: absolute;
   top: 100%;
@@ -134,6 +126,11 @@
 }
 
 @media (min-width: 780px) {
+  .main-header-list,
+  .user-menu-card-and-profile-pic {
+    background-color: rgb(0, 33, 48);
+  }
+
   .main-header-list {
     position: relative;
     top: 0;
@@ -141,12 +138,12 @@
     flex-direction: row;
     gap: 0;
     width: 100%;
-    background-color: rgb(0, 33, 48);
   }
 
-  .head {
+  .page-header {
     display: flex;
   }
+
   .navigation {
     display: flex;
     width: auto;
@@ -164,4 +161,8 @@
   .toggle-menu-wrapper {
     display: none;
   }
+}
+
+.hidden {
+  display: none;
 }
