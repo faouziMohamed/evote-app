@@ -18,6 +18,15 @@ const candidatSchema = mongoose.Schema(
       required: true,
       default: false,
     },
+    depositionOrder: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
+    depositionDate: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
     toJSON: { virtuals: true },

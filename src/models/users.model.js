@@ -45,6 +45,15 @@ const userSchema = new Schema(
       required: [true, 'CIN is required but nothing was specified'],
       unique: true,
     },
+    activationOrderNo: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
+    activationData: {
+      type: Date,
+      default: Date.now,
+    },
     birthDate: { type: Date, required: true, default: '' },
     isPdg: { type: Boolean, default: false },
     isAdministrator: { type: Boolean, default: false },

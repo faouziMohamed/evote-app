@@ -1,9 +1,6 @@
 import { Router } from 'express';
 
-import {
-  constructEntity,
-  getEntityArmoredPublicKey,
-} from '../../controllers/entities/index.entities';
+import { getEntityArmoredPublicKey } from '../../controllers/entities/index.entities';
 import {
   getKeys,
   saveUserKeys,
@@ -16,8 +13,7 @@ const router = new Router();
 async function getEntityPublicKey(req, res) {
   try {
     const { entityName } = req.params;
-    const serverData = constructEntity(entityName.toLowerCase());
-    const publicKey = await getEntityArmoredPublicKey(serverData);
+    const publicKey = await getEntityArmoredPublicKey(entityName.toLowerCase());
     res.status(200).json({ data: publicKey });
   } catch (err) {
     res.status(500).json({ error: err.message });

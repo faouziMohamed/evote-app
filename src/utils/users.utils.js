@@ -7,15 +7,15 @@ import User from '../models/users.model';
 class StaticData {
   static cin = Number(9999);
   static numberUserAdded = Number(0);
-  static numberCandidateAdded = Number(0);
+  static #candidateNumber = Number(0);
 
-  static get candidateNumber() {
-    return this.numberCandidateAdded;
+  static get candidateCount() {
+    return this.#candidateNumber;
   }
 
   static incNumberCandidateAdded() {
-    this.numberCandidateAdded += 1;
-    return this.numberCandidateAdded;
+    this.#candidateNumber += 1;
+    return this.#candidateNumber;
   }
 
   static getNewCin() {
@@ -26,6 +26,10 @@ class StaticData {
   static setCin(cin) {
     this.cin = cin;
     this.setNumberUserAdded(cin);
+  }
+
+  static setNumberCandidateAdded(count) {
+    this.#candidateNumber = count;
   }
 
   static setNumberUserAdded(numberUserAdded) {
@@ -41,6 +45,7 @@ class StaticData {
     return this.numberUserAdded;
   }
 }
+
 const generateName = () =>
   nameGen({
     dictionaries: [names],
@@ -55,6 +60,7 @@ const grabData = async (cb) => {
     dummy = await cb();
   } while (dummy !== null);
 };
+
 async function grabUsernameEmail() {
   let username;
   let email;
@@ -71,12 +77,11 @@ async function grabUsernameEmail() {
 }
 
 const newUser = async (UserModel, password) => {
-  const numberCandidate = StaticData.candidateNumber;
-  const isTrue = Math.round(Math.random() * 10) % 2 === 0;
+  const numberCandidate = StaticData.candidateCount;
+  const isTrue = Math.round(Math.random() * 10.6) % 2 === 0;
   const addACandidate = numberCandidate < 5 && isTrue;
   if (addACandidate) StaticData.incNumberCandidateAdded();
   const { username, email } = await grabUsernameEmail();
-
   const user = new UserModel({
     username,
     email,
@@ -94,7 +99,6 @@ const newUser = async (UserModel, password) => {
     await CandidatesModel.create({ cin: user.cin });
   }
   StaticData.incrementNumberAdded();
-
   return user;
 };
 
@@ -104,12 +108,17 @@ async function findLastCIN(UserModel) {
   return cin;
 }
 
+async function getCandidateCount() {
+  return CandidatesModel.countDocuments().exec() || 0;
+}
+
 export const addRandomUserToDB = async (
   howMany = 5,
   password = '123456789',
   model = User,
 ) => {
   const cin = await findLastCIN(model);
+  StaticData.setNumberCandidateAdded(await getCandidateCount());
   StaticData.setCin(cin);
   for (let i = 1; i <= howMany; i++) {
     await newUser(model, password);
@@ -118,7 +127,11 @@ export const addRandomUserToDB = async (
   }
   // eslint-disable-next-line no-console
   console.log(
-    `Done!!! All ${howMany} users are added using the '${password}' password!`,
+    `All ${howMany} users are added using the '${password}' password!`,
   );
+  // eslint-disable-next-line no-console
+  console.log('\tNumber of candidate added: ', StaticData.candidateCount);
+  // eslint-disable-next-line no-console
+  console.log('Done!!!');
   return !1;
 };

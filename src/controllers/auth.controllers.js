@@ -8,6 +8,7 @@ import {
   findUserByCIN,
   findUserByEmail,
   findUserByUsername,
+  getUserActivatedCount,
   getUserDataFromRequest,
   hasNoMissingField,
 } from './users.controllers';
@@ -84,6 +85,8 @@ export const registerPOST = async (req, res) => {
     Object.keys(userData).forEach((key) => {
       user[key] = userData[key];
     });
+    const activatonOrderNo = await getUserActivatedCount();
+    user.activationOrderNo = activatonOrderNo + 1;
     user.accountActivated = true;
     user.save();
 
@@ -121,9 +124,10 @@ export const checkBeforeLogin = (req, res, next) => (err, user, info) => {
       httpOnly: false,
       secure: false,
     };
-    const data = JSON.stringify({ UID: req.user.id, CIN: req.user.cin });
+    const data = JSON.stringify({ UID: user.id, username: user.username });
     res.cookie('ps', data, options);
-    return res.redirect('/vote');
+
+    return res.redirect(user.isFirstLogin ? '/new-pair' : '/vote');
   });
 };
 

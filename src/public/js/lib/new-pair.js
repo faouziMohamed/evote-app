@@ -7,7 +7,7 @@ import {
   displayMessage,
   hideLoadSpinner,
 } from './utils/new-pair.utils';
-import { redirectTo, reloadPage } from './utils/utils';
+import { postData, redirectTo, reloadPage } from './utils/utils';
 
 runOnLoad().catch(displayError);
 
@@ -103,15 +103,6 @@ async function encryptGeneratedKeys(encryptor, serverArmoredPubKey) {
   const pubKey = await GPGEncryptor.readArmoredPublicKey(serverArmoredPubKey);
   const encrypted = await encryptor.encryptMessage(unencryptedMessage, pubKey);
   return encrypted;
-}
-
-async function postData({ url = '', data = {}, stringify = true }) {
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: stringify ? JSON.stringify(data) : data,
-  });
-  return response.json();
 }
 
 async function getServerPubKey(url) {

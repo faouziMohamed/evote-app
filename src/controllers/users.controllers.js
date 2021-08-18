@@ -37,6 +37,10 @@ export const getUserByUsername = async (req, res, filter = {}) => {
     return res.status(400).json({ error: err.message });
   }
 };
+
+export const getUserActivatedCount = async () =>
+  User.find({ accountActivated: true }).countDocuments().exec();
+
 export const getUserByID = async (req, res, filter = {}) => {
   try {
     const { id } = req.params;

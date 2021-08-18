@@ -3,7 +3,7 @@ import { getErrorMessage, getSuccessMessage } from '../../data/common.cms';
 import Keys, { decryptPassphrase } from '../../models/keys.model';
 import User from '../../models/users.model';
 import { encryptMessage } from '../../utils/lib/aes.utils';
-import { constructEntity, getEncryptionKeys } from './index.entities';
+import { getEncryptionKeys } from './index.entities';
 
 export const getFullName = (name = { first: '', last: '' }) =>
   `${name.first} ${name.last}`;
@@ -48,16 +48,15 @@ async function getOnlyUserKeys(user, filter = {}) {
   return userKeys;
 }
 
-async function decryptReqBody(msg) {
-  const serverData = constructEntity('server');
-  const { entityGPGEncryptor } = await getEncryptionKeys(serverData);
+async function decryptReqBodyMsg(msg, toJson = true, entityName = 'server') {
+  const { entityGPGEncryptor } = await getEncryptionKeys(entityName);
   const decryptedMessage = await entityGPGEncryptor.decryptMessage(msg);
-  const armoredKeysWithPassphrase = JSON.parse(decryptedMessage.data);
-  return armoredKeysWithPassphrase;
+  return toJson ? JSON.parse(decryptedMessage.data) : decryptedMessage.data;
 }
+
 export async function saveUserKeys(req, res) {
   const { user } = req;
-  const armoredKeysWithPassphrase = await decryptReqBody(req.body.encrypted);
+  const armoredKeysWithPassphrase = await decryptReqBodyMsg(req.body.encrypted);
   let msg = checkCredentials(user, req.params);
   if (msg.error) {
     return res.status(400).json({ error: msg.error });
@@ -102,14 +101,14 @@ export async function saveUserKeys(req, res) {
 
 export async function getKeys(req, res) {
   const { user } = req;
-  const { aesKey } = req.body;
+  const { expected: aesKeyEncrypted } = req.body; // expected is a aesKey
   const msg = checkCredentials(user, req.params);
 
   if (msg.error) {
     return res.status(400).json({ error: msg.error });
   }
 
-  if (!aesKey) {
+  if (!aesKeyEncrypted) {
     return res
       .status(400)
       .json({ error: getErrorMessage('noEncryptKeyPassed') });
@@ -120,6 +119,7 @@ export async function getKeys(req, res) {
     return res.status(204).end();
   }
   const keysString = JSON.stringify(keys);
+  const aesKey = await decryptReqBodyMsg(aesKeyEncrypted, false);
   const encrypted = encryptMessage(keysString, aesKey);
   return res.status(200).json({ data: encrypted.toString() });
 }

@@ -14,3 +14,12 @@ export const redirectTo = (path) => {
 };
 
 export const reloadPage = () => window.location.reload();
+
+export async function postData({ url = '', data = {}, stringify = true }) {
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: stringify ? JSON.stringify(data) : data,
+  });
+  return response.json();
+}

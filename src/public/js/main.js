@@ -1,13 +1,13 @@
 import {
+  controleUserVoteSelection,
   getCandidatesEvent,
-  handleUserVote,
   useAutoTypingTexts,
   useHeader,
 } from './lib/index';
 
 (() => {
   useHeader();
-  handleUserVote();
+  controleUserVoteSelection();
   useAutoTypingTexts();
   getCandidatesEvent();
 })();

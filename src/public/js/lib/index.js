@@ -6,6 +6,7 @@ export {
   decodeCookie,
   getDataFromCookie,
   getFullName,
+  postData,
   redirectTo,
 } from './utils/utils';
-export { handleUserVote } from './vote';
+export { controleUserVoteSelection } from './vote';

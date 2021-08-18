@@ -26,11 +26,11 @@ export const constructEntity = (entityType = 'server') => {
   }
   return entity;
 };
-const getKeysFromDB = async (entity, filter = {}) => {
+const getKeysFromDB = async (entityData, filter = {}) => {
   const key = await Keys.findOne(
     {
-      name: entity.name,
-      email: entity.email,
+      name: entityData.name,
+      email: entityData.email,
     },
     filter,
   )
@@ -40,26 +40,28 @@ const getKeysFromDB = async (entity, filter = {}) => {
   return key;
 };
 
-const createNewKeys = async (entity) =>
+const createNewKeys = async (entityData) =>
   new GPGEncryptor({
-    userIDs: entity.userID(),
-    passphrase: entity.passphrase,
+    userIDs: entityData.userID(),
+    passphrase: entityData.passphrase,
   }).init();
 
-export async function getEncryptionKeys(entity) {
+export async function getEncryptionKeys(entityName) {
   const filter = {
     _id: 0,
     publicArmoredKey: 1,
     privateArmoredKey: 1,
     passphrase: 1,
   };
-  let entityKeys = await getKeysFromDB(entity, filter);
+
+  const entityData = constructEntity(entityName.toLowerCase());
+  let entityKeys = await getKeysFromDB(entityData, filter);
   let entityGPGEncryptor = null;
 
   if (entityKeys) {
     entityGPGEncryptor = await GPGEncryptor.fromArmoredKeys({ ...entityKeys });
   } else {
-    entityGPGEncryptor = await createNewKeys(entity);
+    entityGPGEncryptor = await createNewKeys(entityData);
     entityKeys = entityGPGEncryptor.getArmoredKeys();
     const options = {
       ...entityKeys,
@@ -69,13 +71,13 @@ export async function getEncryptionKeys(entity) {
 
     await Keys.create(options);
     // eslint-disable-next-line no-console
-    console.log(`${entity.name} keys created!`);
+    console.log(`${entityData.name} keys created!`);
   }
 
   return { entityKeys, entityGPGEncryptor };
 }
 
-export const getEntityArmoredPublicKey = async (entity) => {
-  const { entityKeys = '' } = await getEncryptionKeys(entity);
+export const getEntityArmoredPublicKey = async (entityName) => {
+  const { entityKeys = '' } = await getEncryptionKeys(entityName);
   return entityKeys.publicArmoredKey;
 };
