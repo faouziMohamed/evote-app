@@ -23,3 +23,18 @@ export async function postData({ url = '', data = {}, stringify = true }) {
   });
   return response.json();
 }
+
+export async function getData({ url = '' }) {
+  const response = await fetch(url);
+  return response.json();
+}
+export function newElement(name, attributes = {}, childs = []) {
+  const node = document.createElement(name);
+  const keys = Object.getOwnPropertyNames(attributes);
+  keys.forEach((key) => {
+    node.setAttribute(`${key}`, attributes[`${key}`]);
+  });
+
+  node.append(...childs);
+  return node;
+}

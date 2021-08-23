@@ -1,9 +1,11 @@
+import { newElement } from '../utils/utils';
+
 class TxtRotate {
   constructor(el, toRotate, period) {
     this.toRotate = toRotate;
     this.el = el;
     this.loopNum = 0;
-    this.period = parseInt(period, 10) || 2000;
+    this.period = Number(period) || 2000;
     this.txt = '';
   }
 
@@ -21,8 +23,8 @@ class TxtRotate {
     } else {
       this.txt = fullTxt.substring(0, this.txt.length + 1);
     }
-
-    this.el.innerHTML = `<span class="wrap">${this.txt}</span>`;
+    const span = newElement('span', { class: 'text-cusor-dynamic' }, this.txt);
+    this.el.replaceChildren(span);
 
     const that = this;
     let delta = 300 - Math.random() * 100;
@@ -59,11 +61,5 @@ export const useAutoTypingTexts = () => {
         txtRotate.run();
       }
     });
-
-    // INJECT CSS
-    const css = document.createElement('style');
-    css.setAttribute('type', 'text/css');
-    css.innerHTML = '.txt-rotate > .wrap { border-right: 0.08em solid #666 }';
-    document.body.appendChild(css);
   });
 };

@@ -1,6 +1,6 @@
-const card = document.querySelector('.user-card-wrapper');
-
 function handleOpenAndClosingUserCard() {
+  const card = document.querySelector('.user-card-wrapper');
+  if (!card) return;
   const arrowUser = document.querySelectorAll(
     '.sort-down, .user-profile-picture-scaled',
   );
@@ -13,6 +13,8 @@ function handleOpenAndClosingUserCard() {
 }
 
 function handleClosingUserCard() {
+  const card = document.querySelector('.user-card-wrapper');
+  if (!card) return;
   document.body.querySelector('.main-content').addEventListener(
     'click',
     (e) => {

@@ -76,3 +76,7 @@ html {
 .login:focus {
   text-decoration: underline;
 }
+
+.text-cusor-dynamic {
+  border-right: 0.08em solid #d9f9f8;
+}
