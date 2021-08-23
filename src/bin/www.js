@@ -1,7 +1,10 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
+import address from 'address';
+import chalk from 'chalk';
 /**
  * Module dependencies.
  */
@@ -74,8 +77,15 @@ const onListening = async () => {
   }
 
   const addr = server.address();
-  const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
-  debug(`Listening on ${bind}`);
+  // const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
+  const localUrl = `http://localhost:${chalk.bold(addr.port)}`;
+  const ipv4Url = `http://${address.ip()}:${chalk.bold(addr.port)}`;
+  const msg = `You can now view ${chalk.bold(Config.APP_NAME)} in the browser.`;
+  console.log('>', msg);
+  console.log();
+  console.log(`    ${chalk.bold('Local:')}           ${localUrl}`);
+  console.log(`    ${chalk.bold('On Your network:')} ${ipv4Url}`);
+  console.log();
 };
 
 /**
