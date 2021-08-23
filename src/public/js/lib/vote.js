@@ -44,7 +44,7 @@ export class Vote {
   #userGPGKeys = '';
   #userGPGEncryptor = null;
   static #instance = null;
-  constructor({ ballot = { votedID: 10001, UID: 10114 }, UID = 10114 }) {
+  constructor({ ballot = { candidateID: 10001, UID: 10114 }, UID = 10114 }) {
     if (!Vote.#instance) {
       this.ballot = ballot;
       this.UID = UID;
@@ -86,10 +86,20 @@ export class Vote {
       const userGPGKeys = this.#decryptUserGPGKeys(encryptedUserGPGkeys.data);
       this.#userGPGEncryptor = await Vote.#createUserGPGEncryptor(userGPGKeys);
       const encryptedBallot = await this.#createEncryptedBallot();
-      const msg = { votedID: 784, encryptedBallot };
-      const vcMsg = await this.#prepareMSG(msg, this.vcPubkey);
+      const { id: voteID } = await this.#getNewVoteID();
+      const msg = { voteID, encryptedBallot };
       const coMsg = await this.#prepareMSG(msg, this.coPubkey);
-      console.log(vcMsg, coMsg);
+      const vcMsg = await this.#prepareMSG(msg, this.vcPubkey);
+      const { data: response } = await postData({
+        url: '/api/vote/submit/co',
+        data: { vote: coMsg },
+      });
+
+      const { data: msgServer } = await postData({
+        url: '/api/vote/submit/vc',
+        data: { vote: vcMsg },
+      });
+      console.log('Server Has reponded: ', response, 'then', msgServer);
       return msg;
     } catch (e) {
       return console.log(e);
@@ -112,12 +122,30 @@ export class Vote {
   }
 
   async #createEncryptedBallot() {
-    return this.#createEncryptedMsg(this.ballot, this.coPubkey);
+    return this.#createEncryptedMsg(this.ballot, this.vcPubkey);
+  }
+
+  async #getNewVoteID() {
+    const userPubKey = this.#userGPGEncryptor.getPublicArmoredKey();
+
+    const { data: voteIdEncrypted, error } = await postData({
+      url: `/api/vote/voteid?uid=${this.UID}`,
+      data: { armoredPublicKey: userPubKey },
+    });
+    if (error) {
+      console.log(error);
+      return error;
+    }
+    const { data } = await this.#userGPGEncryptor.decryptMessage(
+      voteIdEncrypted,
+    );
+    console.log('VOTE ID', data);
+    return JSON.parse(data);
   }
 
   async #prepareMSG(msg, entityPublicKey) {
     const encMSG = await this.#createEncryptedMsg(msg, entityPublicKey);
-    return this.#createEncryptedMsg(encMSG, this.serverPubkey);
+    return this.#createEncryptedMsg(encMSG, this.serverPubkey, false);
   }
 
   static async #getEntityPublicKey(entity) {
@@ -130,11 +158,11 @@ export class Vote {
 // Add event to buttons
 const buttons = document.querySelectorAll('.vote-btn');
 buttons.forEach((button) => {
-  const votedID = button.dataset.candidate;
+  const candidateID = button.dataset.candidate;
   button.addEventListener('click', async () => {
     try {
       const { UID } = JSON.parse(decodeCookie(getDataFromCookie('ps')));
-      const ballot = { votedID, UID };
+      const ballot = { candidateID, UID };
       const vote = await new Vote({ ballot, UID }).initialize();
       await vote.runVoteProcess();
     } catch (error) {

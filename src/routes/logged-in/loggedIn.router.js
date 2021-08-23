@@ -1,8 +1,10 @@
 import { Router } from 'express';
 
-import addCandidatesRoutes from './connected/candidates.router';
-import addDashboardRoute from './connected/dashboard.router';
-import addVoteRoute from './connected/votes.router';
+import addCandidatesRoutes from './candidates.router';
+import addDashboardRoute from './dashboard.router';
+import addVoteRoute from './votes.router';
+
+// ALl routes for connected users except the home page
 
 const connectedRouter = new Router();
 addDashboardRoute(connectedRouter);

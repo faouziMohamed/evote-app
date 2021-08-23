@@ -7,6 +7,7 @@ import {
 } from '../../controllers/entities/users.entities';
 import { getAuthErrorMessage } from '../../data/auth.cms';
 import { getErrorMessage } from '../../data/common.cms';
+/* Router with root /api/keys/ */
 
 // Handle routes from '/api/keys/{server,countcenter|co, valcenter|vc}
 const router = new Router();

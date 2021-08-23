@@ -15,7 +15,7 @@ const keysSchema = new Schema(
   { timeStamp: true },
 );
 
-keysSchema.index({ email: 1 });
+keysSchema.index({ email: 1, _id: 1 }, { unique: true });
 // Encrypt passphrase before saving to database
 keysSchema.pre('save', function encryptPassPhrase(next) {
   if (this.isModified('passphrase')) {

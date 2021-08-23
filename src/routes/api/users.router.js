@@ -1,4 +1,3 @@
-/* eslint-disable import/named */
 import { Router } from 'express';
 
 import { protectAPIRoute } from '../../controllers/auth.controllers';
@@ -10,6 +9,7 @@ import {
 } from '../../controllers/users.controllers';
 import { getAuthErrorMessage } from '../../data/auth.cms';
 
+/* Router with root /api/users/ */
 const router = Router();
 router.use(protectAPIRoute);
 

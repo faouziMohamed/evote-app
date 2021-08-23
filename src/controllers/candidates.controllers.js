@@ -7,6 +7,18 @@ export const findAllCandidates = async () =>
     .lean()
     .exec();
 
+export const findCandidateByCIN = async (cin) =>
+  CandidatesModel.findOne({ cin }, '-_id').lean().exec();
+
+export const incrementVoiceCount = async (cin) =>
+  CandidatesModel.findOneAndUpdate(
+    { cin },
+    { $inc: { voiceCount: 1 } },
+    { new: true },
+  )
+    .lean()
+    .exec();
+
 export const findAllCandidatesMin = async () => {
   const candidates = await findAllCandidates();
   return candidates.map((candidate) => ({

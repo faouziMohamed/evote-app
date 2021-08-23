@@ -6,8 +6,8 @@ import {
   loginGET,
   registerGET,
   registerPOST,
-} from '../controllers/auth.controllers';
-import { getPageData } from '../data/auth.cms';
+} from '../../controllers/auth.controllers';
+import { getPageData } from '../../data/auth.cms';
 
 const router = Router();
 

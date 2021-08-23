@@ -6,6 +6,7 @@ import GPGEncryptor from '../../utils/lib/gpgEncryptor';
 export const constructEntity = (entityType = 'server') => {
   let entity = {};
   switch (entityType) {
+    case 'svr':
     case 'server': {
       entity = getEntity('server');
       break;
@@ -26,6 +27,12 @@ export const constructEntity = (entityType = 'server') => {
   }
   return entity;
 };
+export const getVoteCenterEntities = () => [
+  'co',
+  'countcenter',
+  'vc',
+  'valcenter',
+];
 const getKeysFromDB = async (entityData, filter = {}) => {
   const key = await Keys.findOne(
     {

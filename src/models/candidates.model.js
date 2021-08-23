@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+import { model, Schema } from 'mongoose';
 
-const candidatSchema = mongoose.Schema(
+const candidatSchema = Schema(
   {
     cin: {
       type: Number,
@@ -43,4 +43,5 @@ candidatSchema.virtual('details', {
   match: { isCandidate: true },
 });
 
-export default mongoose.model('Candidates', candidatSchema);
+const Candidates = model('Candidates', candidatSchema);
+export default Candidates;
