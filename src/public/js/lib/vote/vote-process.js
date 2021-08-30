@@ -1,37 +1,8 @@
 /* eslint-disable no-console */
-import { decryptMessage, generateAESKey } from '../../../utils/lib/aes.utils';
-import GPGEncryptor from '../../../utils/lib/gpgEncryptor';
-import { decodeCookie, getDataFromCookie, postData } from './utils/utils';
+import { decryptMessage, generateAESKey } from '@lib/aes.utils';
+import GPGEncryptor from '@lib/gpgEncryptor';
 
-const uncheckInputAndDisableButton = (input, button) => {
-  // eslint-disable-next-line no-param-reassign
-  input.checked = false;
-  button.classList.remove('enabled');
-};
-
-const disableOtherInputsAndButtons = (inputs, input, buttons) => {
-  inputs.forEach((x, index) => {
-    if (x !== input) {
-      uncheckInputAndDisableButton(x, buttons[index]);
-    }
-  });
-};
-
-export const controleUserVoteSelection = () => {
-  const buttons = document.querySelectorAll('.vote-btn');
-  if (!buttons) return;
-
-  const inputs = document.querySelectorAll('.vote-checkbox');
-  inputs.forEach((input, index) => {
-    uncheckInputAndDisableButton(input, buttons[index]);
-    input.addEventListener('change', () => {
-      buttons[index].classList.toggle('enabled');
-      if (input.checked) {
-        disableOtherInputsAndButtons(inputs, input, buttons);
-      }
-    });
-  });
-};
+import { postData } from '../utils/utils';
 
 export class Vote {
   serverPubkey = '';
@@ -44,7 +15,7 @@ export class Vote {
   #userGPGKeys = '';
   #userGPGEncryptor = null;
   static #instance = null;
-  constructor({ ballot = { candidateID: 10001, UID: 10114 }, UID = 10114 }) {
+  constructor({ ballot = { candidateID: -1, UID: -1 }, UID = -1 }) {
     if (!Vote.#instance) {
       this.ballot = ballot;
       this.UID = UID;
@@ -154,21 +125,3 @@ export class Vote {
     return pubKey.data;
   }
 }
-
-// Add event to buttons
-const buttons = document.querySelectorAll('.vote-btn');
-buttons.forEach((button) => {
-  const candidateID = button.dataset.candidate;
-  button.addEventListener('click', async () => {
-    try {
-      const { UID } = JSON.parse(decodeCookie(getDataFromCookie('ps')));
-      const ballot = { candidateID, UID };
-      const vote = await new Vote({ ballot, UID }).initialize();
-      await vote.runVoteProcess();
-    } catch (error) {
-      console.log(error);
-      // TODO: invalidate session and redirect to login page
-      // redirectTo('/login');
-    }
-  });
-});

@@ -1,17 +1,22 @@
-import { generateRandomString } from '../../../utils/lib/aes.utils';
-import GPGEncryptor from '../../../utils/lib/gpgEncryptor';
-import { decodeCookie, getDataFromCookie, getFullName } from './index';
+import { generateRandomString } from '@lib/aes.utils';
+import GPGEncryptor from '@lib/gpgEncryptor';
+
+import {
+  decodeCookie,
+  getDataFromCookie,
+  getFullName,
+  postData,
+  redirectTo,
+  reloadPage,
+} from '../utils/utils';
 import {
   ActionButton,
   displayError,
   displayMessage,
   hideLoadSpinner,
-} from './utils/new-pair.utils';
-import { postData, redirectTo, reloadPage } from './utils/utils';
+} from './new-pair.utils';
 
-runOnLoad().catch(displayError);
-
-async function runOnLoad() {
+export async function runOnLoad() {
   const btn = new ActionButton({ show: false });
 
   displayMessage('Fetching data...');
