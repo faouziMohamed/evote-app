@@ -8,7 +8,8 @@
           "_resources": "./src/resources",
           "_users": "./src/resources/users",
           "_config": "./src/config",
-          "_utils": "./src/utils"
+          "_utils": "./src/utils",
+          "@lib": "./src/utils/lib"
         }
       }
     ],
