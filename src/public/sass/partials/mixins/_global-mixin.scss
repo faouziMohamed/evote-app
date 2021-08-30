@@ -1,0 +1,104 @@
+@use '../variables' as v;
+@mixin useFlexbox($dir: row, $jt: center, $al: center, $inline: 0) {
+  @if $inline==0 {
+    display: flex;
+  } @else {
+    display: inline-flex;
+  }
+  @if $dir != 0 {
+    flex-direction: $dir;
+  }
+  @if $jt !=0 {
+    justify-content: $jt;
+  }
+  @if $al !=0 {
+    align-items: $al;
+  }
+}
+
+@mixin usePosition(
+  $position: relative,
+  $top: none,
+  $left: none,
+  $right: none,
+  $bottom: none
+) {
+  position: $position;
+  @if $top != none {
+    top: $top;
+  }
+  @if $left != none {
+    left: $left;
+  }
+
+  @if ($right != none) {
+    right: $right;
+  }
+
+  @if ($bottom != none) {
+    bottom: $bottom;
+  }
+}
+
+@mixin useSquareSize($size: 1em) {
+  width: $size;
+  height: $size;
+}
+
+@mixin userCenter($dir, $jt, $al) {
+  @include useFlexbox($dir, $jt, $al);
+}
+@mixin useVerticalCenter() {
+  @include userCenter($dir: row, $jt: 0, $al: center);
+}
+
+@mixin useHorizontalCenter() {
+  @include userCenter($dir: column, $jt: center, $al: 0);
+}
+
+@mixin useBorderRadius($radius: 0) {
+  border-radius: $radius;
+}
+
+%no-bg {
+  background-color: transparent;
+}
+
+%useScrollbarStyle {
+  scroll-behavior: smooth;
+  scrollbar-color: lighten(v.$primary_color, 15%) lighten(v.$primary_color, 55%);
+
+  :is(&, & *)::-webkit-scrollbar {
+    width: 5px;
+    background-color: lighten(v.$primary_color, 51%);
+    border: 1px solid lighten(v.$primary_color, 47%);
+  }
+
+  :is(&, & *)::-webkit-scrollbar-thumb {
+    background: darken(v.$primary_color, 11%);
+  }
+}
+
+@mixin useInfoIndicator() {
+  .info-indicator-wrapper {
+    @include useFlexbox($jt: flex-end, $al: flex-start);
+    @include usePosition(absolute, $top: 0, $right: 0);
+    @extend %no-bg;
+    z-index: 10;
+
+    .info-indicator {
+      @include usePosition(relative, $top: 0.3rem, $right: 0.3rem);
+      @extend %no-bg;
+      color: #464646b1;
+      border: none;
+      font-size: 1.2rem;
+    }
+  }
+}
+
+@mixin useHovered-info-indicator() {
+  .info-indicator {
+    color: #111111;
+    @content;
+  }
+}
