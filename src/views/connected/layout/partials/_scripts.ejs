@@ -1,0 +1,5 @@
+<!-- prettier-ignore -->
+<% if (typeof inject !== 'undefined' && inject.bodyScripts) { %>
+  <% inject.bodyScripts.forEach(script => { %> 
+    <%- script.addScriptTag() %> 
+<% })} %>

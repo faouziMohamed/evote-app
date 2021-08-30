@@ -7,7 +7,7 @@
         name="username"
         minlength="2"
         pattern="[a-z_]{2,}"
-        placeholder="<%= usernameLabel %>"
+        placeholder="<%= content[lang].usernameLabel %>"
         class="input-field pass-auth"
         required
       />
@@ -18,7 +18,7 @@
         type="email"
         id="email"
         name="email"
-        placeholder="<%= emailLabel %>"
+        placeholder="<%= content[lang].emailLabel %>"
         class="input-field pass-auth"
         required
       />
@@ -31,7 +31,7 @@
         title="Numbers only, please."
         name="cin"
         pattern="\d*"
-        placeholder="<%= cinLabel %>"
+        placeholder="<%= content[lang].cinLabel %>"
         class="input-field pass-auth"
         required
       />
@@ -42,7 +42,7 @@
         type="password"
         id="password"
         name="password"
-        placeholder="<%= passwordLabel %>"
+        placeholder="<%= content[lang].passwordLabel %>"
         class="input-field pass-auth"
         required
       />
@@ -53,14 +53,18 @@
         type="date"
         id="birthDate"
         name="birthDate"
-        placeholder="<%= birthdateLabel %>"
+        placeholder="<%= content[lang].birthdateLabel %>"
         class="input-field"
         required
       />
     </div>
     <div class="row-content btn-row">
-      <button class="reset-btn" type="reset"><%= resetBtn %></button>
-      <button class="submit-btn" type="submit"><%= submitBtn %></button>
+      <button class="reset-btn" type="reset">
+        <%= content[lang].resetBtn %>
+      </button>
+      <button class="submit-btn" type="submit">
+        <%= content[lang].submitBtn %>
+      </button>
     </div>
   </section>
 </form>

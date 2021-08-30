@@ -6,7 +6,7 @@
         id="username"
         name="username"
         class="input-field pass-auth"
-        placeholder="<%= usernameLabel %>"
+        placeholder="<%= content[lang].usernameLabel %>"
         required
       />
     </div>
@@ -16,13 +16,17 @@
         id="password"
         name="password"
         class="input-field pass-auth"
-        placeholder="<%= passwordLabel %>"
+        placeholder="<%= content[lang].passwordLabel %>"
         required
       />
     </div>
     <div class="row-content btn-row">
-      <button class="reset-btn" type="reset"><%= resetBtn %></button>
-      <button class="submit-btn" type="submit"><%= submitBtn %></button>
+      <button class="reset-btn" type="reset">
+        <%= content[lang].resetBtn %>
+      </button>
+      <button class="submit-btn" type="submit">
+        <%= content[lang].submitBtn %>
+      </button>
     </div>
   </section>
 </form>
