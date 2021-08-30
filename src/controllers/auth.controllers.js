@@ -2,8 +2,9 @@ import Config from '../config/config';
 import {
   getAuthErrorMessage,
   getAuthSuccessMessage,
-  getPageData,
-} from '../data/auth.cms';
+} from '../data/auth/auth-msg.cms';
+import { getLoginPageData } from '../data/auth/login.cms';
+import { getRegisterPageData } from '../data/auth/register.cms';
 import {
   findUserByCIN,
   findUserByEmail,
@@ -139,18 +140,18 @@ export const isAutenticated = (req, res, next) => {
 };
 
 export const loginGET = (req, res) => {
-  const lang = 'en';
-  const pageName = 'login';
-  const pageData = getPageData(pageName, lang);
+  const pageData = getLoginPageData({ user: req.user, layout: 'auth/layout' });
   [pageData.error] = req.flash('error');
   [pageData.success] = req.flash('success');
   res.render('auth/login', pageData);
 };
 
 export const registerGET = (req, res) => {
-  const lang = 'en';
-  const pageName = 'register';
-  const pageData = getPageData(pageName, lang);
+  const pageData = getRegisterPageData({
+    user: req.user,
+    layout: 'auth/layout',
+  });
+
   [pageData.error] = req.flash('error');
   [pageData.success] = req.flash('success');
   res.render('auth/register', pageData);

@@ -61,6 +61,7 @@ const userSchema = new Schema(
     isCandidate: { type: Boolean, default: false },
     hasVoted: { type: Boolean, default: false },
     accountActivated: { type: Boolean, default: false },
+    lang: { type: String, enum: ['fr', 'en'], default: 'en' },
   },
   { timeStamp: true },
 );
