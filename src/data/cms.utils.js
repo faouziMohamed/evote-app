@@ -1,4 +1,5 @@
 import Config from '../config/config';
+import { getUserProfilePicture } from '../utils/utils';
 
 export function addScriptTag() {
   if (!this || !this.src || !this.attributes || !this.type) return null;
@@ -20,6 +21,7 @@ export function getCommonPageData(data = {}) {
     BASE_URL: Config.BASE_URL,
     APP_NAME: Config.APP_NAME,
     THEME_COLOR: Config.THEME_COLOR,
+    fn: { getUserProfilePicture },
     ...data,
   };
 }

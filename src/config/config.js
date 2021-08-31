@@ -33,5 +33,9 @@ const Config = {
   DB_URL:
     env === 'production' ? process.env.DB_URL_PROD : process.env.DB_URL_DEV,
   THEME_COLOR: '#0026a5',
+  IMG_DIR_URL: '/images/users',
+  USER_IMG_URL: '/images/users/user.png',
+  USER_IMG: 'src/public/images/users/user.png',
+  IMG_DIR_PATH: 'src/public/images/users',
 };
 export default Config;

@@ -3,13 +3,15 @@
     <a class="left-side__user-profil-link" href="/#">
       <div class="left-side__img-profil-wrapper">
         <img
-          src="/images/coder.gif"
+          src="<%= fn.getUserProfilePicture(user._id) %>"
           width="50"
           alt="User profile picture"
           class="left-side__userprofil-pic"
         />
       </div>
-      <span class="left-side__user-fullname"> Faouzi Mohamed </span>
+      <span class="left-side__user-fullname">
+        <%= user.name.first %> <%= user.name.last %>
+      </span>
     </a>
   </h1>
 </div>

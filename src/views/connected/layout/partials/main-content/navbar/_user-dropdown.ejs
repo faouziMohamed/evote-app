@@ -1,8 +1,9 @@
+<% const imgPath = fn.getUserProfilePicture(user._id) %>
 <button class="top-navbar__btn profil-btn">
   <img
     alt="User profile picture"
     class="user-profil-thumb"
-    src="/images/coder.gif"
+    src="<%= imgPath %> "
     title="Faouzi Mohamed's profile picture"
     width="40"
   />
@@ -11,14 +12,16 @@
       <figure class="user-figure">
         <div class="user-picture">
           <img
-            src="/images/coder.gif"
+            src="<%= imgPath %> "
             alt="User profile picture"
             class="user-picture-img"
             width="138"
             height="138"
           />
         </div>
-        <figcaption class="user-name">Faouzi Mohamed</figcaption>
+        <figcaption class="user-name">
+          <%= user.name.first %> <%= user.name.last %>
+        </figcaption>
       </figure>
     </div>
     <nav class="user-actions-wrapper">

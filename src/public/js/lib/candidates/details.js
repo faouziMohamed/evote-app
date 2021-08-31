@@ -13,7 +13,7 @@ const defaultArg = {
 export class CandidateDetails {
   constructor(candidateData = defaultArg, lang = 'en') {
     this.data = candidateData;
-    this.candidateId = candidateData.id;
+    this.candidateID = candidateData.id;
     this.lang = lang;
     this.metadataLabels = {
       en: {
@@ -60,8 +60,8 @@ export class CandidateDetails {
     return this.data.description.position;
   }
 
-  getPicturePath(ROOT = '') {
-    return `${ROOT}/images/candidates/${this.data.id}`;
+  getPicturePath() {
+    return this.picturePath;
   }
 
   getDataBio() {
@@ -112,19 +112,34 @@ export class CandidateDetails {
   }
 
   createCandidatePicture() {
-    this.createImg();
-    this.candidatePicture = newElement('div', { class: 'candidate-picture' }, [
-      this.candidatePicture,
-    ]);
+    this.createProfilPicture();
+    this.profilPicContainer = newElement(
+      'div',
+      { class: 'candidate-picture' },
+      [this.profilPicture],
+    );
   }
 
-  createImg(ROOT = '') {
-    this.candidatePicture = newElement('img', {
+  createProfilPicture() {
+    this.altPic = `/images/users/user.png`;
+    this.picturePath = this.altPic;
+    this.profilPicture = newElement('img', {
       class: 'candidate-picture__img',
-      src: `${ROOT}/images/candidates/${this.data.id}`,
+      src: this.altPic,
       alt: `${this.data.name}'s picture`,
       width: '100',
     });
+
+    fetch(`/images/users/${this.candidateID}`)
+      .then(async (res) => {
+        if (!res.ok) throw new Error('Missing Images');
+        const buf = await res.arrayBuffer();
+        const urlPicture = URL.createObjectURL(new Blob([buf]));
+        this.picturePath = urlPicture;
+        this.profilPicture.src = this.picturePath;
+        return urlPicture;
+      })
+      .catch(() => {});
   }
 
   createCandidateDetails() {
@@ -214,7 +229,7 @@ export class CandidateDetails {
 //   </div>
 //   <div class='candidate-picture'>
 //     <img
-//       src='/images/candidates/10190'
+//       src='/images/users/10190'
 //       alt="Faouzi Mohamed's picture"
 //       width='100'
 //       class='candidate-picture__img'

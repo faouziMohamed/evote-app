@@ -6,7 +6,8 @@
     "dist",
     "./**/openpgp.min.js",
     "./tests",
-    "./**/*.css"
+    "./**/*.css",
+    "./**/*bundle.js"
   ],
   "verbose": true,
   "execMap": {

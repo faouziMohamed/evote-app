@@ -28,14 +28,14 @@ function closeLeftSide(input, toggle) {
 function toggleStates(leftSide, contentRoot, burgerMenu) {
   leftSide.parentNode.classList.toggle('on-top');
   leftSide.classList.toggle('left-side__closed');
-  contentRoot.classList.toggle(['prevent-scroll'], ['blur']);
+  contentRoot.classList.toggle('prevent-scroll');
   burgerMenu.classList.toggle('left-side__oppened');
 }
 
 function setDefaultStates(leftSide, contentRoot, burgerMenu, input) {
   leftSide.classList.add('left-side__closed');
   leftSide.classList.remove('hidden');
-  contentRoot.classList.remove(['prevent-scroll'], ['blur']);
+  contentRoot.classList.remove('prevent-scroll');
   burgerMenu.classList.remove('left-side__oppened');
   input.checked = false;
 }
