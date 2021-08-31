@@ -2,7 +2,8 @@
 import { newElement } from '../utils/utils';
 
 const defaultArg = {
-  id: -1,
+  cid: -1,
+  uid: -1,
   name: '',
   email: '',
   description: {
@@ -14,7 +15,8 @@ export class CandidateCard {
     if (JSON.stringify(candidateData) === JSON.stringify(defaultArg)) {
       throw new Error('You need to pass data to the constructor');
     }
-    this.candidateID = candidateData.id;
+    this.candidateUID = candidateData.uid;
+    this.candidateCID = candidateData.cid;
     this.data = candidateData;
     this.lang = lang;
     this.candidateCard = null;
@@ -61,8 +63,12 @@ export class CandidateCard {
     return this.skills;
   }
 
-  getDataId() {
-    return this.candidateID;
+  getDataCID() {
+    return this.candidateCID;
+  }
+
+  getDataUID() {
+    return this.candidateUID;
   }
 
   getDataBio() {
@@ -118,7 +124,7 @@ export class CandidateCard {
       {
         class: 'btn vote-btn btn-primary',
         title: 'Click to vote',
-        'data-id': this.data.id,
+        'data-id': this.candidateCID,
       },
       [voteText],
     );
@@ -171,7 +177,7 @@ export class CandidateCard {
       src: this.altPic,
       alt: `${this.data.name} Profile picture`,
     });
-    fetch(`/images/users/${this.candidateID}`)
+    fetch(`/images/users/${this.candidateUID}`)
       .then(async (res) => {
         if (!res.ok) throw new Error('Missing Images');
         const buf = await res.arrayBuffer();
@@ -200,7 +206,7 @@ export class CandidateCard {
       {
         class: 'btn more-details-btn',
         title: `${altText} ${this.data.name}`,
-        'data-id': this.candidateID,
+        'data-id': this.candidateCID,
       },
       [moreDetailsText],
     );

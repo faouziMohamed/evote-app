@@ -1,7 +1,8 @@
 import { capitalizeAll, newElement } from '../utils/utils';
 
 const defaultArg = {
-  id: -1,
+  uid: -1,
+  cid: -1,
   name: '',
   email: '',
   description: {
@@ -13,7 +14,8 @@ const defaultArg = {
 export class CandidateDetails {
   constructor(candidateData = defaultArg, lang = 'en') {
     this.data = candidateData;
-    this.candidateID = candidateData.id;
+    this.candidateCID = candidateData.cid;
+    this.candidateUID = candidateData.uid;
     this.lang = lang;
     this.metadataLabels = {
       en: {
@@ -23,6 +25,7 @@ export class CandidateDetails {
         skills: 'Skills',
         noSkills: 'None',
         noDeposition: 'No deposition date',
+        noPosition: 'N/A',
       },
       fr: {
         name: 'Nom',
@@ -31,6 +34,7 @@ export class CandidateDetails {
         skills: 'Compétences',
         noSkills: 'Aucune',
         noDeposition: 'Pas de date de dépôt',
+        noPosition: 'N/A',
       },
     };
     this.create();
@@ -40,8 +44,12 @@ export class CandidateDetails {
     this.createCandidateRow();
   }
 
-  getDataId() {
-    return this.data.id;
+  getDataCID() {
+    return this.data.cid;
+  }
+
+  getDataUID() {
+    return this.data.uid;
   }
 
   getDataName() {
@@ -83,7 +91,7 @@ export class CandidateDetails {
 
     this.candidateRow = newElement('div', { class: 'candidate-row' }, [
       this.detailsOverlay,
-      this.candidatePicture,
+      this.profilPicContainer,
       this.candidateDetails,
     ]);
   }
@@ -130,7 +138,7 @@ export class CandidateDetails {
       width: '100',
     });
 
-    fetch(`/images/users/${this.candidateID}`)
+    fetch(`/images/users/${this.candidateUID}`)
       .then(async (res) => {
         if (!res.ok) throw new Error('Missing Images');
         const buf = await res.arrayBuffer();
@@ -163,10 +171,12 @@ export class CandidateDetails {
 
   createPositionStatus() {
     const { position } = this.metadataLabels[this.lang];
-    const description = this.data.description.position?.toUpperCase() || 'N/A';
+    const candidatePosition =
+      this.data.description.position ||
+      this.metadataLabels[this.lang].noPosition;
     this.candidatePosition = newElement('p', { class: 'candidate-position' }, [
       `${position}: `,
-      description,
+      candidatePosition,
     ]);
   }
 

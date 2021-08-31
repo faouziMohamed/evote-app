@@ -65,12 +65,12 @@ export class CandidateModal {
       width: '200',
       tabindex: 0,
     });
-    fetch(`/images/users/${this.candidate.candidateID}`)
+
+    fetch(`/images/users/${this.candidate.candidateUID}`)
       .then(async (res) => {
         if (!res.ok) throw new Error('Missing Images');
         const buf = await res.arrayBuffer();
         const urlPicture = URL.createObjectURL(new Blob([buf]));
-
         this.picturePath = urlPicture;
         this.profilPicture.src = this.picturePath;
         return urlPicture;

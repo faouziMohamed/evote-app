@@ -1,6 +1,7 @@
-export const fetchAllCandidateDetails = async (ROOT = '') => {
-  const response = await fetch(`${ROOT}/api/candidates/data.json`);
+export const fetchAllCandidateDetails = async () => {
+  const response = await fetch(`/api/candidates/info/`);
   const data = await response.json();
+
   return data;
 };
 
