@@ -20,7 +20,11 @@ router
   });
 
 router.route('/new-pair').get((req, res) => {
-  const pageData = getNewPairPageData({ user: req.user, layout: false });
+  const pageData = getNewPairPageData({
+    user: req.user,
+    isNewPaire_page: true,
+    layout: 'auth/layout',
+  });
 
   [pageData.error] = req.flash('error');
   [pageData.success] = req.flash('success');

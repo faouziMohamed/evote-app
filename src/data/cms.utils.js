@@ -21,6 +21,7 @@ export function getCommonPageData(data = {}) {
     BASE_URL: Config.BASE_URL,
     APP_NAME: Config.APP_NAME,
     THEME_COLOR: Config.THEME_COLOR,
+    isNewPaire_page: false,
     fn: { getUserProfilePicture },
     ...data,
   };

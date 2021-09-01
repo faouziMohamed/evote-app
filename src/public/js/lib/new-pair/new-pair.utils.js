@@ -57,25 +57,41 @@ export class ActionButton {
 }
 
 export function hideLoadSpinner(
-  loadSpinner = document.querySelector('.load-spinner'),
+  loadSpinner = document.querySelector('.loading__spinner'),
 ) {
   if (loadSpinner) loadSpinner.classList.add('hidden');
 }
 
+const rootElement = document.querySelector('.root');
+
 export function displayMessage(
   message,
   type = 'success',
-  spinerTxt = document.querySelector('.loading-text'),
+  spinerTxt = document.querySelector('.loading__text'),
 ) {
   if (spinerTxt) {
-    if (type === 'error') spinerTxt.classList.add('error-msg');
-    if (type === 'warning') spinerTxt.classList.add('warning-msg');
+    handleErrorOutput(type, spinerTxt);
     spinerTxt.innerHTML = message;
     return;
   }
   // eslint-disable-next-line no-console
   console.log('Cannot display message');
 }
+function handleErrorOutput(type, spinerTxt) {
+  if (type === 'error') {
+    spinerTxt.classList.add('error-msg');
+    rootElement.classList.add('root_error');
+    rootElement.classList.remove('root_warning');
+  } else if (type === 'warning') {
+    spinerTxt.classList.add('warning-msg');
+    rootElement.classList.remove('root_error');
+    rootElement.classList.add('root_warning');
+  } else {
+    rootElement.classList.remove('root_error');
+    rootElement.classList.remove('root_warning');
+  }
+}
+
 export function displayError(error, type = 'error') {
   displayMessage(`${type === 'error' ? 'error' : 'warning'}: ${error}`, type);
   hideLoadSpinner();

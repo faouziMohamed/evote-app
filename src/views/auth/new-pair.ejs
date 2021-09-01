@@ -1,52 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <meta name="color-scheme" content="dark light" />
-    <meta name="theme-color" content="<%= THEME_COLOR %>" />
-    <link rel="canonical" href="<%= BASE_URL %>/<%= slug %>" />
-    <meta property="og:url" content="<%= BASE_URL %>/<%= slug %>" />
-    <meta
-      property="og:title"
-      content="<%= metadata[lang].title %> | <%= APP_NAME %>"
-    />
-    <meta
-      property="og:description"
-      content="<%= metadata[lang].description %> "
-    />
-    <meta property="og:image" content="/images/e-vote-ws.png" />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:locale" content="fr_FR" />
-    <meta property="og:site_name" content="<%= APP_NAME %>" />
-
-    <link
-      rel="shortcut icon"
-      href="/images/logo/favicon-32x32.png"
-      type="image/x-icon"
-    />
-
-    <link rel="stylesheet" href="/css/login.css" />
-    <title><%= metadata[lang].title %> | <%= APP_NAME %></title>
-  </head>
-  <body class="main-body" style="flex-direction: column">
-    <h1 class="section-title-greeting">
-      <%= content[lang].greeting %> <%= user.name.last %> <%= user.name.first %>
-    </h1>
-
-    <div class="loading-wrapper">
-      <div class="load-spinner"></div>
-      <span class="loading-text"><%= content[lang].loadingMessage %> </span>
-    </div>
-    <div class="action-btn-wrapper">
-      <button class="action-btn hidden"><%= content[lang].continue %></button>
-    </div>
-    <!-- prettier-ignore -->
-    <% inject.bodyScripts.forEach((script)=>{ %>
-      <%- script.addScriptTag(); %>
-    <% }); %>
-  </body>
-</html>
+<header class="page-header new-pair__content__header">
+  <h1 class="page-header__title">
+    <%= content[lang].greeting %> <%= user.name.last %> <%= user.name.first %>
+  </h1>
+  <div class="loading">
+    <div class="loading__spinner"></div>
+    <span class="loading__text"><%= content[lang].loadingMessage %></span>
+  </div>
+  <div class="action">
+    <button class="action-btn btn primary-btn action-btn-error hidden">
+      <%= content[lang].continue %>
+    </button>
+  </div>
+</header>

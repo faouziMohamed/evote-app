@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <title><%= metadata[lang].title %> | <%= APP_NAME %></title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="dark light" />
@@ -27,26 +28,70 @@
       href="/images/logo/favicon-32x32.png"
       type="image/x-icon"
     />
-    <link rel="stylesheet" href="/css/login.css" />
-    <title><%= metadata[lang].title %> | <%= APP_NAME %></title>
+    <link rel="preload" href="/styles/auth-style.css" as="style" />
+    <link rel="stylesheet" href="/styles/auth-style.css" />
+
+    <% if(isNewPaire_page) {%>
+    <link rel="preload" href="/styles/new-pair.css" as="style" />
+    <link rel="stylesheet" href="/styles/new-pair.css" />
+    <% } %>
+
+    <link
+      rel="preload"
+      href="https://pro.fontawesome.com/releases/v5.15.2/css/all.css"
+      as="style"
+    />
+    <link
+      rel="stylesheet"
+      href="https://pro.fontawesome.com/releases/v5.15.2/css/all.css"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,200;0,300;0,500;0,600;0,700;1,100;1,200;1,500;1,600;1,700&family=Roboto:ital,wght@0,100;0,300;0,400;0,700;1,100;1,300;1,400;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200;1,300;1,400;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
   </head>
-  <body class="main-body">
-    <section class="body-content">
-      <h1 class="title"><%= content[lang].pageTitle %></h1>
-      <!-- prettier-ignore -->
-      <% if (error) { %>
-      <section class="error">
-        <p class="error-message"><%= error %></p>
-      </section>
-      <% } %>
-      <!-- prettier-ignore -->
-      <% if (success) { %>
-      <section class="error">
-        <p class="success-message"><%= success %></p>
-      </section>
-      <% } %>
-      <!-- prettier-ignore -->
-      <%- body %>
-    </section>
+  <body>
+    <div class="root">
+      <div class="left-side">
+        <div class="site-logo">
+          <img
+            src="/images/e-vote-ws.svg"
+            alt="Website logo"
+            class="site-logo__img"
+            width="200"
+          />
+        </div>
+      </div>
+      <div class="right-side new-pair">
+        <!-- prettier-ignore -->
+        <% if (error) { %>
+        <section class="error">
+          <p class="error-message"><%= error %></p>
+        </section>
+        <% } %>
+        <!-- prettier-ignore -->
+        <% if (success) { %>
+        <section class="error">
+          <p class="success-message"><%= success %></p>
+        </section>
+        <% } %>
+        <!-- prettier-ignore -->
+        <section class="right-side__content new-pair__content"><%- body %></section>
+      </div>
+    </div>
+    <!-- prettier-ignore -->
+    <% if(typeof inject !== 'undefined') {%> 
+    <% inject.bodyScripts.forEach((script)=>{ %>
+      <%- script.addScriptTag(); %>
+    <% });} %>
   </body>
 </html>
