@@ -1,0 +1,73 @@
+body {
+  background-image: url('../images/vote.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+body,
+html {
+  height: 100%;
+}
+
+%home-common {
+  @include usePosition(absolute, 0, 0);
+  @include useSquareSize(100%);
+}
+
+.all-body {
+  @extend %home-common;
+  background-color: black;
+  opacity: 0.5;
+}
+.wrap-title {
+  @extend %home-common;
+  @include useFlexbox(column);
+  z-index: 100;
+}
+.title-evote,
+.text-evote {
+  color: white;
+}
+.text-evote {
+  font-size: 30px;
+}
+.title-evote {
+  font-size: 130px;
+}
+.all-title {
+  text-align: center;
+}
+.navigation {
+  position: absolute;
+  z-index: 101;
+  display: flex;
+  width: 100%;
+}
+.logo-img {
+  flex-grow: 0;
+}
+.wrap-link {
+  @include useFlexbox(0, $jt: flex-end);
+  flex-grow: 1;
+  padding-right: 18px;
+}
+.login {
+  padding: 10px;
+  border-radius: 10%;
+  color: white;
+  font-size: 20px;
+  text-decoration: none;
+  background-color: rgb(132, 204, 180);
+}
+.log-up {
+  margin-right: 10px;
+  background-color: rgb(214, 148, 109);
+}
+.login:hover,
+.login:focus {
+  text-decoration: underline;
+}
+
+.text-cusor-dynamic {
+  border-right: 0.08em solid #d9f9f8;
+}
