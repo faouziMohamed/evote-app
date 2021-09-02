@@ -1,4 +1,4 @@
-import { getAuthErrorMessage } from '../data/auth.cms';
+import { getAuthErrorMessage } from '../data/auth/auth-msg.cms';
 import User from '../models/users.model';
 
 export const findUserByEmail = async (email, filter = {}, password = false) =>

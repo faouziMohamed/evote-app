@@ -1,28 +1,45 @@
-<form action="/login" method="post" class="auth-form">
-  <section class="form-content">
-    <div class="row-content identifiant">
+<header class="page-header">
+  <h1 class="page-header__title"><%= content[lang].pageTitle %></h1>
+  <p class="auth__text">
+    Account not activated yet?
+    <a href="/activate" class="auth__link">Activate your account</a>
+  </p>
+  <p class="auth__text">
+    New to Evote App?
+    <a href="/register" class="auth__link">Sign up</a>
+  </p>
+</header>
+<div class="auth-form-wrapper">
+  <form action="/login" method="POST" class="auth-form">
+    <div class="form-floating">
       <input
         type="text"
+        class="form-floating__input"
         id="username"
         name="username"
-        class="input-field pass-auth"
-        placeholder="<%= usernameLabel %>"
+        placeholder="Username"
         required
       />
+      <label for="username" class="form-floating__label">Username</label>
+      <div class="invalid-feedback">Field is required</div>
     </div>
-    <div class="row-content password">
+    <div class="form-floating">
       <input
         type="password"
-        id="password"
         name="password"
-        class="input-field pass-auth"
-        placeholder="<%= passwordLabel %>"
+        class="form-floating__input"
+        id="password"
+        placeholder="Password"
         required
       />
+      <label for="password" name="password" class="form-floating__label"
+        >Password</label
+      >
+      <div class="invalid-feedback">Field is required</div>
     </div>
-    <div class="row-content btn-row">
-      <button class="reset-btn" type="reset"><%= resetBtn %></button>
-      <button class="submit-btn" type="submit"><%= submitBtn %></button>
-    </div>
-  </section>
-</form>
+    <p class="auth__text auth__forgot-password">
+      <a href="/reset-password" class="auth__link">Forgot Password?</a>
+    </p>
+    <button class="btn btn-primary signin-btn">Sign in</button>
+  </form>
+</div>

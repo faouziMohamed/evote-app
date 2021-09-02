@@ -1,4 +1,3 @@
-/* eslint-disable import/named */
 import { checkAuthentication } from '../controllers/auth.controllers';
 import candidateRouterAPI from './api/candidates.router';
 import entitiesRouter from './api/entities.router';

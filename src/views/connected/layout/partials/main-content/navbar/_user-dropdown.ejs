@@ -1,0 +1,49 @@
+<% const imgPath = fn.getUserProfilePicture(user._id) %>
+<button class="top-navbar__btn profil-btn">
+  <img
+    alt="User profile picture"
+    class="user-profil-thumb"
+    src="<%= imgPath %> "
+    title="Faouzi Mohamed's profile picture"
+    width="40"
+  />
+  <div class="user-menu-card hidden" aria-label="menu">
+    <div class="user-profile">
+      <figure class="user-figure">
+        <div class="user-picture">
+          <img
+            src="<%= imgPath %> "
+            alt="User profile picture"
+            class="user-picture-img"
+            width="138"
+            height="138"
+          />
+        </div>
+        <figcaption class="user-name">
+          <%= user.name.first %> <%= user.name.last %>
+        </figcaption>
+      </figure>
+    </div>
+    <nav class="user-actions-wrapper">
+      <ul class="action-wrapper">
+        <li class="action-item">
+          <a href="/myaccount" class="action-item-link">
+            <i class="far fa-user-alt"> </i>
+            <span class="link-action-text">Account</span>
+          </a>
+        </li>
+        <li class="action-item">
+          <a href="/notifs" class="action-item-link">
+            <i class="fas fa-bell"> </i>
+            <span class="link-action-text">Setting</span>
+          </a>
+        </li>
+        <li class="action-item">
+          <a href="/logout" class="action-item-link action-logout">
+            <span class="link-action-text">Logout</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</button>

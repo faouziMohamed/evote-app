@@ -4,15 +4,19 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <%- include("partials/headData", {metadata}) %>
-    <title><%=metadata.title %></title>
+    <%- include("./partials/_headData") %>
+    <title><%=metadata[lang].title %> | <%= APP_NAME %></title>
   </head>
   <body>
-    <div class="root app">
-      <!-- prettier-ignore -->
-      <%- include("partials/header") %>
-      <%- body %>
-      <%- include("partials/footer") %>
+    <noscript>You need to activate JavaScript to run this app</noscript>
+    <div class="root">
+      <%- include('./partials/_left-side') %>
+      <div class="main-page">
+        <!-- prettier-ignore -->
+        <%- include("./partials/main-content/_top-navbar") %>
+        <%- include("./partials/_main-content") %>
+      </div>
     </div>
+    <%- include("./partials/_scripts")%>
   </body>
 </html>

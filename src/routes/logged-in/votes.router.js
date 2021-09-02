@@ -1,15 +1,8 @@
-import { findAllCandidatesMin } from '../../controllers/candidates.controllers';
+import { getVotePageData } from '../../data/logged-in/vote.cms';
 
 export default function addVoteRoute(router) {
   router.route('/vote').get(async (req, res) => {
-    const candidates = await findAllCandidatesMin();
-    res.render('connected/vote', {
-      candidates,
-      user: req.user,
-      metadata: {
-        title: 'Vote your favorite candidate',
-        description: 'Vote your favorite candidate',
-      },
-    });
+    const pageData = getVotePageData({ user: req.user });
+    res.render('connected/vote', pageData);
   });
 }

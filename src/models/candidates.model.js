@@ -27,6 +27,22 @@ const candidatSchema = Schema(
       type: Date,
       default: Date.now,
     },
+    description: {
+      en: {
+        details: {
+          type: String,
+          default: '',
+        },
+        skills: [String],
+      },
+      fr: {
+        details: {
+          type: String,
+          default: '',
+        },
+        skills: [String],
+      },
+    },
   },
   {
     toJSON: { virtuals: true },

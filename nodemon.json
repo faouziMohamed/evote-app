@@ -5,7 +5,9 @@
     "node_modules/**/node_modules",
     "dist",
     "./**/openpgp.min.js",
-    "./tests"
+    "./tests",
+    "./**/*.css",
+    "./**/*bundle.js"
   ],
   "verbose": true,
   "execMap": {
@@ -17,9 +19,9 @@
     "./**/*.js",
     "./**/*.json",
     "./**/*.ejs",
-    "./**/*.css",
+    "./**/*.scss",
     "./**/*.md"
   ],
 
-  "ext": "js,json,css,ejs"
+  "ext": "js,json,scss,ejs"
 }
