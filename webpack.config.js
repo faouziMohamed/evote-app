@@ -9,14 +9,16 @@ module.exports = {
   cache: true,
   target: 'web',
   entry: {
-    main: './src/public/js/main.js',
-    newPair: './src/public/js/lib/new-pair.js',
+    candidates: './src/public/js/lib/main-candidates.js',
+    newPair: './src/public/js/lib/main-newKeyPair.js',
+    results: './src/public/js/lib/main-results.js',
+    votes: './src/public/js/lib/main-vote.js',
+    home: './src/public/js/lib/home/autotext.js',
   },
   output: {
     path: path.resolve(__dirname, './src/public/js/'),
     filename: '[name]_bundle.js',
   },
-
   module: {
     rules: [
       {

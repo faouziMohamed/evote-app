@@ -1,10 +1,13 @@
 import { Router } from 'express';
 
+import { getHomePageData } from '../data/home.cms';
+
 const router = Router();
 
 /* GET home page. */
 router.get('/', (req, res) => {
-  res.render('index', { layout: false });
+  const pageData = getHomePageData({});
+  res.render('index', pageData);
 });
 
 export default router;

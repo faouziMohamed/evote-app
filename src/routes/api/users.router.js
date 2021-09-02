@@ -7,7 +7,7 @@ import {
   getUserByUsername,
   getUserWithCallback,
 } from '../../controllers/users.controllers';
-import { getAuthErrorMessage } from '../../data/auth.cms';
+import { getAuthErrorMessage } from '../../data/auth/auth-msg.cms';
 
 /* Router with root /api/users/ */
 const router = Router();

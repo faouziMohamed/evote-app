@@ -1,66 +1,88 @@
-<form action="/register" method="post" class="auth-form">
-  <section class="form-content">
-    <div class="row-content identifiant">
+<header class="page-header">
+  <h1 class="page-header__title">Create an account</h1>
+  <p class="auth__text">
+    Already have an account?
+    <a href="/login" class="auth__link">Sign in</a>
+  </p>
+</header>
+<div class="auth-form-wrapper">
+  <form action="/register" method="POST" class="auth-form">
+    <div class="form-floating">
       <input
+        type="text"
+        class="form-floating__input"
+        id="firstname"
+        name="firstname"
+        placeholder="Firstname"
+        required
+      />
+      <label for="firstname" class="form-floating__label"> First Name </label>
+      <div class="invalid-feedback">Field is required</div>
+    </div>
+    <div class="form-floating">
+      <input
+        type="text"
+        class="form-floating__input"
+        id="lastname"
+        placeholder="Last name"
+        required
+      />
+      <label for="lastname" name="lastname" class="form-floating__label">
+        Last Name
+      </label>
+      <div class="invalid-feedback">Field is required</div>
+    </div>
+    <div class="form-floating">
+      <input
+        class="form-floating__input"
         type="text"
         id="username"
         name="username"
         minlength="2"
         pattern="[a-z_]{2,}"
-        placeholder="<%= usernameLabel %>"
-        class="input-field pass-auth"
+        placeholder="<%= content[lang].usernameLabel %>"
         required
       />
+      <label for="username" class="form-floating__label">
+        <%= content[lang].usernameLabel %>
+      </label>
+      <div class="invalid-feedback">
+        <%= content[lang].usernameLabel %> is required
+      </div>
     </div>
-
-    <div class="row-content identifiant">
+    <div class="form-floating">
       <input
         type="email"
+        class="form-floating__input"
         id="email"
         name="email"
-        placeholder="<%= emailLabel %>"
-        class="input-field pass-auth"
+        placeholder="<%= content[lang].emailLabel %>"
         required
       />
+      <label for="email" class="form-floating__label">
+        <%= content[lang].emailLabel %></label
+      >
+      <div class="invalid-feedback email">
+        <%= content[lang].emailLabel %> is required
+      </div>
     </div>
-
-    <div class="row-content identifiant">
-      <input
-        id="cin"
-        type="number"
-        title="Numbers only, please."
-        name="cin"
-        pattern="\d*"
-        placeholder="<%= cinLabel %>"
-        class="input-field pass-auth"
-        required
-      />
-    </div>
-
-    <div class="row-content password">
+    <div class="form-floating">
       <input
         type="password"
+        class="form-floating__input"
         id="password"
-        name="password"
-        placeholder="<%= passwordLabel %>"
-        class="input-field pass-auth"
+        placeholder="<%= content[lang].passwordLabel %>"
         required
       />
+      <label for="password" name="password" class="form-floating__label">
+        <%= content[lang].passwordLabel %>
+      </label>
+      <div class="invalid-feedback password">
+        <%= content[lang].passwordLabel %> is required
+      </div>
     </div>
-
-    <div class="row-content identifiant">
-      <input
-        type="date"
-        id="birthDate"
-        name="birthDate"
-        placeholder="<%= birthdateLabel %>"
-        class="input-field"
-        required
-      />
-    </div>
-    <div class="row-content btn-row">
-      <button class="reset-btn" type="reset"><%= resetBtn %></button>
-      <button class="submit-btn" type="submit"><%= submitBtn %></button>
-    </div>
-  </section>
-</form>
+    <button class="btn btn-primary signin-btn">
+      <%= content[lang].submitBtn %>
+    </button>
+  </form>
+</div>

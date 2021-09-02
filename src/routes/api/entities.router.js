@@ -5,7 +5,7 @@ import {
   getKeys,
   saveUserKeys,
 } from '../../controllers/entities/users.entities';
-import { getAuthErrorMessage } from '../../data/auth.cms';
+import { getAuthErrorMessage } from '../../data/auth/auth-msg.cms';
 import { getErrorMessage } from '../../data/common.cms';
 /* Router with root /api/keys/ */
 

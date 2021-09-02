@@ -10,8 +10,6 @@ export const connectDB = (options = {}, url = Config.DB_URL) =>
       ...options,
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      useCreateIndex: true,
-      useFindAndModify: false,
     })
     .then((conn) => {
       const connected = chalk.yellowBright('MongoDB Connection established');

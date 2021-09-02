@@ -7,7 +7,7 @@ import {
   registerGET,
   registerPOST,
 } from '../../controllers/auth.controllers';
-import { getPageData } from '../../data/auth.cms';
+import { getNewPairPageData } from '../../data/auth/newPaire.csm';
 
 const router = Router();
 
@@ -20,9 +20,12 @@ router
   });
 
 router.route('/new-pair').get((req, res) => {
-  const lang = 'en';
-  const pageName = 'newPair';
-  const pageData = getPageData(pageName, lang, false);
+  const pageData = getNewPairPageData({
+    user: req.user,
+    isNewPaire_page: true,
+    layout: 'auth/layout',
+  });
+
   [pageData.error] = req.flash('error');
   [pageData.success] = req.flash('success');
   pageData.user = req.user;
