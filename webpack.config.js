@@ -13,6 +13,7 @@ module.exports = {
     newPair: './src/public/js/lib/main-newKeyPair.js',
     results: './src/public/js/lib/main-results.js',
     votes: './src/public/js/lib/main-vote.js',
+    home: './src/public/js/lib/home/autotext.js',
   },
   output: {
     path: path.resolve(__dirname, './src/public/js/'),
