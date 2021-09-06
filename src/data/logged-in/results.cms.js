@@ -26,7 +26,7 @@ export const resultsPageData = {
   lang: 'en',
   content,
   metadata,
-  slug: 'results',
+  slug: ['results'],
   toggle: { currentPage: 'results', setCurrentPage },
   inject: {
     headerScripts: [

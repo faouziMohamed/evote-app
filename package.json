@@ -32,7 +32,7 @@
     "prepare": "husky install",
     "clean": "rimraf dist",
     "build:js": "webpack --progress",
-    "build:css": "sass --watch src/public/sass:src/public/styles/ &",
+    "build:css": "sass --watch --style=compressed src/public/sass:src/public/styles/ &",
     "restart": "npm run build:js && babel-node ./src/bin/www.js --trace-deprecation",
     "build": "npm run clean && echo 'npm run build:css' && babel ./src --out-dir dist --copy-files",
     "start": "npm run prod",

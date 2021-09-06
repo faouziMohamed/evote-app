@@ -26,7 +26,7 @@ export const votePageData = {
   lang: 'en',
   content,
   metadata,
-  slug: 'vote',
+  slug: ['vote'],
   toggle: { currentPage: 'vote', setCurrentPage },
   inject: {
     bodyScripts: [

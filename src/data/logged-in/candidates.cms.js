@@ -26,7 +26,7 @@ export const candiatesPageData = {
   lang: 'en',
   content,
   metadata,
-  slug: 'candidates',
+  slug: ['candidates'],
   toggle: { currentPage: 'candidates', setCurrentPage },
   inject: {
     bodyScripts: [

@@ -40,7 +40,7 @@ export const registerPageData = {
   lang: 'en',
   content,
   metadata,
-  slug: 'register',
+  slug: ['register'],
 };
 
 export function getRegisterPageData(options = {}) {

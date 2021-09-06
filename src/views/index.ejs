@@ -3,117 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <title><%= metadata[lang].title %> | <%= APP_NAME %></title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="dark light" />
-    <meta name="theme-color" content="<%= THEME_COLOR %>" />
-    <!-- prettier-ignore -->
-    <% slug.forEach(s=>{ %>
-    <link rel="canonical" href="<%= BASE_URL %>/<%= s %>" />
-    <% }) %>
-
-    <!-- prettier-ignore -->
-    <% slug.forEach(s=>{ %>
-    <meta property="og:url" content="<%= BASE_URL %>/<%= s %>" />
-    <% }) %>
-
-    <meta
-      property="og:title"
-      content="<%= metadata[lang].title %> | <%= APP_NAME %>"
-    />
-    <meta
-      property="og:description"
-      content="<%= metadata[lang].description %> "
-    />
-    <meta property="og:image" content="/images/e-vote-ws.png" />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:locale" content="fr_FR" />
-    <meta property="og:site_name" content="<%= APP_NAME %>" />
-
-    <link
-      rel="shortcut icon"
-      href="/images/logo/favicon-32x32.png"
-      type="image/x-icon"
-    />
+    <%- include('./partials/_headData') %>
     <link rel="stylesheet" type="text/css" href="/styles/home.css" />
-    <link
-      rel="preload"
-      href="https://pro.fontawesome.com/releases/v5.15.2/css/all.css"
-      as="style"
-    />
-    <link
-      rel="stylesheet"
-      href="https://pro.fontawesome.com/releases/v5.15.2/css/all.css"
-    />
   </head>
 
   <body>
     <div class="page-overlay"></div>
     <div class="root">
-      <nav class="navbar">
-        <a href="/" class="navbar__logo">
-          <img
-            src="/images/e-vote-ws.svg"
-            alt="Evote app Logo"
-            class="navbar__logo__img"
-          />
-        </a>
-        <div class="navbar__links">
-          <a
-            href="/register"
-            class="btn btn-primary navbar__links__item btn-link signup-btn"
-          >
-            <%= content[lang].signUpBtn %>
-          </a>
-          <a
-            href="/login"
-            class="btn btn-secondary navbar__links__item btn-link signin-btn"
-            ><%= content[lang].loginBtn %></a
-          >
-        </div>
-      </nav>
+      <%- include('./home_partials/_navbar') %>
       <main class="main-content">
-        <section class="main-content__col-1">
-          <section class="col-1-content">
-            <h1 class="main-content__col-1__title">
-              <%= content[lang].pageTile %>
-            </h1>
-            <p class="main-content__col-1__text"><%= content[lang].descr1 %></p>
-            <p class="main-content__col-1__text"><%= content[lang].descr2 %></p>
-            <p class="main-content__col-1__text">
-              <%= content[lang].descr3 %>
-              <span
-                class="txt-rotate"
-                data-period="2000"
-                data-rotate="<%= content[lang].descr4 %>"
-              >
-              </span>
-            </p>
-          </section>
-        </section>
-        <section class="main-content__col-2">
-          <div class="content-description">
-            <p><%= content[lang].descr5 %></p>
-            <ul class="description-list">
-              <li class="description-item"><%= content[lang].feature1 %></li>
-              <li class="description-item"><%= content[lang].feature2 %></li>
-              <li class="description-item"><%= content[lang].feature3 %></li>
-              <li class="description-item"><%= content[lang].feature4 %></li>
-              <li class="description-item"><%= content[lang].feature5 %></li>
-              <li class="description-item"><%= content[lang].feature6 %></li>
-              <li class="description-item has-love">
-                <%= content[lang].builtWithLove %>
-              </li>
-            </ul>
-            <a
-              href="/register"
-              class="btn btn-primary btn-link getting-started-btn"
-            >
-              <%= content[lang].gettingStartedBtn %>
-            </a>
-          </div>
-        </section>
+        <%- include('./home_partials/_section_1') %>
+        <!--  -->
+        <%- include('./home_partials/_section_2') %>
       </main>
     </div>
     <!-- prettier-ignore -->

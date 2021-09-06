@@ -40,7 +40,7 @@ export const loginPageData = {
   lang: 'en',
   content,
   metadata,
-  slug: 'login',
+  slug: ['login'],
 };
 
 export function getLoginPageData(options = {}) {
