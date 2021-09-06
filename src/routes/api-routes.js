@@ -5,6 +5,7 @@ import usersRouter from './api/users.router';
 import votesRouter from './api/vote-process.router';
 import authenticationRouter from './authentication/auth.router';
 import homeRoute from './home.router';
+import adminRouter from './logged-in/admin.router';
 import connectedRouter from './logged-in/loggedIn.router';
 
 const APIRoutes = (app) => {
@@ -17,6 +18,7 @@ const APIRoutes = (app) => {
 export const configureRoutes = (app) => {
   app.use('/', homeRoute);
   app.use(checkAuthentication);
+  app.use('/admin', adminRouter);
   APIRoutes(app);
   app.use(connectedRouter);
   app.use(authenticationRouter);

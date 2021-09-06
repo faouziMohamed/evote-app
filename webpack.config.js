@@ -14,6 +14,8 @@ module.exports = {
     results: './src/public/js/lib/main-results.js',
     votes: './src/public/js/lib/main-vote.js',
     home: './src/public/js/lib/home/autotext.js',
+    layout: './src/public/js/lib/main-layout.js',
+    admin: './src/public/js/lib/main-admin.js',
   },
   output: {
     path: path.resolve(__dirname, './src/public/js/'),

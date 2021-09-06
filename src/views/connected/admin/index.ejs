@@ -1,0 +1,126 @@
+<section class="user-management">
+  <header class="user-management__header">
+    <h2 class="user-management__title"><%= content[lang].pageTitle %></h2>
+  </header>
+  <div class="user-management__description">
+    <small class="description-text">
+      <%= content[lang].pageDescription %>
+    </small>
+    <button class="btn btn-primary btn-flex" id="openAddModal">
+      <i class="fas fa-plus"></i>
+      <span class="btn-flex--text"> <%= content[lang].createUserBtn %></span>
+    </button>
+  </div>
+  <div class="users-types">
+    <ul class="users-types__tab-list">
+      <li class="users-types__tab">
+        <button class="tab-btn btn tab-active" data-filter="all">
+          <%= content[lang].allUsersBtn %>
+        </button>
+      </li>
+      <li class="users-types__tab">
+        <button class="tab-btn btn" data-filter="user">
+          <%= content[lang].normalUsersBtn %>
+        </button>
+      </li>
+      <li class="users-types__tab">
+        <button class="tab-btn btn" data-filter="admin">
+          <%= content[lang].adminUsersBtn %>
+        </button>
+      </li>
+      <li class="users-types__tab">
+        <button class="tab-btn btn" data-filter="candidate">
+          <%= content[lang].candidatesBtn %>
+        </button>
+      </li>
+    </ul>
+  </div>
+  <div class="tab-window">
+    <div class="tab-window__row">
+      <div class="user-research">
+        <i class="search-icon far fa-search"></i>
+        <input
+          type="search"
+          class="search-input"
+          id="users-search"
+          name="search"
+          aria-label="Search Users by name, username, email or cin"
+          placeholder="Search Users by name, username, email or cin"
+        />
+      </div>
+      <div class="actions hidden">
+        <button class="btn btn-affirmative actions-edit">
+          <i class="fad fa-edit"></i>
+          <span class="actions--text"><%= content[lang].editUserBtn %> </span>
+        </button>
+        <button class="btn btn-warning action-lock-account">
+          <i class="fad fa-user-lock"></i>
+          <span class="actions--text"><%= content[lang].deleteUserBtn %></span>
+        </button>
+        <button class="btn action-delete btn-danger">
+          <i class="fad fa-trash-alt"></i>
+          <span class="actions--text"><%= content[lang].LockAccountBtn %></span>
+        </button>
+        <button class="btn btn-secondary action-delete hidden">
+          <i class="fad fa-trash-alt"></i>
+          <span class="actions--text"><%= content[lang].saveActionsBtn %></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table class="users-table">
+        <thead class="users-table__header">
+          <tr class="users-table__row">
+            <th class="users-table__col">
+              <div class="user-input">
+                <div class="checkbox">
+                  <label class="checkbox__label">
+                    <div class="checkbox__input-container">
+                      <input
+                        tabindex="0"
+                        id="checkbox-all"
+                        type="checkbox"
+                        class="hidden checkbox__input"
+                      />
+                      <span
+                        tabindex="0"
+                        class="checkbox__checker"
+                        id="checkbox-all--visual"
+                      ></span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </th>
+            <th class="users-table__col">
+              <p class="username"><%= content[lang].usernameCol %>Username</p>
+            </th>
+            <th class="users-table__col">
+              <p class="field--name"><%= content[lang].nameCol %></p>
+            </th>
+            <th class="users-table__col">
+              <p class="field--email"><%= content[lang].emailCol %></p>
+            </th>
+            <th class="users-table__col">
+              <p class="field--role"><%= content[lang].roleCol %></p>
+            </th>
+            <th class="users-table__col">
+              <p class="field--status"><%= content[lang].activatonCol %></p>
+            </th>
+            <th class="users-table__col">
+              <p class="field--status"><%= content[lang].accountTypeCol %></p>
+            </th>
+            <th class="users-table__col">
+              <p class="field--status"><%= content[lang].voteStatusCol %></p>
+            </th>
+            <th class="users-table__col">
+              <p class="field--status"><%= content[lang].cinCol %></p>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="users-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+</section>

@@ -7,6 +7,7 @@
 %padding-1rem {
   padding: 1rem;
 }
+
 .candidate-modal-container {
   @include useFlexbox(column);
   @include usePosition(absolute, 0, 0);
@@ -19,7 +20,7 @@
 .candidate-modal {
   @extend %padding-1rem;
   @extend %border-radius-base;
-  @include useFlexbox(column, $jt: 0, $inline: 1);
+  @include useFlexbox(column, $jt: none, $inline: 1);
   position: relative;
   gap: 1rem;
   width: 90%;
@@ -30,7 +31,7 @@
   &__close-btn {
     @extend %padding-1rem;
     @include usePosition(absolute, 0.1rem, $right: 0.1rem);
-    @include useFlexbox(0, $inline: 1);
+    @include useFlexbox(none, $inline: 1);
     @include useSquareSize(1.8rem);
     box-shadow: 0 0 0.3rem 0.01rem rgba(v.$primary_color, 0.3);
 
@@ -58,7 +59,7 @@
 }
 
 .candidate-full-details {
-  @include useFlexbox(column, 0, 0);
+  @include useFlexbox(column, none, none);
   @extend %border-radius-base;
   box-shadow: 0 0 0.26rem 0.01rem rgba(v.$primary_color, 0.3);
   padding: 0.5rem;

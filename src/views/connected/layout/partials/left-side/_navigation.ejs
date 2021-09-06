@@ -36,11 +36,17 @@
         <span class="nav-text">Profile</span>
       </a>
     </li>
+
+    <% if('undefined' !== typeof isAdmin && isAdmin) {%>
     <li class="site-nav__item">
-      <a href="#" class="site-nav__link <%= toggle.setCurrentPage('admin') %>">
+      <a
+        href="/admin"
+        class="site-nav__link <%= toggle.setCurrentPage('admin') %>"
+      >
         <i class="left-nav-icon fas fa-user-cog"></i>
         <span class="nav-text">Admin</span>
       </a>
     </li>
+    <% } %>
   </ul>
 </nav>

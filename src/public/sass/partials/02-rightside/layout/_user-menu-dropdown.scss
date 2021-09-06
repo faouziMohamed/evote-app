@@ -52,7 +52,7 @@
   }
 
   &-picture {
-    @include useFlexbox($dir: 0);
+    @include useFlexbox(none);
     @include useSquareSize(7.6rem);
     flex: 1;
     padding-block: 0.4rem;
@@ -79,7 +79,7 @@
 
 .action {
   &-wrapper {
-    @include useFlexbox(column, $jt: 0, $al: flex-start);
+    @include useFlexbox(column, $jt: none, $al: flex-start);
     width: 100%;
     list-style-type: none;
     border-radius: 0 0 0.65rem 0.65rem;
