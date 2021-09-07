@@ -17,6 +17,7 @@ jobs:
           npm install -g yarn
           yarn install
           yarn build
+          sed -i 's# node ./dist/# node ./#' package.json
           cp package.json yarn.lock dist/
       - name: deploy 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.4
