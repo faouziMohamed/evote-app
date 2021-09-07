@@ -76,8 +76,8 @@ function useCheckBoxAll() {
   }
 }
 
-export async function getUsersData(ROOT = '') {
-  const users = await fetch(`${ROOT}/api/users/data.json`);
+export async function getUsersData() {
+  const users = await fetch(`/api/users/all?displayable=true`);
   const { data } = await users.json();
   return data;
 }

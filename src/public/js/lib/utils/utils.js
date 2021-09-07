@@ -48,7 +48,7 @@ export const getEmailRegex = () =>
 
 export const getUsernameRegex = () => /^[a-z][a-z0-9_]{3,}$/;
 
-export const getNameRegex = () => /^[a-zA-Z]{1,}$/;
+export const getNameRegex = () => /^[a-zA-Z](\.?\s?\w+)+$/;
 
 export const strip = (str) => str.replace(/\s+/g, ' ');
 export const stripAll = (str) => str.replace(/\s+/g, '');

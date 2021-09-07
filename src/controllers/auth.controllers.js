@@ -10,9 +10,8 @@ import {
   findUserByEmail,
   findUserByUsername,
   getUserActivatedCount,
-  getUserDataFromRequest,
-  hasNoMissingField,
-} from './users.controllers';
+} from '../utils/users.utils';
+import { getUserDataFromRequest, hasNoMissingField } from './users.controllers';
 
 export const checkAuthentication = (req, res, next) => {
   if (req.url === '/login' || req.url === '/register') {

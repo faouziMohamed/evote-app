@@ -1,5 +1,3 @@
-// import { addRandomUserToDB } from './resources/users/users.utils';
-
 import compression from 'compression';
 import flash from 'connect-flash';
 import MongoStore from 'connect-mongo';

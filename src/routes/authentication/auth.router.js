@@ -7,7 +7,7 @@ import {
   registerGET,
   registerPOST,
 } from '../../controllers/auth.controllers';
-import { getNewPairPageData } from '../../data/auth/newPaire.csm';
+import { getNewPairPageData } from '../../data/auth/newPaire.cms';
 
 const router = Router();
 

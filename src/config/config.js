@@ -17,6 +17,7 @@ const Config = {
     expiry: Number(process.env.SESSION_EXPIRY) || 15 * 24 * 60 * 60 * 1000, // 15 days
     maxAge: Number(process.env.SESSION_MAXAGE) || 15 * 24 * 60 * 60 * 1000, // 15 days
   },
+  DEFAULT_CIN: Number(process.env.DEFAULT_CIN) || 10_000,
   PORT,
   BASE_URL,
   APP_NAME,
