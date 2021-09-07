@@ -4,6 +4,7 @@ import User from '../models/users.model';
 export const findUserByEmail = async (email, filter = {}, password = false) =>
   User.findOne({ email }, password && '+password')
     .select(filter)
+    .lean()
     .exec();
 
 export const findUserByUsername = async (
@@ -13,16 +14,19 @@ export const findUserByUsername = async (
 ) =>
   User.findOne({ username }, password && '+password')
     .select(filter)
+    .lean()
     .exec();
 
 export const findUserById = async (id, filter = {}, password = false) =>
   User.findById(id, password && '+password')
     .select(filter)
+    .lean()
     .exec();
 
 export const findUserByCIN = async (cin, filter = {}, password = false) =>
   User.findOne({ cin }, password && '+password')
     .select(filter)
+    .lean()
     .exec();
 
 export const getUserByUsername = async (req, res, filter = {}) => {
@@ -39,7 +43,7 @@ export const getUserByUsername = async (req, res, filter = {}) => {
 };
 
 export const getUserActivatedCount = async () =>
-  User.find({ accountActivated: true }).countDocuments().exec();
+  User.find({ accountActivated: true }).countDocuments().lean().exec();
 
 export const getUserByID = async (req, res, filter = {}) => {
   try {
@@ -99,18 +103,6 @@ export function getUserWithCallback(userFinderCB) {
   };
 }
 
-export const verifyUserExists = async ({ email, username, cin }) => {
-  const user =
-    (await findUserByCIN(cin)) ||
-    (await findUserByEmail(email)) ||
-    (await findUserByUsername(username)) ||
-    null;
-  if (user && user.accountActivated) {
-    return { reason: 403 };
-  }
-  return null;
-};
-
 export function getUserDataFromRequest(req) {
   const {
     username,
@@ -142,18 +134,16 @@ export function hasNoMissingField(fields) {
 
   return (username && cin && email && password && birthDate && true) || false;
 }
-export const findOneUser = async ({
-  id = null,
-  cin = null,
-  username = null,
-  email = null,
-  password = false,
-}) => {
+
+export async function verifyUserExists(
+  { id = null, cin = null, username = null, email = null, password = false },
+  { filter = '' },
+) {
   const user =
-    (id && (await findUserById(id, password))) ||
-    (cin && (await findUserByCIN(Number(cin), password))) ||
-    (username && (await findUserByUsername(username, password))) ||
-    (email && (await findUserByEmail(email, password))) ||
+    (id && (await findUserById(id, filter, password))) ||
+    (cin && (await findUserByCIN(Number(cin), filter, password))) ||
+    (username && (await findUserByUsername(username, filter, password))) ||
+    (email && (await findUserByEmail(email, filter, password))) ||
     null;
   return user;
-};
+}

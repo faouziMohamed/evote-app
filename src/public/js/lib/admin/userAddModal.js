@@ -1,4 +1,9 @@
-import { newElement } from '../utils/utils';
+import {
+  getEmailRegex,
+  getNameRegex,
+  getUsernameRegex,
+  newElement,
+} from '../utils/utils';
 
 export class UserAddModal {
   constructor() {
@@ -53,6 +58,7 @@ export class UserAddModal {
       name: 'firstname',
       placeholder: 'First Name',
       id: 'firstname',
+      pattern: getNameRegex().source,
       required: true,
     });
 
@@ -62,6 +68,7 @@ export class UserAddModal {
       placeholder: 'Last Name',
       id: 'lastname',
       required: true,
+      pattern: getNameRegex().source,
     });
 
     const usernameFormFloating = UserAddModal.createFormFloating({
@@ -70,7 +77,7 @@ export class UserAddModal {
       placeholder: 'Username',
       id: 'username',
       required: true,
-      pattern: '[a-z0-9]{3,}',
+      pattern: getUsernameRegex().source,
       className: 'unique',
     });
 
@@ -81,6 +88,7 @@ export class UserAddModal {
       id: 'email',
       required: true,
       className: 'unique',
+      pattern: getEmailRegex().source,
     });
 
     const inputCheckboxContainer = this.createInputCheckboxContainer();

@@ -15,14 +15,18 @@ export const useUsersTable = async () => {
       useUserFilter(tBody, data, filter);
     });
   });
-
+  const preloader = document.querySelector('#tabwindow-preloader');
   checkAllIpunt.addEventListener('change', (e) => {
     const checkboxes = document.querySelectorAll('.user-row-checkbox');
+    if (preloader) preloader.classList.remove('hidden');
     checkboxes.forEach((checkbox) => {
       checkbox.checked = e.target.checked;
     });
+    if (preloader) preloader.classList.add('hidden');
   });
   useUserFilter(tBody, data, 'all');
+  if (preloader) preloader.classList.add('hidden');
+
   const dataStringified = JSON.stringify(data);
   localStorage.setItem('users', dataStringified);
 };

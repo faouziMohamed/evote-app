@@ -1,3 +1,12 @@
+import { AlertDialog } from '../utils/modals/alerte-dialog';
+import {
+  getData,
+  getEmailRegex,
+  getUsernameRegex,
+  postData,
+  strip,
+  stripStartEnd,
+} from '../utils/utils';
 import { UserAddModal } from './userAddModal';
 
 export const useAddUserModal = () => {
@@ -21,14 +30,51 @@ export const useAddUserModal = () => {
     modalContainer.replaceChildren();
     contentRoot.classList.remove(['prevent-scroll'], ['blur']);
   });
-  submitBtn.addEventListener('click', handleAddNewUser);
+  submitBtn.addEventListener('click', async (e) => handleAddNewUser(e));
   submitBtn.disabled = true;
 };
 
-function handleAddNewUser() {
-  // const form = document.querySelector('#add-new-user-form');
-  // console.log(form.elements.isAdmin.checked);
-  // const formData = new FormData(form);
+async function handleAddNewUser(e) {
+  e.preventDefault();
+
+  if (checkInputsValidity()) {
+    await sendDataToServer();
+  } else {
+    const msgError = 'Please fill correctly all the required fields!';
+    showErrorDialog({ modalText: msgError });
+  }
+}
+
+async function sendDataToServer() {
+  const data = readFormData();
+  const { error, data: serverResponse } = await postData({
+    url: '/api/admin/users/add',
+    data,
+  });
+
+  if (error) {
+    showErrorDialog({ modalText: error });
+  } else {
+    showSuccessDialog({ modalText: serverResponse });
+  }
+}
+
+function readFormData() {
+  const form = document.querySelector('#add-new-user-form');
+  if (!form) {
+    const msgError =
+      'An error occured, please contact a developer to resolve it!';
+    return showErrorDialog({ modalText: msgError });
+  }
+  const formData = new FormData(form);
+  const data = {};
+  formData.forEach((value, key) => {
+    data[key] = stripStartEnd(strip(value));
+  });
+
+  data.isAdmin = form.elements.isAdmin.checked;
+  data.isCandidate = form.elements.isCandidate.checked;
+  return data;
 }
 
 function useFormValidation() {
@@ -48,54 +94,57 @@ function useFormValidation() {
 function handleInputValueError(input, errorElement) {
   const placeholder = input.getAttribute('placeholder');
 
-  input.addEventListener('input', () => {
-    if (input.value.replace(/\s+/g, '') === '') {
+  input.addEventListener('input', async () => {
+    if (stripStartEnd(input.value) === '') {
       const message = `${placeholder} is invalid and is required`;
       handleInvalidInput(input, errorElement, message);
     } else {
-      handleValidInput(input, errorElement);
+      await handleValidInput(input, errorElement);
     }
   });
 
-  input.addEventListener('blur', () => {
-    if (input.value.replace(/\s+/g, '') === '') {
+  input.addEventListener('blur', async () => {
+    if (stripStartEnd(input.value) === '') {
       const message = `${placeholder} is invalid and is required`;
       handleInvalidInput(input, errorElement, message);
     } else {
-      handleValidInput(input, errorElement);
+      await handleValidInput(input, errorElement);
     }
   });
 }
 
 function handleInputWithRegexValueError(input, errorElement, regex) {
   const placeholder = input.getAttribute('placeholder');
-  input.addEventListener('input', () => {
-    if (input.value.replace(/\s+/g, '') === '') {
+  input.addEventListener('input', async () => {
+    if (stripStartEnd(input.value) === '') {
       const message = `${placeholder} is invalid and is required`;
       handleInvalidInput(input, errorElement, message);
-    } else if (!regex.test(input.value)) {
+    } else if (!regex.test(stripStartEnd(input.value))) {
       const message = `Invalid ${placeholder}`;
       handleInvalidInput(input, errorElement, message);
     } else {
-      handleValidInput(input, errorElement);
+      await handleValidInput(input, errorElement);
     }
   });
 
-  input.addEventListener('blur', () => {
-    if (!regex.test(input.value) || input.value === '') {
+  input.addEventListener('blur', async () => {
+    if (
+      stripStartEnd(input.value) === '' ||
+      !regex.test(stripStartEnd(input.value))
+    ) {
       const message = `${placeholder} is invalid and is required`;
       handleInvalidInput(input, errorElement, message);
     } else {
-      handleValidInput(input, errorElement);
+      const checkExists = ['email', 'username'].includes(input.name);
+      await handleValidInput(input, errorElement, checkExists);
     }
   });
 }
 
 function checkInputsValidity() {
-  const isValid = (input) =>
-    strip(input.value) !== '' && input.classList.contains('is-valid');
-
   const inputs = document.querySelectorAll('.form-control:not(.optional)');
+  const isValid = (input) =>
+    stripStartEnd(input.value) !== '' && input.classList.contains('is-valid');
   return [...inputs].every(isValid);
 }
 
@@ -106,30 +155,85 @@ function getInputAndErorrElement(id) {
 }
 
 function handleInvalidInput(input, errorElement, message) {
+  input.classList.remove('is-valid');
   input.classList.add('is-invalid');
   errorElement.textContent = message;
   input.setCustomValidity(message);
+  document.querySelector('#btn-submit').disabled = true;
 }
 
-function handleValidInput(input, errorElement) {
+async function handleValidInput(input, errorElement, check = false) {
+  try {
+    if (check && (await verifyValueIfUsed(input))) {
+      const message = `${input.value} is already taken`;
+      handleInvalidInput(input, errorElement, message);
+      return;
+    }
+    removeErrorMessages(input, errorElement);
+    activateSubmitButton();
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function removeErrorMessages(input, errorElement) {
   input.classList.remove('is-invalid');
   input.classList.add('is-valid');
-  input.setCustomValidity('');
   errorElement.textContent = '✔';
+  input.setCustomValidity('');
+}
+
+function activateSubmitButton() {
   const areInputsValid = checkInputsValidity();
   if (areInputsValid) {
     document.querySelector('#btn-submit').disabled = false;
   }
 }
 
-function getEmailRegex() {
-  return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+async function verifyValueIfUsed(input) {
+  const value = stripStartEnd(input.value);
+  const url = `/api/users/verify/${input.name}/${value}`;
+  const { data: exist } = await getData({ url });
+  return !!exist;
 }
 
-function getUsernameRegex() {
-  return /^[a-z][a-z0-9_]{3,}$/;
+function showDialog({
+  modalType = 'success',
+  modalTitle = 'Success',
+  modalOkBtnText = 'Done',
+  modalText = 'Success',
+}) {
+  const options = {
+    modalType,
+    modalTitle,
+    modalOkBtnText,
+    modalText,
+  };
+  const dialog = new AlertDialog({ ...options });
+  const dialogParent = dialog.getDialogWithParent();
+  dialog.attachEventsTo('btnOk', 'click', () =>
+    dialogParent.remove(dialogParent),
+  );
+  document.querySelector('.main-content')?.append(dialogParent);
 }
 
-function strip(str) {
-  return str.replace(/\s+/g, '');
+function showSuccessDialog({
+  modalText,
+  modalOkBtnText = 'Close',
+  modalTitle = 'User added',
+}) {
+  showDialog({
+    modalType: 'success',
+    modalOkBtnText,
+    modalTitle,
+    modalText,
+  });
+}
+
+function showErrorDialog({
+  modalTitle = 'Error',
+  modalOkBtnText = 'Ok',
+  modalText = 'An error occured, please retry!',
+}) {
+  showDialog({ modalType: 'error', modalTitle, modalOkBtnText, modalText });
 }

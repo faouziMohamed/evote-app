@@ -28,6 +28,7 @@ export async function getData({ url = '' }) {
   const response = await fetch(url);
   return response.json();
 }
+
 export function newElement(name, attributes = {}, childs = []) {
   const node = document.createElement(name);
   const keys = Object.getOwnPropertyNames(attributes);
@@ -41,3 +42,14 @@ export function newElement(name, attributes = {}, childs = []) {
 
 export const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 export const capitalizeAll = (str) => str.replace(/\w\S*/g, capitalize);
+
+export const getEmailRegex = () =>
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+export const getUsernameRegex = () => /^[a-z][a-z0-9_]{3,}$/;
+
+export const getNameRegex = () => /^[a-zA-Z]{1,}$/;
+
+export const strip = (str) => str.replace(/\s+/g, ' ');
+export const stripAll = (str) => str.replace(/\s+/g, '');
+export const stripStartEnd = (str) => str.replace(/^\s+|\s+$/g, '');
