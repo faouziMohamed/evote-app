@@ -2,9 +2,9 @@ import { UserTableRow } from './userTableRow';
 
 export const useUsersTable = async () => {
   const tabBtns = document.querySelectorAll('.tab-btn');
-  const data = await getUsersData();
   const tBody = document.querySelector('.users-table-body');
   const checkAllIpunt = document.querySelector('#checkbox-all');
+  const data = await getUsersData();
   if (!tabBtns?.length > 0 || (!tBody && !data)) return;
   if (checkAllIpunt) checkAllIpunt.checked = false;
 
