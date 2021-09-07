@@ -3,20 +3,19 @@ on:
   workflow_dispatch:
   push:
     branches:
-    - main
-    
-jobs: 
+      - main
+
+jobs:
   test-node-compile:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      
+
       - name: Install and build
         run: |
           npm install -g yarn
-          yarn 
-          yarn wpack
+          yarn install
           yarn build
           cp package.json yarn.lock dist/
       - name: deploy 🚀
@@ -24,6 +23,3 @@ jobs:
         with:
           branch: release
           folder: dist
-      
-      
-      
