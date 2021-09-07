@@ -1,0 +1,19 @@
+<% if(slug?.includes('admin')) {%>
+<div
+  class="admin-modal hidden"
+  tabindex="-1"
+  aria-labelledby="admin-modal__title"
+  aria-describedby="admin-modal__description"
+  aria-hidden="true"
+  id="admin-modal"
+></div>
+<% }else{ %>
+<div
+  class="candidate-modal-container hidden"
+  tabindex="-1"
+  aria-labelledby="candidate-full-details__name"
+  aria-describedby="candidate-modal-description"
+  aria-hidden="true"
+  id="candidate-modal-container"
+></div>
+<% } %>

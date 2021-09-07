@@ -32,7 +32,7 @@ export const newPairPageData = {
   lang: 'en',
   content,
   metadata,
-  slug: 'new-pair',
+  slug: ['new-pair'],
   inject: {
     bodyScripts: [
       {

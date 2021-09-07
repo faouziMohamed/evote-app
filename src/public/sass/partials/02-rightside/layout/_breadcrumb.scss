@@ -2,7 +2,7 @@
 @use '../../mixins/global-mixin' as *;
 
 .breadcrumb {
-  @include useFlexbox($jt: 0, $dir: 0);
+  @include useFlexbox($jt: none, $dir: none);
   padding: 0.5rem 0.3rem;
   background-color: rgba(v.$primary_color, 0.05);
   font-family: v.$secondary_font;

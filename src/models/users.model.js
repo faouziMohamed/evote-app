@@ -50,13 +50,13 @@ const userSchema = new Schema(
       min: 0,
       default: 0,
     },
-    activationData: {
+    activationDate: {
       type: Date,
       default: Date.now,
     },
     birthDate: { type: Date, required: true, default: '' },
     isPdg: { type: Boolean, default: false },
-    isAdministrator: { type: Boolean, default: false },
+    isAdmin: { type: Boolean, default: false },
     isFirstLogin: { type: Boolean, default: true },
     isCandidate: { type: Boolean, default: false },
     hasVoted: { type: Boolean, default: false },
@@ -125,8 +125,5 @@ userSchema.methods.comparePassword = async function comparePassword(password) {
   return isMatch;
 };
 
-userSchema.methods.isAdmin = function isAdmin() {
-  return this.isAdministrator;
-};
 const User = model('User', userSchema);
 export default User;

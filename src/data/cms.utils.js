@@ -17,12 +17,15 @@ export function setCurrentPage(pageName) {
 }
 
 export function getCommonPageData(data = {}) {
+  const { user } = data;
+  const isAdmin = user?.isAdmin || false;
   return {
     BASE_URL: Config.BASE_URL,
     APP_NAME: Config.APP_NAME,
     THEME_COLOR: Config.THEME_COLOR,
     isNewPaire_page: false,
     fn: { getUserProfilePicture },
+    isAdmin,
     ...data,
   };
 }
