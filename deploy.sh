@@ -3,6 +3,8 @@
 echo "Copying some file to build directory..."
 cp package.json yarn.lock dist/
 
+pwd
+echo 
 echo 
 echo "Configure deploy script in 'package.json' file..."
 sed -i '/"prepare"/d' package.json
