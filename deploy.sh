@@ -3,16 +3,16 @@
 echo "Copying some file to build directory..."
 cp package.json yarn.lock dist/
 
-pwd
+
 echo 
 echo 
 echo "Configure deploy script in 'package.json' file..."
-sed -i '/"prepare"/d' package.json
-sed -i 's# node ./dist/# node ./#' package.json
-sed -i 's#\(webpack --progress\)#\1 --mode production#' package.json 
-sed -i 's#\(sass --watch\)\(.\+\)&#sass\2#' package.json
-sed -i 's#\("build"\)\(.\+\),#\1: "echo Building...",#' package.json
-sed -i 's#dist/bin#bin#' package.json
+sed -i '/"prepare"/d' dist/package.json
+sed -i 's# node ./dist/# node ./#' dist/package.json
+sed -i 's#\(webpack --progress\)#\1 --mode production#' dist/package.json 
+sed -i 's#\(sass --watch\)\(.\+\)&#sass\2#' dist/package.json
+sed -i 's#\("build"\)\(.\+\),#\1: "echo Building...",#' dist/package.json
+sed -i 's#dist/bin#bin#' dist/package.json
 echo 
 echo 
 echo "Configuration Done!"
