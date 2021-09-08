@@ -12,9 +12,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Preprocess build command
+        run: |
+          echo "Preprocessing..."
+          chmod +x ./deploy.sh
+          chmod +x ./deploy-before.sh
+          ./deploy-before.sh
+
       - name: Install and build dependencies
         run: |
-          sed -i "s#echo '\(.\+\)' &&#\1 \&\&#" package.json
           npm install -g yarn
           yarn install
           yarn build
@@ -22,8 +28,6 @@ jobs:
       - name: Configuring deployment to production
         run: |
           echo "Deploying to production"
-          pwd
-          chmod +x ./deploy.sh
           ./deploy.sh
 
       - name: deploy 🚀
