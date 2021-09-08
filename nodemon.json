@@ -3,7 +3,7 @@
   "ignore": [
     ".git",
     "node_modules/**/node_modules",
-    "dist",
+    "dist/**",
     "./**/openpgp.min.js",
     "./tests",
     "./**/*.css",

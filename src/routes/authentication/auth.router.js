@@ -31,5 +31,6 @@ router.route('/new-pair').get((req, res) => {
   pageData.user = req.user;
   res.render('auth/new-pair', pageData);
 });
+
 router.route('/register').get(registerGET).post(registerPOST);
 export default router;
