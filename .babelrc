@@ -23,5 +23,5 @@
       }
     ]
   ],
-  "ignore": ["**/node_modules/**","./src/public/js"]
+  "ignore": ["**/node_modules/**","./src/public/js/*bundle*.js"]
 }
