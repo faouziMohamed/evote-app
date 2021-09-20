@@ -1,0 +1,14 @@
+<header class="page-header new-pair__content__header">
+  <h1 class="page-header__title">
+    <%= content[lang].greeting %> <%= user.name.last %> <%= user.name.first %>
+  </h1>
+  <div class="loading">
+    <div class="loading__spinner"></div>
+    <span class="loading__text"><%= content[lang].loadingMessage %></span>
+  </div>
+  <div class="action">
+    <button class="action-btn btn primary-btn action-btn-error hidden">
+      <%= content[lang].continue %>
+    </button>
+  </div>
+</header>

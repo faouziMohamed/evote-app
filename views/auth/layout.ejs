@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title><%= metadata[lang].title %> | <%= APP_NAME %></title>
+    <link rel="preload" href="/styles/auth-style.css" as="style" />
+    <link rel="stylesheet" href="/styles/auth-style.css" />
+
+    <% if(isNewPaire_page) {%>
+    <link rel="preload" href="/styles/new-pair.css" as="style" />
+    <link rel="stylesheet" href="/styles/new-pair.css" />
+    <% } %>
+    <!--  -->
+    <%- include("../partials/_headData") %>
+  </head>
+
+  <body>
+    <div class="root">
+      <%- include("./partials/_leftside") %>
+      <div class="right-side new-pair">
+        <section class="right-side__content new-pair__content">
+          <%- body %>
+        </section>
+      </div>
+    </div>
+
+    <!-- prettier-ignore -->
+    <% if(typeof inject !== 'undefined') {%> 
+    <% inject.bodyScripts.forEach((script)=>{ %>
+      <%- script.addScriptTag(); %>
+    <% });} %>
+  </body>
+</html>

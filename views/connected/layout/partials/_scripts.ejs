@@ -1,0 +1,6 @@
+<script src="/js/layout_bundle.js" async defer></script>
+<!-- prettier-ignore -->
+<% if (typeof inject !== 'undefined' && inject.bodyScripts) { %>
+  <% inject.bodyScripts.forEach(script => { %> 
+    <%- script.addScriptTag() %> 
+<% })} %>

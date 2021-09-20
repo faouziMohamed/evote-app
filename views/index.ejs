@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= metadata[lang].title %> | <%= APP_NAME %></title>
+    <%- include('./partials/_headData') %>
+    <link rel="stylesheet" type="text/css" href="/styles/home.css" />
+  </head>
+
+  <body>
+    <div class="page-overlay"></div>
+    <div class="root">
+      <%- include('./home_partials/_navbar') %>
+      <main class="main-content">
+        <%- include('./home_partials/_section_1') %>
+        <!--  -->
+        <%- include('./home_partials/_section_2') %>
+      </main>
+    </div>
+    <!-- prettier-ignore -->
+    <% if(typeof inject !== 'undefined') {%> 
+    <% inject.bodyScripts.forEach((script)=>{ %>
+      <%- script.addScriptTag(); %>
+    <% });} %>
+  </body>
+</html>
