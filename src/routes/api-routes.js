@@ -1,4 +1,5 @@
-import { checkAuthentication } from '../controllers/auth.controllers';
+import { routeProtecter } from '../controllers/auth.controllers';
+import { allGetRoutes } from '../utils/routes.utils';
 import adminAPIRouter from './api/admin-api.router';
 import candidateRouterAPI from './api/candidates.router';
 import entitiesRouter from './api/entities.router';
@@ -18,10 +19,24 @@ const APIRoutes = (app) => {
 };
 
 export const configureRoutes = (app) => {
+  /**
+   * Since all routes are not yet registered in the app,
+   * {@link GETroutes} will be an empty array.
+   * It will be populated later using {@link allGetRoutes}
+   */
+
+  let GETroutes = [];
   app.use('/', homeRoute);
-  app.use(checkAuthentication);
+  app.use((req, res, next) => {
+    // Handle 404
+    if (!GETroutes.includes(req.path)) {
+      return next();
+    }
+    return routeProtecter(req, res, next);
+  });
   APIRoutes(app);
   app.use(connectedRouter);
   app.use('/admin', adminRouter);
   app.use(authenticationRouter);
+  GETroutes = allGetRoutes(app);
 };

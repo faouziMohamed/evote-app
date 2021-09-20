@@ -9,7 +9,7 @@ const dataFormat = {
   role: '',
   userType: '',
   hasVoted: true,
-  accountActivated: true,
+  isActivated: true,
 };
 
 export const dataMap = {
@@ -22,7 +22,7 @@ export const dataMap = {
     role: { admin: 'Admin', user: 'User' },
     userType: { candidate: 'Candidate', voter: 'Voter' },
     hasVoted: { true: 'Has Voted', false: 'Has Not Voted yet' },
-    accountActivated: {
+    isActivated: {
       true: 'Account Activated',
       false: 'Account Not Activated',
     },
@@ -36,7 +36,7 @@ export const dataMap = {
     role: { admin: 'Administrateur', user: 'Utilisateur' },
     userType: { candidate: 'Candidat', voter: 'Votant' },
     hasVoted: { true: 'A voté', false: "N'a pas voté" },
-    accountActivated: { true: 'Compte activé', false: 'Compte non activé' },
+    isActivated: { true: 'Compte activé', false: 'Compte non activé' },
   },
 };
 
@@ -107,7 +107,7 @@ export class UserTableRow {
 
     this.activationCol = UserTableRow.createColumn(
       newElement('p', { class: 'result__activation' }, [
-        dataMap[this.lang].accountActivated[this.userData.accountActivated],
+        dataMap[this.lang].isActivated[this.userData.isActivated],
       ]),
     );
 

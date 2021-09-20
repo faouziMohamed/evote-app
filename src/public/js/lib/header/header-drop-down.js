@@ -1,4 +1,4 @@
-import { capitalize } from '../utils/utils';
+import { capitalize, reloadPage } from '../utils/utils';
 
 function handleOpenCloseDropDown(clickClassName, dropDownClassName) {
   const dropDown = document.querySelector(`.${dropDownClassName}`);
@@ -57,6 +57,7 @@ function changeLang(dropDown, langMap) {
     if (lang) localStorage.setItem('lang', lang);
     dropDown.classList.add('hidden');
     updateImgSource(langMap[lang]);
+    reloadPage();
   };
 }
 

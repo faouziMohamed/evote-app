@@ -19,7 +19,7 @@ const content = {
     emailCol: 'Email',
     roleCol: 'Role',
     activatonCol: 'Activation',
-    accountTypeCol: 'Account Type',
+    userTypeCol: 'User Type',
     voteStatusCol: 'Vote Status',
     cinCol: 'CIN',
   },

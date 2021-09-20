@@ -31,10 +31,10 @@
     "format": "prettier  --write './src/**/*.{js,css,json}'",
     "prepare": "husky install",
     "clean": "rimraf dist",
-    "build:js": "webpack --progress --mode production",
+    "build:js": "webpack --progress",
     "build:scss": "sass --watch --style=compressed src/public/sass:src/public/styles/ &",
     "restart": "npm run build:js && babel-node ./src/bin/www.js --trace-deprecation",
-    "build": "npm run clean && echo 'npm run build:scss'&& babel ./src --out-dir dist --copy-files && npm run build:js",
+    "build": "npm run clean && echo 'npm run build:scss' && babel ./src --out-dir dist --copy-files && npm run build:js",
     "start": "npm run prod",
     "dev": "DEBUG='evote-app:*'  NODE_ENV=development nodemon --exec npm run restart",
     "prod": "DEBUG='evote-app:*' NODE_ENV=production node ./dist/bin/www.js"

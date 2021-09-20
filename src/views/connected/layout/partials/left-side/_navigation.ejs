@@ -37,7 +37,7 @@
       </a>
     </li>
 
-    <% if('undefined' !== typeof isAdmin && isAdmin) {%>
+    <% if('boolean' === typeof isAdmin && isAdmin) {%>
     <li class="site-nav__item">
       <a
         href="/admin"

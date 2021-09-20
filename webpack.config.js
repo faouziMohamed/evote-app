@@ -16,6 +16,7 @@ module.exports = {
     home: './src/public/js/lib/home/autotext.js',
     layout: './src/public/js/lib/main-layout.js',
     admin: './src/public/js/lib/main-admin.js',
+    auth: './src/public/js/lib/main-auth.js',
   },
   output: {
     path: path.resolve(__dirname, './src/public/js/'),

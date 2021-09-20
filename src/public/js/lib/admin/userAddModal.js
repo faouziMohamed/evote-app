@@ -37,6 +37,10 @@ export class UserAddModal {
     return this.dialog;
   }
 
+  resetForm() {
+    this.form.reset();
+  }
+
   createDialog() {
     this.createAdminModalForm();
     this.dialog = newElement('div', { class: 'add-user-modal' }, [this.form]);
@@ -125,14 +129,14 @@ export class UserAddModal {
     const { checkSwither: adminCheckboxSwitcher, input: adminInput } =
       UserAddModal.createCheckboxSwitcher({
         label: 'Admin',
-        name: 'isAdmin',
+        name: 'role',
         id: 'admin-checkbox',
       });
 
     const { checkSwither: candidateCheckboxSwitcher, input: candidateInput } =
       UserAddModal.createCheckboxSwitcher({
         label: 'Candidate',
-        name: 'isCandidate',
+        name: 'userType',
         id: 'candidate-checkbox',
       });
     this.adminInput = adminInput;

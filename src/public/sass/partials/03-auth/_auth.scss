@@ -73,6 +73,17 @@
 .auth-form-wrapper {
   display: flex;
   width: 100%;
+  flex-direction: column;
+}
+
+.auth-error-msg {
+  color: rgb(247, 9, 9);
+  background-color: rgb(250, 235, 215);
+  padding-block: 0.5rem;
+  text-align: center;
+  border: 1px solid #f2daba;
+  box-shadow: 0 0 9px 2px rgb(255, 228, 196);
+  margin-block: 1rem 0;
 }
 
 .auth-form {
@@ -88,7 +99,7 @@
 
 @include useLoadSpinner-md-1();
 
-.signin-btn {
+.btn-submit {
   width: 100%;
   font-size: 0.98rem;
   padding: 0.7rem 1.7rem;
@@ -192,7 +203,7 @@
 @media (min-width: 510px) {
   .root {
     background-image: linear-gradient(
-      rgba(0, 0, 255, 0.083) 0%,
+      rgba(0, 0, 255, 0.152) 0%,
       rgb(255, 255, 255) 50%,
       rgba(0, 0, 139, 0.179) 100%
     );
@@ -219,5 +230,11 @@
   }
   .right-side {
     justify-content: center;
+  }
+}
+
+@media (max-width: 350px) {
+  .right-side {
+    justify-content: flex-start;
   }
 }

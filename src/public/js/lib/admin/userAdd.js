@@ -1,14 +1,12 @@
 import {
+  checkInputsValidity,
+  useRegisterFormValidation,
+} from '../utils/auth-form.utils';
+import {
   showErrorDialog,
   showSuccessDialog,
 } from '../utils/modals/index.dialog';
-import {
-  getData,
-  getEmailRegex,
-  getUsernameRegex,
-  postData,
-  strip,
-} from '../utils/utils';
+import { postData, strip } from '../utils/utils';
 import { UserAddModal } from './userAddModal';
 
 export const useAddUserModal = () => {
@@ -24,13 +22,16 @@ export const useAddUserModal = () => {
     handleOpenModalBtnClick(contentRoot, modalContainer, modal),
   );
 
-  closeBtn.addEventListener('click', () =>
-    handleCloseBtnCLick(modalContainer, contentRoot),
-  );
+  closeBtn.addEventListener('click', () => {
+    modal.resetForm();
+    handleCloseBtnCLick(modalContainer, contentRoot);
+  });
 
   // submit button disabled by default
   submitBtn.disabled = true;
-  submitBtn.addEventListener('click', handleBtnSubmitAddNewUser);
+  submitBtn.addEventListener('click', (e) =>
+    handleBtnSubmitAddNewUser(e, closeBtn),
+  );
 };
 
 // CLose button handler
@@ -45,139 +46,34 @@ function handleOpenModalBtnClick(contentRoot, modalContainer, modal) {
   contentRoot.classList.add(['prevent-scroll'], ['blur']);
   modalContainer.classList.remove('hidden');
   modalContainer.append(modal.getDialog());
-  useFormValidation();
-}
-
-function useFormValidation() {
-  const [firstName, firstNameFeedbackEL] = getInputAndErorrElement('firstname');
-  const [lastName, lastNameFeedbackEL] = getInputAndErorrElement('lastname');
-  const [email, emailFeedbackEL] = getInputAndErorrElement('email');
-  const [username, usernameFeedbackEL] = getInputAndErorrElement('username');
-  const emailRegex = getEmailRegex();
-  const usernameRegex = getUsernameRegex();
-
-  handleInputValueError(firstName, firstNameFeedbackEL);
-  handleInputValueError(lastName, lastNameFeedbackEL);
-  handleInputWithRegexValueError(username, usernameFeedbackEL, usernameRegex);
-  handleInputWithRegexValueError(email, emailFeedbackEL, emailRegex);
-}
-
-// Form validation handlers
-function getInputAndErorrElement(id) {
-  const input = document.querySelector(`#${id}`);
-  const inputFeedbackEL = document.querySelector(`#${id} ~ .invalid-feedback`);
-  return [input, inputFeedbackEL];
-}
-
-function handleInputValueError(input, errorElement) {
-  const placeholder = input.getAttribute('placeholder');
-
-  input.addEventListener('input', async () => {
-    if (input.value.trim() === '') {
-      const message = `${placeholder} is invalid and is required`;
-      handleInvalidInput(input, errorElement, message);
-    } else {
-      await handleValidInput(input, errorElement);
-    }
-  });
-
-  input.addEventListener('blur', async () => {
-    if (input.value.trim() === '') {
-      const message = `${placeholder} is invalid and is required`;
-      handleInvalidInput(input, errorElement, message);
-    } else {
-      await handleValidInput(input, errorElement);
-    }
-  });
-}
-
-function handleInputWithRegexValueError(input, errorElement, regex) {
-  const placeholder = input.getAttribute('placeholder');
-  input.addEventListener('input', async () => {
-    if (input.value.trim() === '') {
-      const message = `${placeholder} is invalid and is required`;
-      handleInvalidInput(input, errorElement, message);
-    } else if (!regex.test(input.value.trim())) {
-      const message = `Invalid ${placeholder}`;
-      handleInvalidInput(input, errorElement, message);
-    } else {
-      const checkExists = ['email', 'username'].includes(input.name);
-      await handleValidInput(input, errorElement, checkExists);
-      // await handleValidInput(input, errorElement);
-    }
-  });
-
-  input.addEventListener('blur', async () => {
-    if (input.value.trim() === '' || !regex.test(input.value.trim())) {
-      const message = `${placeholder} is invalid and is required`;
-      handleInvalidInput(input, errorElement, message);
-    } else {
-      const checkExists = ['email', 'username'].includes(input.name);
-      await handleValidInput(input, errorElement, checkExists);
-    }
-  });
-}
-
-function checkInputsValidity() {
-  const inputs = document.querySelectorAll('.form-control:not(.optional)');
-  const isValid = (input) =>
-    input.value.trim() !== '' && input.classList.contains('is-valid');
-  return [...inputs].every(isValid);
-}
-
-function handleInvalidInput(input, errorElement, message) {
-  input.classList.remove('is-valid');
-  input.classList.add('is-invalid');
-  errorElement.textContent = message;
-  input.setCustomValidity(message);
-  document.querySelector('#btn-submit').disabled = true;
-}
-
-async function handleValidInput(input, errorElement, check = false) {
-  try {
-    if (check && (await verifyValueIfUsed(input))) {
-      const message = `${input.value} is already taken`;
-      handleInvalidInput(input, errorElement, message);
-      return;
-    }
-    removeErrorMessages(input, errorElement);
-    activateSubmitButton();
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.log(error);
-  }
-}
-
-async function verifyValueIfUsed(input) {
-  const value = input.value.trim();
-  const url = `/api/users/verify/${input.name}/${value}`;
-  const { data: exist } = await getData({ url });
-  return !!exist;
-}
-
-function removeErrorMessages(input, errorElement) {
-  input.classList.remove('is-invalid');
-  input.classList.add('is-valid');
-  errorElement.textContent = '✔';
-  input.setCustomValidity('');
-}
-
-function activateSubmitButton() {
-  const areInputsValid = checkInputsValidity();
-  if (areInputsValid) {
-    document.querySelector('#btn-submit').disabled = false;
-  }
+  useRegisterFormValidation();
 }
 
 // Submit button handler
-async function handleBtnSubmitAddNewUser(e) {
+async function handleBtnSubmitAddNewUser(e, closeBtn) {
   e.preventDefault();
-
   if (checkInputsValidity()) {
-    await sendDataToServer();
+    const response = await sendDataToServer();
+    const actionSuccessCallback = () => closeBtn?.click();
+    useServerResponse({ ...response, actionSuccessCallback });
   } else {
     const msgError = 'Please fill correctly all the required fields!';
     showErrorDialog({ modalText: msgError });
+  }
+}
+
+function useServerResponse({
+  error,
+  serverResponse,
+  actionSuccessCallback = () => {},
+  actionErrorCallback = () => {},
+}) {
+  if (error) {
+    showErrorDialog({ modalText: error });
+    actionErrorCallback();
+  } else {
+    showSuccessDialog({ modalText: serverResponse });
+    actionSuccessCallback();
   }
 }
 
@@ -188,11 +84,7 @@ async function sendDataToServer() {
     data,
   });
 
-  if (error) {
-    showErrorDialog({ modalText: error });
-  } else {
-    showSuccessDialog({ modalText: serverResponse });
-  }
+  return { error, serverResponse };
 }
 
 function readFormData() {
@@ -208,7 +100,7 @@ function readFormData() {
     data[key] = strip(value).trim();
   });
 
-  data.isAdmin = form.elements.isAdmin.checked;
-  data.isCandidate = form.elements.isCandidate.checked;
+  data.role = form.elements.role.checked ? 'admin' : 'user';
+  data.userType = form.elements.userType.checked ? 'candidate' : 'voter';
   return data;
 }

@@ -1,76 +1,79 @@
 <header class="page-header">
-  <h1 class="page-header__title">Create an account</h1>
+  <h1 class="page-header__title"><%= content[lang].pageTitle %></h1>
   <p class="auth__text">
-    Already have an account?
-    <a href="/login" class="auth__link">Sign in</a>
+    <%= content[lang].haveAnAccount %>
+    <a href="/login" class="auth__link"><%= content[lang].signIn %></a>
   </p>
 </header>
 <div class="auth-form-wrapper">
-  <form action="/register" method="POST" class="auth-form">
-    <div class="form-floating">
-      <input
-        type="text"
-        class="form-floating__input"
-        id="firstname"
-        name="firstname"
-        placeholder="Firstname"
-        required
-      />
-      <label for="firstname" class="form-floating__label"> First Name </label>
-      <div class="invalid-feedback">Field is required</div>
-    </div>
-    <div class="form-floating">
-      <input
-        type="text"
-        class="form-floating__input"
-        id="lastname"
-        placeholder="Last name"
-        required
-      />
-      <label for="lastname" name="lastname" class="form-floating__label">
-        Last Name
-      </label>
-      <div class="invalid-feedback">Field is required</div>
-    </div>
-    <div class="form-floating">
-      <input
-        class="form-floating__input"
-        type="text"
-        id="username"
-        name="username"
-        minlength="2"
-        pattern="[a-z_]{2,}"
-        placeholder="<%= content[lang].usernameLabel %>"
-        required
-      />
-      <label for="username" class="form-floating__label">
-        <%= content[lang].usernameLabel %>
-      </label>
-      <div class="invalid-feedback">
-        <%= content[lang].usernameLabel %> is required
-      </div>
-    </div>
+  <%- include("./partials/_useServerMessage") %>
+  <form action="/register" method="POST" class="auth-form" id="auth-form">
     <div class="form-floating">
       <input
         type="email"
-        class="form-floating__input"
+        class="form-floating__input form-control"
         id="email"
         name="email"
         placeholder="<%= content[lang].emailLabel %>"
         required
       />
       <label for="email" class="form-floating__label">
-        <%= content[lang].emailLabel %></label
-      >
-      <div class="invalid-feedback email">
-        <%= content[lang].emailLabel %> is required
-      </div>
+        <%= content[lang].emailLabel %>
+      </label>
+      <div class="invalid-feedback"></div>
+    </div>
+
+    <div class="form-floating">
+      <input
+        type="text"
+        class="form-floating__input form-control"
+        id="firstname"
+        name="firstname"
+        placeholder="<%= content[lang].firstNameLabel %>"
+        required
+      />
+      <label for="firstname" class="form-floating__label">
+        <%= content[lang].firstNameLabel %>
+      </label>
+      <div class="invalid-feedback"></div>
     </div>
     <div class="form-floating">
       <input
+        type="text"
+        class="form-floating__input form-control"
+        id="lastname"
+        name="lastname"
+        placeholder="  <%= content[lang].lastNameLabel %>"
+        required
+      />
+      <label for="lastname" name="lastname" class="form-floating__label">
+        <%= content[lang].lastNameLabel %>
+      </label>
+      <div class="invalid-feedback"></div>
+    </div>
+    <div class="form-floating">
+      <input
+        class="form-floating__input form-control"
+        type="text"
+        id="username"
+        name="username"
+        minlength="3"
+        pattern="^[a-z][a-z0-9_]{3,}$"
+        placeholder="<%= content[lang].usernameLabel %>"
+        required
+      />
+      <label for="username" class="form-floating__label">
+        <%= content[lang].usernameLabel %>
+      </label>
+      <div class="invalid-feedback"></div>
+    </div>
+
+    <div class="form-floating">
+      <input
         type="password"
-        class="form-floating__input"
+        class="form-floating__input form-control"
         id="password"
+        name="password"
         placeholder="<%= content[lang].passwordLabel %>"
         minlength="7"
         required
@@ -78,11 +81,9 @@
       <label for="password" name="password" class="form-floating__label">
         <%= content[lang].passwordLabel %>
       </label>
-      <div class="invalid-feedback password">
-        <%= content[lang].passwordLabel %> is required
-      </div>
+      <div class="invalid-feedback"></div>
     </div>
-    <button class="btn btn-primary signin-btn">
+    <button class="btn btn-primary btn-submit signup-btn" id="btn-submit">
       <%= content[lang].submitBtn %>
     </button>
   </form>

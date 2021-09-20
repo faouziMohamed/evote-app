@@ -1,15 +1,23 @@
+import { capitalize } from 'lodash';
+
 import { getAuthErrorMessage } from '../data/auth/auth-msg.cms';
+import User from '../models/users.model';
 import {
   getEmailRegex,
   getFullName,
+  getNameRegex,
+  getPasswordRegex,
   getUsernameRegex,
+  strip,
 } from '../public/js/lib/utils/utils';
+import { generateRandomString } from '../utils/lib/aes.utils';
 import {
+  findAllUsers,
   findUserByCIN,
   findUserById,
   findUserByUsername,
+  getNewCin,
 } from '../utils/users.utils';
-import { findAllUsers } from '../utils/users/users-db.utils';
 
 export const getUserByUsername = async (req, res, filter = {}) => {
   try {
@@ -55,9 +63,9 @@ function filterByQueryParameters(query) {
   if (query?.displayable) {
     [
       toKeep.name,
-      toKeep.isAdmin,
+      toKeep.role,
       toKeep.isCandidate,
-      toKeep.accountActivated,
+      toKeep.isActivated,
       toKeep.hasVoted,
     ] = [1, 1, 1, 1, 1];
   } else {
@@ -65,8 +73,8 @@ function filterByQueryParameters(query) {
     if (query?.vt_status) toKeep.hasVoted = 1;
     if (query?.log_status) toKeep.isFirstLogin = 1;
     if (query?.utype) toKeep.isCandidate = 1;
-    if (query?.acc_status) toKeep.accountActivated = 1;
-    if (query?.role) toKeep.isAdmin = 1;
+    if (query?.acc_status) toKeep.isActivated = 1;
+    if (query?.role) toKeep.role = 1;
     if (query?.pdg) toKeep.isPdg = 1;
   }
   return toKeep;
@@ -102,47 +110,67 @@ function createDisplayableData(user) {
     username: user.username,
     name: getFullName(user.name),
     email: user.email,
-    role: user.isAdmin ? 'admin' : 'user',
-    userType: user.isCandidate ? 'candidate' : 'voter',
+    role: user.role || 'user',
+    userType: user.userType || 'voter',
     hasVoted: user.hasVoted,
-    accountActivated: user.accountActivated,
+    isActivated: user.isActivated,
   };
 }
 
-export function getUserDataFromRequest(req) {
-  const {
-    username,
-    email,
-    cin,
-    password,
-    isPdg,
-    isAdmin,
-    birthDate,
-    hasVoted,
-    accountActivated,
-  } = req.body;
+export async function readUserData(req, genPassword = true) {
+  const validated = readAndvalidateWithRegex(req.body);
+  const { role = 'user', userType = 'voter' } = req.body;
+  const { password } = readAndValidatePassword(req, genPassword);
+  const [cin, birthDate] = [await getNewCin(User), new Date()];
+  const data = { cin, ...validated, role, userType, birthDate, password };
+  return data;
+}
 
-  const userData = {
-    username,
-    email,
-    password,
-    cin,
-    birthDate,
-    isPdg: isPdg || false,
-    isAdmin: isAdmin || false,
-    hasVoted: hasVoted || false,
-    accountActivated: accountActivated || false,
+function readAndvalidateWithRegex({ username, email, lastname, firstname }) {
+  if (!username || !email || !lastname || !firstname) {
+    throw new Error(getAuthErrorMessage('missinParams'));
+  }
+
+  const usernameLower = username.toLowerCase().trim();
+  const emailLower = email.toLowerCase().trim();
+  const first = capitalize(strip(firstname).trim());
+  const last = capitalize(strip(lastname).trim());
+
+  // test regexs
+  if (!getUsernameRegex().test(usernameLower)) {
+    throw new Error(getAuthErrorMessage('invalidUsername'));
+  }
+  if (!getEmailRegex().test(emailLower)) {
+    throw new Error(getAuthErrorMessage('invalidEmail'));
+  }
+
+  if (!getNameRegex().test(first)) {
+    throw new Error(getAuthErrorMessage('invalidFirstName'));
+  }
+
+  if (!getNameRegex().test(last)) {
+    throw new Error(getAuthErrorMessage('invalidLastName'));
+  }
+
+  return {
+    email: emailLower,
+    username: usernameLower,
+    name: { first, last },
   };
-  return userData;
+}
+function readAndValidatePassword(req, genPassword) {
+  if (genPassword) {
+    return { password: generateRandomString(8) };
+  }
+  const { password } = req.body;
+  if (!password) throw new Error(getAuthErrorMessage('missingPassword'));
+  if (!getPasswordRegex().test(password)) {
+    throw new Error(getAuthErrorMessage('passwordConstraint'));
+  }
+  return { password };
 }
 
-export function hasNoMissingField(fields) {
-  const { username, email, password, birthDate, cin } = fields;
-
-  return (username && cin && email && password && birthDate && true) || false;
-}
-
-export function readUserInput({ username, email }) {
+export function readAndVerifyUserInput({ username, email }) {
   const lowercasedUsername = username?.toLowerCase().trim() || '';
   const lowercasedEmail = email?.toLowerCase().trim() || '';
 

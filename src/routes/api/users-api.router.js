@@ -1,20 +1,18 @@
 import { Router } from 'express';
 
-import { protectAPIRoute } from '../../controllers/auth.controllers';
 import {
   getAllUsers,
   getUserByCIN,
   getUserByID,
   getUserByUsername,
   getUserWithCallback,
-  readUserInput,
+  readAndVerifyUserInput,
 } from '../../controllers/users.controllers';
 import { getAuthErrorMessage } from '../../data/auth/auth-msg.cms';
 import { verifyUserExists } from '../../utils/users.utils';
 
 /* PATH: /api/users/ */
 const usersAPIRouter = Router();
-usersAPIRouter.use(protectAPIRoute);
 
 // PATH: /api/users/all
 usersAPIRouter.route('/all').get(async (req, res) => {
@@ -53,15 +51,9 @@ usersAPIRouter
   .route(['/verify/username/:username', '/verify/email/:email'])
   .get(async (req, res) => {
     try {
-      const { username, email } = readUserInput(req.params);
-      const isUserExists = await verifyUserExists(
-        { username, email },
-        { filter: '_id' },
-      );
-
-      return res
-        .status(200)
-        .json({ data: !!isUserExists }); /* Make sure it is a boolean */
+      const { username, email } = readAndVerifyUserInput(req.params);
+      const isUserExists = await verifyUserExists({ username, email });
+      return res.status(200).json({ data: isUserExists });
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }

@@ -1,9 +1,9 @@
-import Debug from 'debug';
+import CreateLogger from 'debug';
 import { nanoid } from 'nanoid';
 
 require('dotenv').config();
 
-export const debug = Debug('evote-app: ');
+export const debug = CreateLogger('evote-app: ');
 const env = process.env.NODE_ENV || 'production';
 const APP_NAME = process.env.APP_NAME || 'E-Vote';
 const PORT = Number(process.env.PORT) || 5000;

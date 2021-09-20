@@ -50,6 +50,29 @@ export const getUsernameRegex = () => /^[a-z][a-z0-9_]{3,}$/;
 
 export const getNameRegex = () => /^[a-zA-Z](\.?\s?\w+)+$/;
 
-export const strip = (str) => str.replace(/\s+/g, ' ');
-export const stripAll = (str) => str.replace(/\s+/g, '');
-export const stripStartEnd = (str) => str.replace(/^\s+|\s+$/g, '');
+export const getPasswordRegex = () =>
+  /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#%^$!%*?&])[\w@#%^$!%*?&]{7,}/;
+
+export const strip = (str) => String(str).replace(/\s+/g, ' ');
+export const stripAll = (str) => String(str).replace(/\s+/g, '');
+export const removeExtraSpaces = (str) => strip(str).trim();
+
+export const isString = (str) => typeof str === 'string';
+export const isAnArray = (arr) => Array.isArray(arr);
+
+export const isArrayOfStrings = (arr) =>
+  isAnArray(arr) && arr.every((item) => isString(item));
+
+export const isEmpty = (str) => !str || !strip(str).trim();
+export const isNotEmpty = (str) => !isEmpty(str);
+
+export const isValidEmail = (str) =>
+  getEmailRegex().test(removeExtraSpaces(str));
+
+export const isValidUsername = (str) =>
+  getUsernameRegex().test(removeExtraSpaces(str));
+
+export const isValidName = (str) => getNameRegex().test(removeExtraSpaces(str));
+
+export const isValidPassword = (str) =>
+  getPasswordRegex().test(removeExtraSpaces(str));

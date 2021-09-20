@@ -6,8 +6,8 @@ import express from 'express';
 import expressLayout from 'express-ejs-layouts';
 import minify from 'express-minify';
 import session from 'express-session';
-// import helmet from 'helmet';
-import createError from 'http-errors';
+import helmet from 'helmet';
+// import createError from 'http-errors';
 import logger from 'morgan';
 import passport from 'passport';
 import path from 'path';
@@ -19,7 +19,7 @@ import { configureRoutes } from './routes/api-routes';
 
 const app = express();
 // addRandomUserToDB(200).catch(() => {});
-// app.use(helmet());
+if (Config.env === 'production') app.use(helmet());
 // view engine setup
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
@@ -70,9 +70,10 @@ app.use(minify());
 app.use(express.static(path.join(__dirname, 'public')));
 configureRoutes(app);
 
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-  next(createError(404));
+// catch 404
+app.use((req, res) => {
+  // next(createError(404));
+  res.status(404).send("Sorry can't find that!");
 });
 
 // error handler

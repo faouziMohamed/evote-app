@@ -18,7 +18,7 @@ export function setCurrentPage(pageName) {
 
 export function getCommonPageData(data = {}) {
   const { user } = data;
-  const isAdmin = user?.isAdmin || false;
+  const isAdmin = user?.role === 'admin' || false;
   return {
     BASE_URL: Config.BASE_URL,
     APP_NAME: Config.APP_NAME,
