@@ -1,7 +1,10 @@
-import { useAddUserModal } from './userAdd';
-import { useUsersTable } from './usersList';
+import UserAdd from './user-add';
 
 export const useAdminPrivileges = () => {
-  useUsersTable();
-  useAddUserModal();
+  try {
+    new UserAdd().render();
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('AdminUiError : ', error.message);
+  }
 };

@@ -32,7 +32,7 @@ usersAPIRouter
     res.status(400).json({ error: getAuthErrorMessage('noValuePassed') });
   });
 
-// PATH: /api/users/:cin || /api/users/:id || /api/users/:username
+// PATH: /api/users/cin/:cin || /api/users/id/:id || /api/users/username/:username
 usersAPIRouter
   .route(['/cin/:cin', '/id/:id', '/username/:username'])
   .get(async (req, res) => {

@@ -64,7 +64,7 @@ function filterByQueryParameters(query) {
     [
       toKeep.name,
       toKeep.role,
-      toKeep.isCandidate,
+      toKeep.userType,
       toKeep.isActivated,
       toKeep.hasVoted,
     ] = [1, 1, 1, 1, 1];
@@ -72,7 +72,7 @@ function filterByQueryParameters(query) {
     if (query?.name) toKeep.name = 1;
     if (query?.vt_status) toKeep.hasVoted = 1;
     if (query?.log_status) toKeep.isFirstLogin = 1;
-    if (query?.utype) toKeep.isCandidate = 1;
+    if (query?.utype) toKeep.userType = 1;
     if (query?.acc_status) toKeep.isActivated = 1;
     if (query?.role) toKeep.role = 1;
     if (query?.pdg) toKeep.isPdg = 1;
@@ -95,7 +95,7 @@ export function getUserWithCallback(userFinderCB) {
       if (typeof user === 'function') {
         return user();
       }
-      const data = query?.displayable ? user : createDisplayableData(user);
+      const data = query?.displayable ? createDisplayableData(user) : user;
       return res.status(200).json({ data });
     } catch (err) {
       return res.status(400).json({ error: err.message });
@@ -103,7 +103,7 @@ export function getUserWithCallback(userFinderCB) {
   };
 }
 
-function createDisplayableData(user) {
+export function createDisplayableData(user) {
   return {
     id: user._id,
     cin: user.cin,
@@ -194,6 +194,8 @@ export async function getAllUsers(req, res) {
       .status(204)
       .json({ error: getAuthErrorMessage('emptyUserList') });
   }
+
   const data = query?.displayable ? users.map(createDisplayableData) : users;
+
   return res.status(200).json({ data });
 }
