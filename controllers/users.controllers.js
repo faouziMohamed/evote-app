@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.getUserWithCallback = getUserWithCallback;
+exports.createDisplayableData = createDisplayableData;
 exports.readUserData = readUserData;
 exports.readAndVerifyUserInput = readAndVerifyUserInput;
 exports.getAllUsers = getAllUsers;
@@ -191,14 +192,14 @@ function filterByQueryParameters(query) {
     var _ref4 = [1, 1, 1, 1, 1];
     toKeep.name = _ref4[0];
     toKeep.role = _ref4[1];
-    toKeep.isCandidate = _ref4[2];
+    toKeep.userType = _ref4[2];
     toKeep.isActivated = _ref4[3];
     toKeep.hasVoted = _ref4[4];
   } else {
     if (query !== null && query !== void 0 && query.name) toKeep.name = 1;
     if (query !== null && query !== void 0 && query.vt_status) toKeep.hasVoted = 1;
     if (query !== null && query !== void 0 && query.log_status) toKeep.isFirstLogin = 1;
-    if (query !== null && query !== void 0 && query.utype) toKeep.isCandidate = 1;
+    if (query !== null && query !== void 0 && query.utype) toKeep.userType = 1;
     if (query !== null && query !== void 0 && query.acc_status) toKeep.isActivated = 1;
     if (query !== null && query !== void 0 && query.role) toKeep.role = 1;
     if (query !== null && query !== void 0 && query.pdg) toKeep.isPdg = 1;
@@ -242,7 +243,7 @@ function getUserWithCallback(userFinderCB) {
               return _context4.abrupt("return", user());
 
             case 10:
-              data = query !== null && query !== void 0 && query.displayable ? user : createDisplayableData(user);
+              data = query !== null && query !== void 0 && query.displayable ? createDisplayableData(user) : user;
               return _context4.abrupt("return", res.status(200).json({
                 data: data
               }));

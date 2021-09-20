@@ -1,17 +1,21 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.useAdminPrivileges = void 0;
 
-var _userAdd = require("./userAdd");
-
-var _usersList = require("./usersList");
+var _userAdd = _interopRequireDefault(require("./user-add"));
 
 var useAdminPrivileges = function useAdminPrivileges() {
-  (0, _usersList.useUsersTable)();
-  (0, _userAdd.useAddUserModal)();
+  try {
+    new _userAdd["default"]().render();
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('AdminUiError : ', error.message);
+  }
 };
 
 exports.useAdminPrivileges = useAdminPrivileges;

@@ -21,7 +21,7 @@ var _users2 = require("../../utils/users.utils");
 var adminAPIRouter = new _express.Router();
 adminAPIRouter.route('/users/add').post( /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res) {
-    var data;
+    var data, userCreated, user;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -36,25 +36,28 @@ adminAPIRouter.route('/users/add').post( /*#__PURE__*/function () {
             return (0, _users2.createUser)(data);
 
           case 6:
+            userCreated = _context.sent;
+            user = (0, _users.createDisplayableData)(userCreated);
             res.status(200).json({
-              data: 'User Added'
+              data: 'User Added',
+              user: user
             });
-            _context.next = 12;
+            _context.next = 14;
             break;
 
-          case 9:
-            _context.prev = 9;
+          case 11:
+            _context.prev = 11;
             _context.t0 = _context["catch"](0);
             res.status(400).json({
               error: _context.t0.message
             });
 
-          case 12:
+          case 14:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 9]]);
+    }, _callee, null, [[0, 11]]);
   }));
 
   return function (_x, _x2) {
