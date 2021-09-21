@@ -15,7 +15,7 @@ var _express = require("express");
 
 var _candidates = require("../../controllers/candidates.controllers");
 
-/* Router with root /api/candidates/ */
+/* Router in the path:  /api/candidates/ */
 var routerAPI = (0, _express.Router)();
 routerAPI.route(['/info/id/:id', '/info/cin/:cin']).get( /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res) {
@@ -48,7 +48,7 @@ routerAPI.route(['/info/id/:id', '/info/cin/:cin']).get( /*#__PURE__*/function (
           case 10:
             _context.prev = 10;
             _context.t3 = _context["catch"](0);
-            res.status(500).json({
+            res.status(400).json({
               error: "Error getting candidate informations : ==> ".concat(_context.t3)
             });
 

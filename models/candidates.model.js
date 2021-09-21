@@ -8,6 +8,11 @@ exports["default"] = void 0;
 var _mongoose = require("mongoose");
 
 var candidatSchema = (0, _mongoose.Schema)({
+  user: {
+    type: _mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   cin: {
     type: Number,
     required: true,
@@ -48,6 +53,14 @@ var candidatSchema = (0, _mongoose.Schema)({
       },
       skills: [String]
     }
+  },
+  createdAt: {
+    type: Date,
+    "default": Date.now
+  },
+  updatedAt: {
+    type: Date,
+    "default": Date.now
   }
 }, {
   toJSON: {
@@ -64,7 +77,7 @@ candidatSchema.virtual('details', {
   localField: 'cin',
   justOne: true,
   match: {
-    isCandidate: true
+    userType: 'candidate'
   }
 });
 var Candidates = (0, _mongoose.model)('Candidates', candidatSchema);

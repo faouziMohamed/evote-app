@@ -15,6 +15,8 @@ var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/
 
 var _config = _interopRequireDefault(require("../../config/config"));
 
+var _candidates = require("../../controllers/candidates.controllers");
+
 var _users = _interopRequireDefault(require("../../models/users.model"));
 
 var findUserByEmail = /*#__PURE__*/function () {
@@ -379,13 +381,24 @@ function _getNewCin() {
 
 var createUser = /*#__PURE__*/function () {
   var _ref12 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee11(userData) {
+    var user;
     return _regenerator["default"].wrap(function _callee11$(_context11) {
       while (1) {
         switch (_context11.prev = _context11.next) {
           case 0:
-            return _context11.abrupt("return", _users["default"].create(userData));
+            _context11.next = 2;
+            return _users["default"].create(userData);
 
-          case 1:
+          case 2:
+            user = _context11.sent;
+
+            if (user.userType === 'candidate') {
+              (0, _candidates.createCandidate)(user);
+            }
+
+            return _context11.abrupt("return", user);
+
+          case 5:
           case "end":
             return _context11.stop();
         }
@@ -402,7 +415,7 @@ exports.createUser = createUser;
 
 var deleteUser = /*#__PURE__*/function () {
   var _ref14 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee12(_ref13) {
-    var id, cin, username, email, query;
+    var id, cin, username, email, query, user;
     return _regenerator["default"].wrap(function _callee12$(_context12) {
       while (1) {
         switch (_context12.prev = _context12.next) {
@@ -453,9 +466,21 @@ var deleteUser = /*#__PURE__*/function () {
             throw new Error('No user id, cin, username or email provided');
 
           case 19:
-            return _context12.abrupt("return", _users["default"].findOneAndDelete(query).exec());
+            _context12.next = 21;
+            return _users["default"].findOneAndDelete(query).exec();
 
-          case 20:
+          case 21:
+            user = _context12.sent;
+
+            if (!((user === null || user === void 0 ? void 0 : user.userType) === 'candidate')) {
+              _context12.next = 25;
+              break;
+            }
+
+            _context12.next = 25;
+            return (0, _candidates.deleteCandidateByUserId)(user._id);
+
+          case 25:
           case "end":
             return _context12.stop();
         }
