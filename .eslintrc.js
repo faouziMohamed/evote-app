@@ -29,6 +29,10 @@ module.exports = {
     'no-implicit-coercion': 'warn',
     'no-underscore-dangle': 'off',
     'no-var': 'warn',
+    'no-unused-expressions': [
+      'error',
+      { allowShortCircuit: true, allowTernary: true },
+    ],
     'no-use-before-define': ['error', { functions: false }],
     'no-empty-function': 'warn',
     'no-confusing-arrow': ['error', { allowParens: true }],
