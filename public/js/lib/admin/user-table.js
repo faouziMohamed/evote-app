@@ -21,6 +21,8 @@ var _loadSSpinners = require("../utils/preloader/loadS-spinners");
 
 var _userData = require("../utils/user-data.utils");
 
+var _adminActions = _interopRequireDefault(require("./admin-actions"));
+
 var _userTableRow = require("./user-table-row");
 
 function _classPrivateMethodGet(receiver, privateSet, fn) { if (!privateSet.has(receiver)) { throw new TypeError("attempted to get private field on non-instance"); } return fn; }
@@ -39,15 +41,29 @@ var UserTable = /*#__PURE__*/function () {
     this.tabBtns = (0, _toConsumableArray2["default"])(document.querySelectorAll('.tab-btn')) || [];
     this.tBody = document.querySelector('.users-table-body');
     this.checkAllIpunts = document.querySelector('#checkbox-all');
+    this.checkAllIpunts.checked = false;
     this.data = data;
     this.expectedUsersFilters = ['all', 'admin', 'user', 'candidate'];
+    this.actionBtns = _adminActions["default"].getBtns();
     this.spinner = (0, _loadSSpinners.LoadSpinner)();
+    this.pendingAction = {
+      remove: [],
+      update: [],
+      lock: [],
+      save: []
+    };
+    this.selectedRows = [];
   }
 
   (0, _createClass2["default"])(UserTable, [{
     key: "render",
     value: function render() {
       this.spinner.show();
+
+      _adminActions["default"].hideBtn('save');
+
+      _adminActions["default"].hide();
+
       this.useUserTable();
       (0, _userData.addUsersToCache)(this.data);
       this.spinner.hide();
@@ -188,6 +204,15 @@ var UserTable = /*#__PURE__*/function () {
                 row.attachEventTo('checkbox', 'click', function () {
                   return _this4.useCheckBoxAll();
                 });
+                row.attachEventTo('checkbox', 'change', function () {
+                  if (row.checkbox.checked) {
+                    _this4.selectedRows.push(row);
+                  } else {
+                    _this4.selectedRows.splice(_this4.selectedRows.indexOf(row), 1);
+                  }
+
+                  _this4.checkAllIpunts.checked ? _adminActions["default"].show() : _adminActions["default"].hide();
+                });
 
                 isAdmin = function isAdmin(str) {
                   return str === 'admin';
@@ -211,7 +236,7 @@ var UserTable = /*#__PURE__*/function () {
                   this.tBody.append(row.getRow());
                 }
 
-              case 10:
+              case 11:
               case "end":
                 return _context2.stop();
             }

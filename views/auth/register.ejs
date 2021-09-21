@@ -10,11 +10,12 @@
   <form action="/register" method="POST" class="auth-form" id="auth-form">
     <div class="form-floating">
       <input
+        data-name="<%= content[lang].emailLabel %>"
         type="email"
         class="form-floating__input form-control"
         id="email"
         name="email"
-        placeholder="<%= content[lang].emailLabel %>"
+        placeholder=""
         required
       />
       <label for="email" class="form-floating__label">
@@ -25,11 +26,12 @@
 
     <div class="form-floating">
       <input
+        data-name="<%= content[lang].firstNameLabel %>"
         type="text"
         class="form-floating__input form-control"
         id="firstname"
         name="firstname"
-        placeholder="<%= content[lang].firstNameLabel %>"
+        placeholder=""
         required
       />
       <label for="firstname" class="form-floating__label">
@@ -39,11 +41,12 @@
     </div>
     <div class="form-floating">
       <input
+        data-name="<%= content[lang].lastNameLabel %>"
         type="text"
         class="form-floating__input form-control"
         id="lastname"
         name="lastname"
-        placeholder="  <%= content[lang].lastNameLabel %>"
+        placeholder=""
         required
       />
       <label for="lastname" name="lastname" class="form-floating__label">
@@ -53,13 +56,14 @@
     </div>
     <div class="form-floating">
       <input
+        data-name="<%= content[lang].usernameLabel %>"
         class="form-floating__input form-control"
         type="text"
         id="username"
         name="username"
         minlength="3"
         pattern="^[a-z][a-z0-9_]{3,}$"
-        placeholder="<%= content[lang].usernameLabel %>"
+        placeholder=""
         required
       />
       <label for="username" class="form-floating__label">
@@ -70,11 +74,12 @@
 
     <div class="form-floating">
       <input
+        data-name="<%= content[lang].passwordLabel %>"
         type="password"
         class="form-floating__input form-control"
         id="password"
         name="password"
-        placeholder="<%= content[lang].passwordLabel %>"
+        placeholder=""
         minlength="7"
         required
       />

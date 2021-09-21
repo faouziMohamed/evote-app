@@ -160,7 +160,7 @@ var getNameRegex = function getNameRegex() {
 exports.getNameRegex = getNameRegex;
 
 var getPasswordRegex = function getPasswordRegex() {
-  return /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#%^$!%*?&])[\w@#%^$!%*?&]{7,}/;
+  return /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#%^$!%*?&])[\w\W@#%^$!%*?&]{7,}/;
 };
 
 exports.getPasswordRegex = getPasswordRegex;

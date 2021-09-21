@@ -44,30 +44,33 @@
     </div>
     <div class="tab-window__row">
       <div class="user-research">
-        <i class="search-icon far fa-search"></i>
+        <button id="search-btn" class="btn btn-nobg btn-users-search">
+          <i class="search-icon far fa-search"></i>
+        </button>
         <input
           type="search"
           class="search-input"
-          id="users-search"
+          id="search-input"
           name="search"
           aria-label="Search Users by name, username, email or cin"
           placeholder="Search Users by name, username, email or cin"
         />
       </div>
-      <div class="actions hidden">
-        <button class="btn btn-affirmative actions-edit">
+      <div class="admin-actions hiddden" id="admin-actions">
+        <button class="btn btn-affirmative actions-edit" id="edit-user">
           <i class="fad fa-edit"></i>
           <span class="actions--text"><%= content[lang].editUserBtn %> </span>
         </button>
-        <button class="btn btn-warning action-lock-account">
+        <button class="btn btn-warning action-lock" id="lock-user">
           <i class="fad fa-user-lock"></i>
-          <span class="actions--text"><%= content[lang].deleteUserBtn %></span>
-        </button>
-        <button class="btn action-delete btn-danger">
-          <i class="fad fa-trash-alt"></i>
           <span class="actions--text"><%= content[lang].LockAccountBtn %></span>
         </button>
-        <button class="btn btn-secondary action-delete hidden">
+        <button class="btn btn-danger action-delete" id="delete-user">
+          <i class="fad fa-trash-alt"></i>
+          <span class="actions--text"><%= content[lang].deleteUserBtn %></span>
+        </button>
+
+        <button class="btn btn-secondary action-save" id="save-changes">
           <i class="fad fa-trash-alt"></i>
           <span class="actions--text"><%= content[lang].saveActionsBtn %></span>
         </button>
