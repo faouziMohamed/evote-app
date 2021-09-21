@@ -37,11 +37,9 @@ var _passport2 = require("./controllers/passport");
 
 var _apiRoutes = require("./routes/api-routes");
 
-// import createError from 'http-errors';
 // import { addRandomUserToDB } from './utils/users.utils';
-var app = (0, _express["default"])(); // addRandomUserToDB(200).catch(() => {});
-
-if (_config["default"].env === 'production') app.use((0, _helmet["default"])()); // view engine setup
+var app = (0, _express["default"])();
+app.use((0, _helmet["default"])()); // view engine setup
 
 app.set('views', _path["default"].join(__dirname, '/views'));
 app.set('view engine', 'ejs');
