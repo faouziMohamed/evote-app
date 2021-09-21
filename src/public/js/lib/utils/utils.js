@@ -51,7 +51,7 @@ export const getUsernameRegex = () => /^[a-z][a-z0-9_]{3,}$/;
 export const getNameRegex = () => /^[a-zA-Z](\.?\s?\w+)+$/;
 
 export const getPasswordRegex = () =>
-  /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#%^$!%*?&])[\w@#%^$!%*?&]{7,}/;
+  /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#%^$!%*?&])[\w\W@#%^$!%*?&]{7,}/;
 
 export const strip = (str) => String(str).replace(/\s+/g, ' ');
 export const stripAll = (str) => String(str).replace(/\s+/g, '');

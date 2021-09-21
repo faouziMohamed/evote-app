@@ -3,22 +3,27 @@
 import {
   getData,
   getEmailRegex,
+  getPasswordRegex,
   getUsernameRegex,
   isEmpty,
   isString,
+  newElement,
   removeExtraSpaces,
-  strip,
 } from './utils';
 
 export function useRegisterFormValidation() {
   const btnSubmit = document.querySelector('#btn-submit');
   if (btnSubmit) btnSubmit.disabled = true;
+  // Some time fields are automatically filled by the browser, check if everything is Ok
+  activateSubmitButton('btn-submit');
   const [firstName, firstNameFeedbackEL] = getInputAndErorrElement('firstname');
   const [lastName, lastNameFeedbackEL] = getInputAndErorrElement('lastname');
   const [email, emailFeedbackEL] = getInputAndErorrElement('email');
   const [username, usernameFeedbackEL] = getInputAndErorrElement('username');
+  const [password, passwordFeedbackEL] = getInputAndErorrElement('password');
   const emailRegex = getEmailRegex();
   const usernameRegex = getUsernameRegex();
+  const passwordRegex = getPasswordRegex();
   const uniqueElNames = [String(email?.name), String(username?.name)];
   handleInputValueError(firstName, firstNameFeedbackEL);
   handleInputValueError(lastName, lastNameFeedbackEL);
@@ -36,6 +41,12 @@ export function useRegisterFormValidation() {
     regex: emailRegex,
     uniqueElements: uniqueElNames,
   });
+  if (password && passwordFeedbackEL)
+    handleInputWithRegexValueError({
+      input: password,
+      errorElement: passwordFeedbackEL,
+      regex: passwordRegex,
+    });
 }
 
 // Form validation handlers
@@ -46,10 +57,10 @@ export function getInputAndErorrElement(id) {
 }
 
 export function handleInputValueError(input, errorElement) {
-  const placeholder = input.getAttribute('placeholder');
+  const inputName = input.dataset?.name || '';
   const verify = async () => {
     if (isEmpty(input.value)) {
-      const message = `${placeholder} is invalid and is required`;
+      const message = `${inputName} is invalid and is required`;
       handleInvalidInput(input, errorElement, message);
     } else {
       await handleValidInput(input, errorElement);
@@ -72,14 +83,17 @@ export function handleInputWithRegexValueError({
 }
 
 function attachInputEvent({ input, errorElement, regex, watchList }) {
-  const placeholder = input.getAttribute('placeholder');
+  const inputName = input.dataset?.name || '';
   input.addEventListener('input', async () => {
     const value = removeExtraSpaces(input.value);
     if (isEmpty(value)) {
-      const message = `${placeholder} is invalid and is required`;
+      const message = `${inputName} is invalid and is required`;
       handleInvalidInput(input, errorElement, message);
     } else if (!regex.test(value)) {
-      const message = `Invalid ${placeholder}`;
+      let message = `Invalid ${inputName}`;
+      if (inputName?.toLocaleLowerCase() === 'password') {
+        message = validatePassword(value, message);
+      } else message = `Invalid ${inputName}`;
       handleInvalidInput(input, errorElement, message);
     } else {
       const checkExists = watchList.includes(input.name);
@@ -88,12 +102,40 @@ function attachInputEvent({ input, errorElement, regex, watchList }) {
   });
 }
 
+function validatePassword(value) {
+  const msg = newElement('p', {}, ['The password must contain : ']);
+  const lis = [];
+  const specialChars = ['@', '#', '%', '^', '$', '!', '%', '*', '?', '&'];
+  if (value.length < 7)
+    lis.push(newElement('li', {}, [`at last 7 characters`]));
+  if (value.search(/[a-z]/) < 0)
+    lis.push(newElement('li', {}, [`at least 1 lowercase letter`]));
+  if (value.search(/[A-Z]/) < 0)
+    lis.push(newElement('li', {}, [`at least 1 uppercase letter`]));
+
+  if (value.search(/[0-9]/) < 0)
+    lis.push(newElement('li', {}, [`at least 1 number`]));
+
+  if (value.search(RegExp(`[${specialChars.join('')}]`)) < 0) {
+    lis.push(
+      newElement('li', {}, [
+        `at least 1 special character in : ${specialChars.join(' ')}`,
+      ]),
+    );
+  }
+  const ul = newElement('ul', { class: 'list-msg' }, lis);
+  return newElement('div', {}, [msg, ul]);
+}
+
 function attachBlurEvent({ input, errorElement, regex, watchList }) {
-  const placeholder = input.getAttribute('placeholder');
+  const inputName = input.dataset?.name || '';
   input.addEventListener('blur', async () => {
     const value = removeExtraSpaces(input.value);
     if (isEmpty(value) || !regex.test(value)) {
-      const message = `${placeholder} is invalid and is required`;
+      let message = `${inputName} is invalid and is required`;
+      if (inputName?.toLocaleLowerCase() === 'password') {
+        message = validatePassword(value, message);
+      } else message = `Invalid ${inputName}`;
       handleInvalidInput(input, errorElement, message);
     } else {
       const checkExists = watchList.includes(input.name);
@@ -104,8 +146,11 @@ function attachBlurEvent({ input, errorElement, regex, watchList }) {
 
 export function checkInputsValidity(className = 'form-control:not(.optional)') {
   const inputs = document.querySelectorAll(`.${className}`);
-  const isValid = (input) =>
-    strip(input.value).trim() !== '' && input.classList.contains('is-valid');
+  const isCorrect = (input) =>
+    input.classList.contains('is-valid') ||
+    !input.classList.contains('is-invalid');
+
+  const isValid = (input) => !isEmpty(input.value) && isCorrect(input);
   return [...inputs].every(isValid);
 }
 
@@ -118,7 +163,7 @@ function handleInvalidInput(
   input.classList.remove('is-valid');
   input.classList.add('is-invalid');
   if (message) {
-    if (errorElement) errorElement.textContent = message;
+    errorElement?.replaceChildren(message);
     input.setCustomValidity(message);
   }
   const submitButton = document.querySelector(`#${submitBtnId}`);

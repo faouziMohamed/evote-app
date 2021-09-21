@@ -89,6 +89,19 @@
   }
 }
 
+.btn-users-search {
+  &:hover {
+    color: #222;
+  }
+
+  &:focus {
+    outline: none;
+    &:hover {
+      outline: none;
+      background-color: #bfc3ff;
+    }
+  }
+}
 .user-research {
   @extend %useInput;
   @include useFlexbox(none, flex-start, center);

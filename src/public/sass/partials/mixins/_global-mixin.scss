@@ -134,6 +134,9 @@
         opacity: 0;
         padding-block: 0.5rem 0.5rem;
         color: v.$danger_color;
+        .list-msg {
+          padding-inline-start: 1.3rem;
+        }
       }
 
       @at-root .is-invalid ~ .invalid-feedback {

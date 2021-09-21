@@ -1,5 +1,6 @@
 import { LoadSpinner } from '../utils/preloader/loadS-spinners';
 import { addUsersToCache, getUsersFromCache } from '../utils/user-data.utils';
+import AdminActions from './admin-actions';
 import { UserTableRow } from './user-table-row';
 
 export default class UserTable {
@@ -7,13 +8,19 @@ export default class UserTable {
     this.tabBtns = [...document.querySelectorAll('.tab-btn')] || [];
     this.tBody = document.querySelector('.users-table-body');
     this.checkAllIpunts = document.querySelector('#checkbox-all');
+    this.checkAllIpunts.checked = false;
     this.data = data;
     this.expectedUsersFilters = ['all', 'admin', 'user', 'candidate'];
+    this.actionBtns = AdminActions.getBtns();
     this.spinner = LoadSpinner();
+    this.pendingAction = { remove: [], update: [], lock: [], save: [] };
+    this.selectedRows = [];
   }
 
   render() {
     this.spinner.show();
+    AdminActions.hideBtn('save');
+    AdminActions.hide();
     this.useUserTable();
     addUsersToCache(this.data);
     this.spinner.hide();
@@ -89,6 +96,14 @@ export default class UserTable {
     }
     const row = new UserTableRow(user);
     row.attachEventTo('checkbox', 'click', () => this.useCheckBoxAll());
+    row.attachEventTo('checkbox', 'change', () => {
+      if (row.checkbox.checked) {
+        this.selectedRows.push(row);
+      } else {
+        this.selectedRows.splice(this.selectedRows.indexOf(row), 1);
+      }
+      this.checkAllIpunts.checked ? AdminActions.show() : AdminActions.hide();
+    });
 
     const isAdmin = (str) => str === 'admin';
     const isNormalUser = (str) => str === 'user';
