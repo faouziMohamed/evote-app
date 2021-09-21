@@ -1,4 +1,8 @@
 import Config from '../../config/config';
+import {
+  createCandidate,
+  deleteCandidateByUserId,
+} from '../../controllers/candidates.controllers';
 import User from '../../models/users.model';
 
 export const findUserByEmail = async (email, filter = {}, password = false) =>
@@ -58,7 +62,13 @@ export async function getNewCin(UserModel) {
   return cin;
 }
 
-export const createUser = async (userData) => User.create(userData);
+export const createUser = async (userData) => {
+  const user = await User.create(userData);
+  if (user.userType === 'candidate') {
+    createCandidate(user);
+  }
+  return user;
+};
 
 export const deleteUser = async ({ id, cin, username, email }) => {
   const query = {};
@@ -67,5 +77,8 @@ export const deleteUser = async ({ id, cin, username, email }) => {
   else if (username) query.username = username;
   else if (email) query.email = email;
   else throw new Error('No user id, cin, username or email provided');
-  return User.findOneAndDelete(query).exec();
+  const user = await User.findOneAndDelete(query).exec();
+  if (user?.userType === 'candidate') {
+    await deleteCandidateByUserId(user._id);
+  }
 };

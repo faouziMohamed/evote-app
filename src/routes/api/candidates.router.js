@@ -4,18 +4,17 @@ import {
   getAllCandidatesInformations,
   getCandidateInformations,
 } from '../../controllers/candidates.controllers';
-/* Router with root /api/candidates/ */
+/* Router in the path:  /api/candidates/ */
 
 const routerAPI = Router();
 routerAPI.route(['/info/id/:id', '/info/cin/:cin']).get(async (req, res) => {
   try {
     const { id, cin } = req.params;
-
     res.status(200).json({
       data: await getCandidateInformations({ id, cin }),
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(400).json({
       error: `Error getting candidate informations : ==> ${error}`,
     });
   }

@@ -2,6 +2,11 @@ import { model, Schema } from 'mongoose';
 
 const candidatSchema = Schema(
   {
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
     cin: {
       type: Number,
       required: true,
@@ -43,6 +48,14 @@ const candidatSchema = Schema(
         skills: [String],
       },
     },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+    updatedAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
     toJSON: { virtuals: true },
@@ -56,7 +69,7 @@ candidatSchema.virtual('details', {
   foreignField: 'cin',
   localField: 'cin',
   justOne: true,
-  match: { isCandidate: true },
+  match: { userType: 'candidate' },
 });
 
 const Candidates = model('Candidates', candidatSchema);
