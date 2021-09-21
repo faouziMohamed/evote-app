@@ -73,7 +73,13 @@ configureRoutes(app);
 // catch 404
 app.use((req, res) => {
   // next(createError(404));
-  res.status(404).send("Sorry can't find that!");
+  const msg = `
+  <h1>Oups 404!</h1>
+  <p> Sorry can't find that!</p>
+  <p>This mean that the page is not published or you hit a route that does'nt exists</p>
+  <p><strong>Faouzi</strong></p>
+  `;
+  res.status(404).send(msg);
 });
 
 // error handler
