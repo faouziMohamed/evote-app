@@ -7,7 +7,6 @@ import expressLayout from 'express-ejs-layouts';
 import minify from 'express-minify';
 import session from 'express-session';
 import helmet from 'helmet';
-// import createError from 'http-errors';
 import logger from 'morgan';
 import passport from 'passport';
 import path from 'path';
@@ -18,8 +17,8 @@ import { configureRoutes } from './routes/api-routes';
 // import { addRandomUserToDB } from './utils/users.utils';
 
 const app = express();
-// addRandomUserToDB(200).catch(() => {});
-if (Config.env === 'production') app.use(helmet());
+
+app.use(helmet());
 // view engine setup
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
@@ -31,6 +30,7 @@ app.use(logger('dev'));
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
