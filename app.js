@@ -92,7 +92,8 @@ app.use(_express["default"]["static"](_path["default"].join(__dirname, 'public')
 
 app.use(function (req, res) {
   // next(createError(404));
-  res.status(404).send("Sorry can't find that!");
+  var msg = "\n  <h1>Oups 404!</h1>\n  <p> Sorry can't find that!</p>\n  <p>This mean that the page is not published or you hit a route that does'nt exists</p>\n  <p><strong>Faouzi</strong></p>\n  ";
+  res.status(404).send(msg);
 }); // error handler
 
 app.use(function (err, req, res) {

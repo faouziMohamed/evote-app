@@ -31,7 +31,7 @@
     "format": "prettier  --write './src/**/*.{js,css,json}'",
     "clean": "rimraf dist",
     "build:js": "webpack --progress --mode production",
-    "build:scss": "sass --style=compressed src/public/sass:src/public/styles/ ",
+    "build:sass": "sass --style=compressed src/public/sass:src/public/styles/ ",
     "restart": "npm run build:js && babel-node ./src/bin/www.js --trace-deprecation",
     "build": "echo Building...",
     "start": "npm run prod",
