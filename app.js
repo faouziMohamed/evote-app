@@ -71,13 +71,20 @@ app.use((0, _expressSession["default"])({
   resave: false,
   saveUninitialized: true,
   cookie: {
-    secure: _config["default"].env === 'production',
+    secure: _config["default"].env !== 'production',
     httpOnly: _config["default"].env === 'production',
     maxAge: _config["default"].session.maxAge,
     sameSite: true
   }
 }));
-console.log(_config)
+console.log(_config["default"]);
+app.use(function (req, res,next) {
+  // next(createError(404));
+  var msg = "\n  <h1>Oups 404!</h1>\n  <p> Sorry can't find that!</p>\n  <p>This mean that the page is not published or you hit a route that does'nt exists</p>\n  <p><strong>Faouzi</strong></p>\n  ";
+  console.log(msg);
+  next();
+}); // error handler
+
 app.use((0, _connectFlash["default"])());
 (0, _passport2.usePassportLocalStrategy)();
 app.use(_passport["default"].initialize());
