@@ -15,9 +15,9 @@ var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/
 
 var _config = _interopRequireDefault(require("../../config/config"));
 
-var _candidates = require("../../controllers/candidates.controllers");
-
 var _users = _interopRequireDefault(require("../../models/users.model"));
+
+var _candidate = require("../candidate.utils");
 
 var findUserByEmail = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(email) {
@@ -393,7 +393,7 @@ var createUser = /*#__PURE__*/function () {
             user = _context11.sent;
 
             if (user.userType === 'candidate') {
-              (0, _candidates.createCandidate)(user);
+              (0, _candidate.createCandidate)(user);
             }
 
             return _context11.abrupt("return", user);
@@ -478,7 +478,7 @@ var deleteUser = /*#__PURE__*/function () {
             }
 
             _context12.next = 25;
-            return (0, _candidates.deleteCandidateByUserId)(user._id);
+            return (0, _candidate.deleteCandidateByUserId)(user._id);
 
           case 25:
           case "end":
