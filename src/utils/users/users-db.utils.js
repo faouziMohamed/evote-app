@@ -1,9 +1,6 @@
 import Config from '../../config/config';
-import {
-  createCandidate,
-  deleteCandidateByUserId,
-} from '../../controllers/candidates.controllers';
 import User from '../../models/users.model';
+import { createCandidate, deleteCandidateByUserId } from '../candidate.utils';
 
 export const findUserByEmail = async (email, filter = {}, password = false) =>
   User.findOne({ email }, password && '+password')
