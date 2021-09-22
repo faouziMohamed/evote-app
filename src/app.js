@@ -23,7 +23,6 @@ app.use(helmet());
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 app.set('layout', 'connected/layout/layout');
-app.set('trusty proxy', Config.env === 'production' ? 1 : 0);
 
 app.use(expressLayout);
 app.use(logger('dev'));
