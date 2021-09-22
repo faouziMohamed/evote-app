@@ -23,6 +23,7 @@ app.use(helmet());
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 app.set('layout', 'connected/layout/layout');
+app.set('trusty proxy', Config.env === 'production' ? 1 : 0);
 
 app.use(expressLayout);
 app.use(logger('dev'));
@@ -51,6 +52,7 @@ app.use(
     secret: Config.session.secret,
     resave: false,
     saveUninitialized: true,
+    proxy: true,
     cookie: {
       secure: Config.env === 'production',
       httpOnly: Config.env === 'production',
