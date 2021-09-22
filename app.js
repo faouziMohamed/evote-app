@@ -44,7 +44,6 @@ app.use((0, _helmet["default"])()); // view engine setup
 app.set('views', _path["default"].join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 app.set('layout', 'connected/layout/layout');
-app.set('trusty proxy', _config["default"].env === 'production' ? 1 : 0);
 app.use(_expressEjsLayouts["default"]);
 app.use((0, _morgan["default"])('dev'));
 app.use((0, _cors["default"])({

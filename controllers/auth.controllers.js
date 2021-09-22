@@ -203,7 +203,7 @@ function useUnprotectedPath(req, res, next) {
   };
 
   if (!isAuthPath(req.path)) fn = function fn() {
-    return res.status(307).redirect('/login');
+    return res.redirect('/login');
   };
   return fn();
 }
@@ -214,7 +214,7 @@ function useProtectedPath(req, res, next) {
   var isAdmin = req.user.isAdmin;
 
   var redirectTo = function redirectTo(path) {
-    return res.status(307).redirect(path);
+    return res.redirect(path);
   };
 
   var isAuthPath = function isAuthPath(path) {
@@ -302,11 +302,11 @@ function checkBeforeLogin(req, res, next) {
 
     if (!user) {
       handleNoValuesPassed(info, req);
-      return res.status(307).redirect('/login');
+      return res.redirect('/login');
     }
 
     return req.logIn(user, function (error) {
-      if (error) return res.status(307).redirect('/login');
+      if (error) return res.redirect('/login');
       var options = {
         expires: _config["default"].session.expires,
         httpOnly: false,
@@ -317,7 +317,7 @@ function checkBeforeLogin(req, res, next) {
         username: user.username
       });
       res.cookie('ps', data, options);
-      return res.status(307).redirect(user.isFirstLogin ? '/new-pair' : '/vote');
+      return res.redirect(user.isFirstLogin ? '/new-pair' : '/vote');
     });
   };
 }
