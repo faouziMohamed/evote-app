@@ -54,6 +54,9 @@ app.use(_express["default"].json());
 app.use(_express["default"].urlencoded({
   extended: true
 }));
+
+app.set('trusty proxy', _config["default"].env === 'production' ? 1 : 0);
+
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
@@ -71,7 +74,7 @@ app.use((0, _expressSession["default"])({
   resave: false,
   saveUninitialized: true,
   cookie: {
-    secure: _config["default"].env !== 'production',
+    secure: _config["default"].env === 'production',
     httpOnly: _config["default"].env === 'production',
     maxAge: _config["default"].session.maxAge,
     sameSite: true
