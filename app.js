@@ -77,7 +77,6 @@ app.use((0, _expressSession["default"])({
     sameSite: true
   }
 }));
-
 console.log(_config)
 app.use((0, _connectFlash["default"])());
 (0, _passport2.usePassportLocalStrategy)();
