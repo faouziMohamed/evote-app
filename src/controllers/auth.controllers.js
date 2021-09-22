@@ -89,7 +89,7 @@ function useUnprotectedPath(req, res, next) {
   let fn = next;
   const authPath = ['/login', '/activate', '/register'];
   const isAuthPath = (path) => authPath.some((p) => path.startsWith(p));
-  if (!isAuthPath(req.path)) fn = () => res.status(307).redirect('/login');
+  if (!isAuthPath(req.path)) fn = () => res.redirect('/login');
   return fn();
 }
 
@@ -97,7 +97,7 @@ function useProtectedPath(req, res, next) {
   const authPath = ['/login', '/activate', '/register'];
   const adminPath = ['/admin', '/api/admin'];
   const { isAdmin } = req.user;
-  const redirectTo = (path) => res.status(307).redirect(path);
+  const redirectTo = (path) => res.redirect(path);
   const isAuthPath = (path) => authPath.some((p) => path.startsWith(p));
   const isAdminPath = (path) => adminPath.some((p) => path.startsWith(p));
 
@@ -124,11 +124,11 @@ export function checkBeforeLogin(req, res, next) {
     if (err) return next(err);
     if (!user) {
       handleNoValuesPassed(info, req);
-      return res.status(307).redirect('/login');
+      return res.redirect('/login');
     }
 
     return req.logIn(user, (error) => {
-      if (error) return res.status(307).redirect('/login');
+      if (error) return res.redirect('/login');
       const options = {
         expires: Config.session.expires,
         httpOnly: false,
@@ -137,9 +137,7 @@ export function checkBeforeLogin(req, res, next) {
       const data = JSON.stringify({ UID: user.id, username: user.username });
       res.cookie('ps', data, options);
 
-      return res
-        .status(307)
-        .redirect(user.isFirstLogin ? '/new-pair' : '/vote');
+      return res.redirect(user.isFirstLogin ? '/new-pair' : '/vote');
     });
   };
 }
