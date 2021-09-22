@@ -75,7 +75,7 @@ app.use((0, _expressSession["default"])({
   saveUninitialized: true,
   proxy: true,
   cookie: {
-    secure: _config["default"].env !== 'production',
+    secure: _config["default"].env === 'production',
     httpOnly: _config["default"].env === 'production',
     maxAge: _config["default"].session.maxAge,
     sameSite: true
