@@ -44,6 +44,7 @@ app.use((0, _helmet["default"])()); // view engine setup
 app.set('views', _path["default"].join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 app.set('layout', 'connected/layout/layout');
+app.set('trusty proxy', _config["default"].env === 'production' ? 1 : 0);
 app.use(_expressEjsLayouts["default"]);
 app.use((0, _morgan["default"])('dev'));
 app.use((0, _cors["default"])({
@@ -54,9 +55,6 @@ app.use(_express["default"].json());
 app.use(_express["default"].urlencoded({
   extended: true
 }));
-
-app.set('trusty proxy', _config["default"].env === 'production' ? 1 : 0);
-
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
@@ -81,12 +79,6 @@ app.use((0, _expressSession["default"])({
     sameSite: true
   }
 }));
-console.log(_config["default"]);
-app.use(function (req, res,next) {
-  console.log(req.session);
-  next();
-}); // error handler
-
 app.use((0, _connectFlash["default"])());
 (0, _passport2.usePassportLocalStrategy)();
 app.use(_passport["default"].initialize());
