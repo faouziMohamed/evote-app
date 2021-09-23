@@ -18,15 +18,14 @@ import {
 
 export async function runOnLoad() {
   const btn = new ActionButton({ show: false });
-
   displayMessage('Fetching data...');
   const { UID, error: cookieErr } = getUIDFromCookie('ps');
   if (cookieErr) {
-    btn.updateButton(() => window.location.reload(), 'Reload page', true);
+    btn.updateButton(() => reloadPage(), 'Reload page', true);
     return displayError(cookieErr);
   }
-  const { isDone } = getCookie();
-  if (isDone) redirectTo('/vote');
+  const userCookie = getCookie();
+  if (!userCookie) redirectTo('/vote');
   displayMessage('Establishing communication with the server...');
   const { data: serverArmoredPubKey, error: keyError } = await getServerPubKey(
     '/api/keys/public/server',
@@ -40,7 +39,7 @@ export async function runOnLoad() {
   const URL = `/api/users/id/${UID}?name=true&log_status=true`;
   const { userData, error: userDataError } = await fetchUserData(URL);
   if (userDataError) {
-    btn.updateButton(() => redirectTo('/register'), 'Activate account', true);
+    btn.updateButton(() => redirectTo('/activate'), 'Activate account', true);
     return displayError(userDataError);
   }
 
@@ -86,7 +85,9 @@ async function fetchUserData(URL) {
     .then(async (res) => {
       const { data, error } = await res.json();
       if (error) return { error };
-
+      if (!data?.isFirstLogin) {
+        return { error: 'Generating Key done!' };
+      }
       const name = getFullName(data.name);
       const email = `${data.email}`;
       const passphrase = generateRandomString(100);

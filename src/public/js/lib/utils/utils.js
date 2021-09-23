@@ -46,9 +46,11 @@ export const capitalizeAll = (str) => str.replace(/\w\S*/g, capitalize);
 export const getEmailRegex = () =>
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-export const getUsernameRegex = () => /^[a-z][a-z0-9_]{3,}$/;
+export const getUsernameRegex = () => /^[a-zA-Z][a-zA-Z0-9_]{4,}$/;
 
 export const getNameRegex = () => /^[a-zA-Z](\.?\s?\w+)+$/;
+
+export const getCINRegex = () => /^[0-9]{5,}$/;
 
 export const getPasswordRegex = () =>
   /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#%^$!%*?&])[\w\W@#%^$!%*?&]{7,}/;

@@ -67,6 +67,7 @@ export class AlertDialog {
       this.events[elementName].push(event);
     });
 
+    // eslint-disable-next-line no-console
     console.log(`Events attached to ${elementName}`);
   }
 

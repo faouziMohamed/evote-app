@@ -60,6 +60,11 @@ tokenRouter.post('/request', async (req, res) => {
     const user = await findUserByEmail(email);
     if (!user) throw new Error('User not found');
 
+    if (user?.isActivated)
+      throw new Error(
+        'User already activated, please contact an admin for more support',
+      );
+
     if (Number(user?.cin) !== Number(cin))
       throw new Error(
         'The combination of Email and CIN not found, ' +

@@ -1,6 +1,7 @@
 // import { isEmpty } from 'lodash';
 
 import {
+  getCINRegex,
   getData,
   getEmailRegex,
   getPasswordRegex,
@@ -21,32 +22,51 @@ export function useRegisterFormValidation() {
   const [email, emailFeedbackEL] = getInputAndErorrElement('email');
   const [username, usernameFeedbackEL] = getInputAndErorrElement('username');
   const [password, passwordFeedbackEL] = getInputAndErorrElement('password');
-  const emailRegex = getEmailRegex();
-  const usernameRegex = getUsernameRegex();
-  const passwordRegex = getPasswordRegex();
-  const uniqueElNames = [String(email?.name), String(username?.name)];
-  handleInputValueError(firstName, firstNameFeedbackEL);
-  handleInputValueError(lastName, lastNameFeedbackEL);
+  const [cin, cinFeedbackEL] = getInputAndErorrElement('cin');
+  const [emailRegex, usernameRegex] = [getEmailRegex(), getUsernameRegex()];
+  const [cinRegex, passwordRegex] = [getCINRegex(), getPasswordRegex()];
+  const uniqueElements = [email?.name, username?.name, cin?.name].filter(
+    (str) => str,
+  );
+  const isOkExistEl = [email?.name, cin?.name].filter((str) => str);
 
-  handleInputWithRegexValueError({
-    input: username,
-    errorElement: usernameFeedbackEL,
-    regex: usernameRegex,
-    uniqueElements: uniqueElNames,
-  });
+  if (firstName) handleInputValueError(firstName, firstNameFeedbackEL);
+  if (lastName) handleInputValueError(lastName, lastNameFeedbackEL);
 
-  handleInputWithRegexValueError({
-    input: email,
-    errorElement: emailFeedbackEL,
-    regex: emailRegex,
-    uniqueElements: uniqueElNames,
-  });
-  if (password && passwordFeedbackEL)
+  if (cin) {
+    handleInputWithRegexValueError({
+      input: cin,
+      errorElement: cinFeedbackEL,
+      regex: cinRegex,
+      uniqueElements,
+      isOkExistEl,
+    });
+  }
+  if (email) {
+    handleInputWithRegexValueError({
+      input: email,
+      errorElement: emailFeedbackEL,
+      regex: emailRegex,
+      uniqueElements,
+      isOkExistEl,
+    });
+  }
+  if (username) {
+    handleInputWithRegexValueError({
+      input: username,
+      errorElement: usernameFeedbackEL,
+      regex: usernameRegex,
+      uniqueElements,
+    });
+  }
+
+  if (password) {
     handleInputWithRegexValueError({
       input: password,
       errorElement: passwordFeedbackEL,
       regex: passwordRegex,
     });
+  }
 }
 
 // Form validation handlers
@@ -74,15 +94,17 @@ export function handleInputWithRegexValueError({
   errorElement,
   regex,
   uniqueElements = ['username'],
+  isOkExistEl = [],
 }) {
   let watchList = [];
   if (uniqueElements)
     watchList = isString(uniqueElements) ? [uniqueElements] : uniqueElements;
-  const params = { input, errorElement, regex, watchList };
+  const params = { input, errorElement, regex, watchList, isOk: false };
+  params.isOk = watchList.every((el) => isOkExistEl.includes(el));
   [attachInputEvent, attachBlurEvent].forEach((fn) => fn(params));
 }
 
-function attachInputEvent({ input, errorElement, regex, watchList }) {
+function attachInputEvent({ input, errorElement, regex, watchList, isOk }) {
   const inputName = input.dataset?.name || '';
   input.addEventListener('input', async () => {
     const value = removeExtraSpaces(input.value);
@@ -97,7 +119,7 @@ function attachInputEvent({ input, errorElement, regex, watchList }) {
       handleInvalidInput(input, errorElement, message);
     } else {
       const checkExists = watchList.includes(input.name);
-      await handleValidInput(input, errorElement, checkExists);
+      await handleValidInput(input, errorElement, checkExists, isOk);
     }
   });
 }
@@ -127,7 +149,7 @@ function validatePassword(value) {
   return newElement('div', {}, [msg, ul]);
 }
 
-function attachBlurEvent({ input, errorElement, regex, watchList }) {
+function attachBlurEvent({ input, errorElement, regex, watchList, isOk }) {
   const inputName = input.dataset?.name || '';
   input.addEventListener('blur', async () => {
     const value = removeExtraSpaces(input.value);
@@ -139,7 +161,8 @@ function attachBlurEvent({ input, errorElement, regex, watchList }) {
       handleInvalidInput(input, errorElement, message);
     } else {
       const checkExists = watchList.includes(input.name);
-      await handleValidInput(input, errorElement, checkExists);
+
+      await handleValidInput(input, errorElement, checkExists, isOk);
     }
   });
 }
@@ -166,13 +189,20 @@ function handleInvalidInput(
     errorElement?.replaceChildren(message);
     input.setCustomValidity(message);
   }
+  document.querySelector(`.root`)?.classList.add('root_error');
+
   const submitButton = document.querySelector(`#${submitBtnId}`);
   if (submitButton) submitButton.disabled = true;
 }
 
-async function handleValidInput(input, errorElement, check = false) {
+async function handleValidInput(
+  input,
+  errorElement,
+  check = false,
+  isOk = false,
+) {
   try {
-    if (check && (await verifyValueIfUsed(input))) {
+    if (check && (await verifyValueIfUsed(input)) && !isOk) {
       const message = `${input.value} is already taken`;
       handleInvalidInput(input, errorElement, message);
       return;
@@ -189,12 +219,13 @@ async function verifyValueIfUsed(input) {
   const value = removeExtraSpaces(input.value);
   const url = `/api/users/verify/${input.name}/${value}`;
   const { data: exist } = await getData({ url });
-  return !!exist;
+  return exist;
 }
 
 function removeErrorMessages(input, errorElement) {
   input.classList.remove('is-invalid');
   input.classList.add('is-valid');
+  document.querySelector(`.root`)?.classList.remove('root_error');
   if (errorElement) errorElement.textContent = '✔';
   input.setCustomValidity('');
 }
