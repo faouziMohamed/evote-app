@@ -65,6 +65,7 @@
     "lodash": "^4.17.21",
     "mongoose": "^6.0.2",
     "morgan": "~1.10.0",
+    "ms": "^3.0.0-canary.1",
     "nanoid": "^3.1.25",
     "openpgp": "^5.0.0-6",
     "passport": "^0.4.1",
