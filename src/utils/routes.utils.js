@@ -51,10 +51,11 @@ export default function getRoutes(app) {
 
 export function allGetRoutes(app) {
   const isGetRoute = (path) => path.startsWith('GET ');
-  const isNotRootPath = (path) => !path.endsWith('/');
+  const isNotRootPath = (path) => !path.endsWith('GET /');
   const isNotApiRoute = (path) => !path.includes('/api/');
   return getRoutes(app)
     ?.filter(isNotRootPath)
     .filter((path) => isGetRoute(path) && isNotApiRoute(path))
-    .map((str) => str.replace('GET ', ''));
+    .map((str) => str.replace('GET ', ''))
+    .map((str) => str.replace(/\/$/, '')); // Remove trailing slash
 }

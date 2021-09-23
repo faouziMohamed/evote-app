@@ -7,7 +7,7 @@ export const content = {
     signUp: 'Sign up',
     emailLabel: 'Email',
     cinLabel: 'CIN',
-    submitBtn: 'Sign up',
+    submitBtn: 'Request Activation Link',
   },
   fr: {
     pageTitle: 'Activer votre compte',
@@ -15,7 +15,7 @@ export const content = {
     signUp: "S'inscrire",
     emailLabel: 'Email',
     cinLabel: 'CIN',
-    submitBtn: "S'inscrire",
+    submitBtn: "Demander un lien d'activation",
   },
 };
 
@@ -23,20 +23,20 @@ const metadata = {
   en: {
     title: 'Activation Page',
     description: 'Activate vonting account',
-    keywords: 'activate,account, register page',
+    keywords: 'activate, account, register page',
   },
   fr: {
     title: 'Activation Page',
     description: 'Activate vonting account',
-    keywords: 'inscription,inscrire,inscrire page',
+    keywords: 'inscription, inscrire, inscrire page',
   },
 };
 
-export const registerPageData = {
+export const activatePageData = {
   lang: 'en',
   content,
   metadata,
-  slug: ['register'],
+  slug: ['activate'],
   inject: {
     bodyScripts: [
       {
@@ -49,10 +49,10 @@ export const registerPageData = {
   },
 };
 
-export function getRegisterPageData(options = {}) {
+export function getActivatePageData(options = {}) {
   return (
-    getCommonPageData({ ...registerPageData, ...options }) || {
-      ...registerPageData,
+    getCommonPageData({ ...activatePageData, ...options }) || {
+      ...activatePageData,
       ...options,
     }
   );

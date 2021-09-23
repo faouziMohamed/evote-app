@@ -14,7 +14,7 @@ const BASE_URL =
 const Config = {
   env,
   session: {
-    secret: process.env.SESSION_SECRET || ms(),
+    secret: process.env.SESSION_SECRET,
     expiry: Number(process.env.SESSION_EXPIRY) || ms('15d'), // 15 days
     maxAge: Number(process.env.SESSION_MAXAGE) || ms('15d'), // 15 days
   },

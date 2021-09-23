@@ -3,6 +3,7 @@ import { capitalize } from 'lodash';
 import { getAuthErrorMessage } from '../data/auth/auth-msg.cms';
 import User from '../models/users.model';
 import {
+  getCINRegex,
   getEmailRegex,
   getFullName,
   getNameRegex,
@@ -95,6 +96,7 @@ export function getUserWithCallback(userFinderCB) {
       if (typeof user === 'function') {
         return user();
       }
+
       const data = query?.displayable ? createDisplayableData(user) : user;
       return res.status(200).json({ data });
     } catch (err) {
@@ -170,19 +172,21 @@ function readAndValidatePassword(req, genPassword) {
   return { password };
 }
 
-export function readAndVerifyUserInput({ username, email }) {
-  const lowercasedUsername = username?.toLowerCase().trim() || '';
-  const lowercasedEmail = email?.toLowerCase().trim() || '';
+export function readAndVerifyUserInput({ username, email, cin }) {
+  const lUsername = username?.toLowerCase().trim() || '';
+  const lEmail = email?.toLowerCase().trim() || '';
+  const lCin = Number(cin);
 
   const notValid =
-    (lowercasedUsername && !getUsernameRegex().test(lowercasedUsername)) ||
-    (lowercasedEmail && !getEmailRegex().test(lowercasedEmail));
+    (lUsername && !getUsernameRegex().test(lUsername)) ||
+    (lEmail && !getEmailRegex().test(lEmail)) ||
+    (lCin && !getCINRegex().test(lCin));
 
   if (notValid) {
-    const reason = lowercasedUsername ? 'invalidUsername' : 'invalidEmail';
+    const reason = lUsername ? 'invalidUsername' : 'invalidEmail';
     throw new Error(getAuthErrorMessage(reason));
   }
-  return { username: lowercasedUsername, email: lowercasedEmail };
+  return { username: lUsername, email: lEmail, cin: lCin };
 }
 
 export async function getAllUsers(req, res) {

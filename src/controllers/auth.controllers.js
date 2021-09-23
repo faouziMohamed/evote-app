@@ -8,6 +8,7 @@ import {
 } from '../data/auth/auth-msg.cms';
 import { getLoginPageData } from '../data/auth/login.cms';
 import { getNewPairPageData } from '../data/auth/newPaire.cms';
+import { getRegisterPageData } from '../data/auth/register.cms';
 import {
   createUser,
   existsUserByEmail,
@@ -28,7 +29,7 @@ export const loginPOST = (req, res, next) => {
 };
 
 export const registerGET = (req, res) => {
-  const pageData = getActivatePageData({
+  const pageData = getRegisterPageData({
     user: req.user,
     layout: 'auth/layout',
   });
@@ -60,6 +61,7 @@ export const registerPOST = async (req, res) => {
 };
 
 export const newPairGET = (req, res) => {
+  if (!req?.user.isFirstLogin) return res.redirect('/vote');
   const pageData = getNewPairPageData({
     user: req.user,
     isNewPaire_page: true,
@@ -69,11 +71,23 @@ export const newPairGET = (req, res) => {
   [pageData.error] = req.flash('error');
   [pageData.success] = req.flash('success');
   pageData.user = req.user;
-  res.render('auth/new-pair', pageData);
+  return res.render('auth/new-pair', pageData);
+};
+
+export const activateGET = (req, res) => {
+  const pageData = getActivatePageData({
+    user: req.user,
+    isNewPaire_page: true,
+    layout: 'auth/layout',
+  });
+
+  [pageData.error] = req.flash('error');
+  [pageData.success] = req.flash('success');
+  res.render('auth/activate', pageData);
 };
 
 export const routeProtecter = (req, res, next) => {
-  const freePath = ['/api/users/verify'];
+  const freePath = ['/api/users/verify', '/api/activate'];
   const isProtectedPath = (path) => freePath.some((p) => !path.startsWith(p));
   let fn = next;
   if (isProtectedPath(req.path)) {
@@ -100,7 +114,6 @@ function useProtectedPath(req, res, next) {
   const redirectTo = (path) => res.redirect(path);
   const isAuthPath = (path) => authPath.some((p) => path.startsWith(p));
   const isAdminPath = (path) => adminPath.some((p) => path.startsWith(p));
-
   let fn = next;
   if (isAuthPath(req.url)) fn = () => redirectTo('/vote');
   else if (!isAdmin && isAdminPath(req.path)) {
@@ -130,13 +143,12 @@ export function checkBeforeLogin(req, res, next) {
     return req.logIn(user, (error) => {
       if (error) return res.redirect('/login');
       const options = {
-        expires: Config.session.expires,
+        maxAge: Config.session.expiry,
         httpOnly: false,
         secure: false,
       };
       const data = JSON.stringify({ UID: user.id, username: user.username });
       res.cookie('ps', data, options);
-
       return res.redirect(user.isFirstLogin ? '/new-pair' : '/vote');
     });
   };

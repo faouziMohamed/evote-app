@@ -49,7 +49,7 @@ export async function verifyUserExists({ id: _id, email, username, cin }) {
   if (_id) return existsUserById(_id);
   if (email) return existsUserByEmail(email);
   if (username) return existsUserByUsername(username);
-  if (cin) return existsUserByCIN(cin);
+  if (cin) return existsUserByCIN(Number(cin));
   throw new Error('No user to verify');
 }
 
