@@ -6,8 +6,9 @@ export {
   findAllCandidates,
   findAllCandidatesPopulate,
   findCandidateByCIN,
+  findCandidateByCINPopulate,
   findCandidateById,
   findCandidateByIdPopulate,
   getCandidatePositionByID,
   incrementVoiceCount,
-} from './candidates/candidate-db.utils';
+} from './db/candidate-db.utils';

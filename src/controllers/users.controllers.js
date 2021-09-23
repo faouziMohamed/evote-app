@@ -194,7 +194,6 @@ export async function getAllUsers(req, res) {
       .status(204)
       .json({ error: getAuthErrorMessage('emptyUserList') });
   }
-
   const data = query?.displayable ? users.map(createDisplayableData) : users;
 
   return res.status(200).json({ data });

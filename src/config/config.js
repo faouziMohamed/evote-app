@@ -1,4 +1,5 @@
 import CreateLogger from 'debug';
+import ms from 'ms';
 import { nanoid } from 'nanoid';
 
 require('dotenv').config();
@@ -13,10 +14,16 @@ const BASE_URL =
 const Config = {
   env,
   session: {
-    secret: process.env.SESSION_SECRET || nanoid(1000),
-    expiry: Number(process.env.SESSION_EXPIRY) || 15 * 24 * 60 * 60 * 1000, // 15 days
-    maxAge: Number(process.env.SESSION_MAXAGE) || 15 * 24 * 60 * 60 * 1000, // 15 days
+    secret: process.env.SESSION_SECRET || ms(),
+    expiry: Number(process.env.SESSION_EXPIRY) || ms('15d'), // 15 days
+    maxAge: Number(process.env.SESSION_MAXAGE) || ms('15d'), // 15 days
   },
+  jwt: {
+    secret: process.env.JWT_SECRET,
+    expiry: process.env.JWT_EXPIRY || '15m', // 15 minutes,
+    algorithm: 'HS256',
+  },
+  DB_TOKEN_EXPIRY: process.env.DB_TOKEN_EXPIRY || '17m', // 17 minutes,
   DEFAULT_CIN: Number(process.env.DEFAULT_CIN) || 10_000,
   PORT,
   BASE_URL,

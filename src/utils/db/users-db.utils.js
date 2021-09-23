@@ -79,3 +79,6 @@ export const deleteUser = async ({ id, cin, username, email }) => {
     await deleteCandidateByUserId(user._id);
   }
 };
+
+export const updateUserById = async (_id, update = {}) =>
+  User.findByIdAndUpdate(_id, { $set: update }, { new: true }).exec();

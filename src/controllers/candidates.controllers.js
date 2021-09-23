@@ -1,9 +1,9 @@
 import {
   findAllCandidatesPopulate,
+  findCandidateByCINPopulate,
   findCandidateByIdPopulate,
   getCandidatePositionByID,
 } from '../utils/candidate.utils';
-import { findCandidateByCINPopulate } from '../utils/candidates/candidate-db.utils';
 
 const getDetails = async (candidate) => ({
   uid: candidate.user._id,

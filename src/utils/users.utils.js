@@ -11,6 +11,7 @@ export {
   findUserByUsername,
   getCountUserActivated,
   getNewCin,
+  updateUserById,
   verifyUserExists,
-} from './users/users-db.utils';
-export { addRandomUserToDB } from './users/users-mock.utils';
+} from './db/users-db.utils';
+export { addRandomUserToDB } from './db/users-mock.utils';
