@@ -52,7 +52,8 @@ usersAPIRouter.route('/all').get( /*#__PURE__*/function () {
  * /api/users/:cin || /api/users/:id || /api/users/:username ||
  * /api/users/verify/username/ || /api/users/verify/email/ */
 
-usersAPIRouter.route(['/cin/', '/id', '/username', '/verify/username/', '/verify/email/']).get(function (req, res) {
+var unCompletePath = ['/cin/', '/id', '/username', '/verify/username/', '/verify/email/', '/verify/cin/'];
+usersAPIRouter.route(unCompletePath).get(function (req, res) {
   res.status(400).json({
     error: (0, _authMsg.getAuthErrorMessage)('noValuePassed')
   });
@@ -95,22 +96,24 @@ usersAPIRouter.route(['/cin/:cin', '/id/:id', '/username/:username']).get( /*#__
   return function (_x3, _x4) {
     return _ref2.apply(this, arguments);
   };
-}()); // /api/users/verify/username/ || /api/users/verify/email/
+}()); // /api/users/verify/username/ || /api/users/verify/email/ || /api/users/verify/cin/
 
-usersAPIRouter.route(['/verify/username/:username', '/verify/email/:email']).get( /*#__PURE__*/function () {
+var verifyPaths = ['/verify/username/:username', '/verify/email/:email', '/verify/cin/:cin'];
+usersAPIRouter.route(verifyPaths).get( /*#__PURE__*/function () {
   var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(req, res) {
-    var _readAndVerifyUserInp, username, email, isUserExists;
+    var _readAndVerifyUserInp, username, email, cin, isUserExists;
 
     return _regenerator["default"].wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
             _context3.prev = 0;
-            _readAndVerifyUserInp = (0, _users.readAndVerifyUserInput)(req.params), username = _readAndVerifyUserInp.username, email = _readAndVerifyUserInp.email;
+            _readAndVerifyUserInp = (0, _users.readAndVerifyUserInput)(req.params), username = _readAndVerifyUserInp.username, email = _readAndVerifyUserInp.email, cin = _readAndVerifyUserInp.cin;
             _context3.next = 4;
             return (0, _users2.verifyUserExists)({
               username: username,
-              email: email
+              email: email,
+              cin: cin
             });
 
           case 4:

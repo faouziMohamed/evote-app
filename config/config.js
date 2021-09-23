@@ -24,7 +24,7 @@ var BASE_URL = env === 'production' ? process.env.BASE_URL : "http://localhost:"
 var Config = {
   env: env,
   session: {
-    secret: process.env.SESSION_SECRET || (0, _ms["default"])(),
+    secret: process.env.SESSION_SECRET,
     expiry: Number(process.env.SESSION_EXPIRY) || (0, _ms["default"])('15d'),
     // 15 days
     maxAge: Number(process.env.SESSION_MAXAGE) || (0, _ms["default"])('15d') // 15 days

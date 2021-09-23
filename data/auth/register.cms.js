@@ -5,8 +5,8 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getActivatePageData = getActivatePageData;
-exports.activatePageData = exports.content = void 0;
+exports.getRegisterPageData = getRegisterPageData;
+exports.registerPageData = exports.content = void 0;
 
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
@@ -19,39 +19,37 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 var content = {
   en: {
     pageTitle: 'Activate your account',
-    newToUs: 'New to Evote App?',
-    signUp: 'Sign up',
+    haveAnAccount: 'Already have an account?',
+    signIn: 'Sign in',
+    firstNameLabel: 'First name',
+    lastNameLabel: 'Last name',
     emailLabel: 'Email',
+    passwordLabel: 'Password',
+    usernameLabel: 'Username',
+    birthdateLabel: 'Birthdate',
     cinLabel: 'CIN',
-    submitBtn: 'Request Activation Link'
+    submitBtn: 'Sign up'
   },
-  fr: {
-    pageTitle: 'Activer votre compte',
-    newToUs: 'Nouveau chez Evote App?',
-    signUp: "S'inscrire",
-    emailLabel: 'Email',
-    cinLabel: 'CIN',
-    submitBtn: "Demander un lien d'activation"
-  }
+  fr: {}
 };
 exports.content = content;
 var metadata = {
   en: {
-    title: 'Activation Page',
-    description: 'Activate vonting account',
-    keywords: 'activate, account, register page'
+    title: 'Registration Page',
+    description: 'Create and admin page to be abble to create election',
+    keywords: 'register,account, register page'
   },
   fr: {
-    title: 'Activation Page',
-    description: 'Activate vonting account',
-    keywords: 'inscription, inscrire, inscrire page'
+    title: "Page d'inscription",
+    description: 'Créer et administrer la page pour créer des élections',
+    keywords: "inscription, compte, page d'inscription"
   }
 };
-var activatePageData = {
+var registerPageData = {
   lang: 'en',
   content: content,
   metadata: metadata,
-  slug: ['activate'],
+  slug: ['register'],
   inject: {
     bodyScripts: [{
       addScriptTag: _cms.addScriptTag,
@@ -61,9 +59,9 @@ var activatePageData = {
     }]
   }
 };
-exports.activatePageData = activatePageData;
+exports.registerPageData = registerPageData;
 
-function getActivatePageData() {
+function getRegisterPageData() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  return (0, _cms.getCommonPageData)(_objectSpread(_objectSpread({}, activatePageData), options)) || _objectSpread(_objectSpread({}, activatePageData), options);
+  return (0, _cms.getCommonPageData)(_objectSpread(_objectSpread({}, registerPageData), options)) || _objectSpread(_objectSpread({}, registerPageData), options);
 }

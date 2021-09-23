@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.checkBeforeLogin = checkBeforeLogin;
-exports.routeProtecter = exports.newPairGET = exports.registerPOST = exports.registerGET = exports.loginPOST = exports.loginGET = void 0;
+exports.routeProtecter = exports.activateGET = exports.newPairGET = exports.registerPOST = exports.registerGET = exports.loginPOST = exports.loginGET = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -25,6 +25,8 @@ var _authMsg = require("../data/auth/auth-msg.cms");
 var _login = require("../data/auth/login.cms");
 
 var _newPaire = require("../data/auth/newPaire.cms");
+
+var _register = require("../data/auth/register.cms");
 
 var _users = require("../utils/users.utils");
 
@@ -61,7 +63,7 @@ var loginPOST = function loginPOST(req, res, next) {
 exports.loginPOST = loginPOST;
 
 var registerGET = function registerGET(req, res) {
-  var pageData = (0, _activate.getActivatePageData)({
+  var pageData = (0, _register.getRegisterPageData)({
     user: req.user,
     layout: 'auth/layout'
   });
@@ -145,6 +147,7 @@ var registerPOST = /*#__PURE__*/function () {
 exports.registerPOST = registerPOST;
 
 var newPairGET = function newPairGET(req, res) {
+  if (!(req !== null && req !== void 0 && req.user.isFirstLogin)) return res.redirect('/vote');
   var pageData = (0, _newPaire.getNewPairPageData)({
     user: req.user,
     isNewPaire_page: true,
@@ -163,13 +166,36 @@ var newPairGET = function newPairGET(req, res) {
 
   pageData.success = _req$flash12[0];
   pageData.user = req.user;
-  res.render('auth/new-pair', pageData);
+  return res.render('auth/new-pair', pageData);
 };
 
 exports.newPairGET = newPairGET;
 
+var activateGET = function activateGET(req, res) {
+  var pageData = (0, _activate.getActivatePageData)({
+    user: req.user,
+    isNewPaire_page: true,
+    layout: 'auth/layout'
+  });
+
+  var _req$flash13 = req.flash('error');
+
+  var _req$flash14 = (0, _slicedToArray2["default"])(_req$flash13, 1);
+
+  pageData.error = _req$flash14[0];
+
+  var _req$flash15 = req.flash('success');
+
+  var _req$flash16 = (0, _slicedToArray2["default"])(_req$flash15, 1);
+
+  pageData.success = _req$flash16[0];
+  res.render('auth/activate', pageData);
+};
+
+exports.activateGET = activateGET;
+
 var routeProtecter = function routeProtecter(req, res, next) {
-  var freePath = ['/api/users/verify'];
+  var freePath = ['/api/users/verify', '/api/activate'];
 
   var isProtectedPath = function isProtectedPath(path) {
     return freePath.some(function (p) {
@@ -308,7 +334,7 @@ function checkBeforeLogin(req, res, next) {
     return req.logIn(user, function (error) {
       if (error) return res.redirect('/login');
       var options = {
-        expires: _config["default"].session.expires,
+        maxAge: _config["default"].session.expiry,
         httpOnly: false,
         secure: false
       };

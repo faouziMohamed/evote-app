@@ -18,7 +18,7 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function showDialog(_ref) {
-  var _document$querySelect, _dialogParent$querySe;
+  var _dialogParent$querySe;
 
   var _ref$modalType = _ref.modalType,
       modalType = _ref$modalType === void 0 ? 'success' : _ref$modalType,
@@ -27,7 +27,11 @@ function showDialog(_ref) {
       _ref$modalOkBtnText = _ref.modalOkBtnText,
       modalOkBtnText = _ref$modalOkBtnText === void 0 ? 'Done' : _ref$modalOkBtnText,
       _ref$modalText = _ref.modalText,
-      modalText = _ref$modalText === void 0 ? 'Success' : _ref$modalText;
+      modalText = _ref$modalText === void 0 ? 'Success' : _ref$modalText,
+      _ref$parentEl = _ref.parentEl,
+      parentEl = _ref$parentEl === void 0 ? document.body : _ref$parentEl,
+      _ref$forceNewParent = _ref.forceNewParent,
+      forceNewParent = _ref$forceNewParent === void 0 ? false : _ref$forceNewParent;
   var options = {
     modalType: modalType,
     modalTitle: modalTitle,
@@ -39,7 +43,15 @@ function showDialog(_ref) {
   dialog.attachEventsTo('btnOk', 'click', function () {
     dialogParent.remove(dialogParent);
   });
-  (_document$querySelect = document.querySelector('.main-content')) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.append(dialogParent);
+  var mainContent = document.querySelector('.main-content');
+
+  if (forceNewParent) {
+    parentEl.append(dialogParent);
+  } else {
+    var elParent = mainContent || parentEl;
+    elParent.append(dialogParent);
+  }
+
   (_dialogParent$querySe = dialogParent.querySelector('button')) === null || _dialogParent$querySe === void 0 ? void 0 : _dialogParent$querySe.focus();
 }
 
@@ -48,12 +60,15 @@ function showSuccessDialog(_ref2) {
       _ref2$modalOkBtnText = _ref2.modalOkBtnText,
       modalOkBtnText = _ref2$modalOkBtnText === void 0 ? 'Close' : _ref2$modalOkBtnText,
       _ref2$modalTitle = _ref2.modalTitle,
-      modalTitle = _ref2$modalTitle === void 0 ? 'User added' : _ref2$modalTitle;
+      modalTitle = _ref2$modalTitle === void 0 ? 'User added' : _ref2$modalTitle,
+      _ref2$parentEl = _ref2.parentEl,
+      parentEl = _ref2$parentEl === void 0 ? document.body : _ref2$parentEl;
   showDialog({
     modalType: 'success',
     modalOkBtnText: modalOkBtnText,
     modalTitle: modalTitle,
-    modalText: modalText
+    modalText: modalText,
+    parentEl: parentEl
   });
 }
 
@@ -63,11 +78,14 @@ function showErrorDialog(_ref3) {
       _ref3$modalOkBtnText = _ref3.modalOkBtnText,
       modalOkBtnText = _ref3$modalOkBtnText === void 0 ? 'Ok' : _ref3$modalOkBtnText,
       _ref3$modalText = _ref3.modalText,
-      modalText = _ref3$modalText === void 0 ? 'An error occured, please retry!' : _ref3$modalText;
+      modalText = _ref3$modalText === void 0 ? 'An error occured, please retry!' : _ref3$modalText,
+      _ref3$parentEl = _ref3.parentEl,
+      parentEl = _ref3$parentEl === void 0 ? document.body : _ref3$parentEl;
   showDialog({
     modalType: 'error',
     modalTitle: modalTitle,
     modalOkBtnText: modalOkBtnText,
-    modalText: modalText
+    modalText: modalText,
+    parentEl: parentEl
   });
 }

@@ -53,29 +53,62 @@ function useRegisterFormValidation() {
       password = _getInputAndErorrElem10[0],
       passwordFeedbackEL = _getInputAndErorrElem10[1];
 
-  var emailRegex = (0, _utils.getEmailRegex)();
-  var usernameRegex = (0, _utils.getUsernameRegex)();
-  var passwordRegex = (0, _utils.getPasswordRegex)();
-  var uniqueElNames = [String(email === null || email === void 0 ? void 0 : email.name), String(username === null || username === void 0 ? void 0 : username.name)];
-  handleInputValueError(firstName, firstNameFeedbackEL);
-  handleInputValueError(lastName, lastNameFeedbackEL);
-  handleInputWithRegexValueError({
-    input: username,
-    errorElement: usernameFeedbackEL,
-    regex: usernameRegex,
-    uniqueElements: uniqueElNames
+  var _getInputAndErorrElem11 = getInputAndErorrElement('cin'),
+      _getInputAndErorrElem12 = (0, _slicedToArray2["default"])(_getInputAndErorrElem11, 2),
+      cin = _getInputAndErorrElem12[0],
+      cinFeedbackEL = _getInputAndErorrElem12[1];
+
+  var _ref = [(0, _utils.getEmailRegex)(), (0, _utils.getUsernameRegex)()],
+      emailRegex = _ref[0],
+      usernameRegex = _ref[1];
+  var _ref2 = [(0, _utils.getCINRegex)(), (0, _utils.getPasswordRegex)()],
+      cinRegex = _ref2[0],
+      passwordRegex = _ref2[1];
+  var uniqueElements = [email === null || email === void 0 ? void 0 : email.name, username === null || username === void 0 ? void 0 : username.name, cin === null || cin === void 0 ? void 0 : cin.name].filter(function (str) {
+    return str;
   });
-  handleInputWithRegexValueError({
-    input: email,
-    errorElement: emailFeedbackEL,
-    regex: emailRegex,
-    uniqueElements: uniqueElNames
+  var isOkExistEl = [email === null || email === void 0 ? void 0 : email.name, cin === null || cin === void 0 ? void 0 : cin.name].filter(function (str) {
+    return str;
   });
-  if (password && passwordFeedbackEL) handleInputWithRegexValueError({
-    input: password,
-    errorElement: passwordFeedbackEL,
-    regex: passwordRegex
-  });
+  if (firstName) handleInputValueError(firstName, firstNameFeedbackEL);
+  if (lastName) handleInputValueError(lastName, lastNameFeedbackEL);
+
+  if (cin) {
+    handleInputWithRegexValueError({
+      input: cin,
+      errorElement: cinFeedbackEL,
+      regex: cinRegex,
+      uniqueElements: uniqueElements,
+      isOkExistEl: isOkExistEl
+    });
+  }
+
+  if (email) {
+    handleInputWithRegexValueError({
+      input: email,
+      errorElement: emailFeedbackEL,
+      regex: emailRegex,
+      uniqueElements: uniqueElements,
+      isOkExistEl: isOkExistEl
+    });
+  }
+
+  if (username) {
+    handleInputWithRegexValueError({
+      input: username,
+      errorElement: usernameFeedbackEL,
+      regex: usernameRegex,
+      uniqueElements: uniqueElements
+    });
+  }
+
+  if (password) {
+    handleInputWithRegexValueError({
+      input: password,
+      errorElement: passwordFeedbackEL,
+      regex: passwordRegex
+    });
+  }
 } // Form validation handlers
 
 
@@ -91,7 +124,7 @@ function handleInputValueError(input, errorElement) {
   var inputName = ((_input$dataset = input.dataset) === null || _input$dataset === void 0 ? void 0 : _input$dataset.name) || '';
 
   var verify = /*#__PURE__*/function () {
-    var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
+    var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
       var message;
       return _regenerator["default"].wrap(function _callee$(_context) {
         while (1) {
@@ -120,7 +153,7 @@ function handleInputValueError(input, errorElement) {
     }));
 
     return function verify() {
-      return _ref.apply(this, arguments);
+      return _ref3.apply(this, arguments);
     };
   }();
 
@@ -129,32 +162,39 @@ function handleInputValueError(input, errorElement) {
   });
 }
 
-function handleInputWithRegexValueError(_ref2) {
-  var input = _ref2.input,
-      errorElement = _ref2.errorElement,
-      regex = _ref2.regex,
-      _ref2$uniqueElements = _ref2.uniqueElements,
-      uniqueElements = _ref2$uniqueElements === void 0 ? ['username'] : _ref2$uniqueElements;
+function handleInputWithRegexValueError(_ref4) {
+  var input = _ref4.input,
+      errorElement = _ref4.errorElement,
+      regex = _ref4.regex,
+      _ref4$uniqueElements = _ref4.uniqueElements,
+      uniqueElements = _ref4$uniqueElements === void 0 ? ['username'] : _ref4$uniqueElements,
+      _ref4$isOkExistEl = _ref4.isOkExistEl,
+      isOkExistEl = _ref4$isOkExistEl === void 0 ? [] : _ref4$isOkExistEl;
   var watchList = [];
   if (uniqueElements) watchList = (0, _utils.isString)(uniqueElements) ? [uniqueElements] : uniqueElements;
   var params = {
     input: input,
     errorElement: errorElement,
     regex: regex,
-    watchList: watchList
+    watchList: watchList,
+    isOk: false
   };
+  params.isOk = watchList.every(function (el) {
+    return isOkExistEl.includes(el);
+  });
   [attachInputEvent, attachBlurEvent].forEach(function (fn) {
     return fn(params);
   });
 }
 
-function attachInputEvent(_ref3) {
+function attachInputEvent(_ref5) {
   var _input$dataset2;
 
-  var input = _ref3.input,
-      errorElement = _ref3.errorElement,
-      regex = _ref3.regex,
-      watchList = _ref3.watchList;
+  var input = _ref5.input,
+      errorElement = _ref5.errorElement,
+      regex = _ref5.regex,
+      watchList = _ref5.watchList,
+      isOk = _ref5.isOk;
   var inputName = ((_input$dataset2 = input.dataset) === null || _input$dataset2 === void 0 ? void 0 : _input$dataset2.name) || '';
   input.addEventListener('input', /*#__PURE__*/(0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
     var value, message, _message, checkExists;
@@ -194,7 +234,7 @@ function attachInputEvent(_ref3) {
           case 12:
             checkExists = watchList.includes(input.name);
             _context2.next = 15;
-            return handleValidInput(input, errorElement, checkExists);
+            return handleValidInput(input, errorElement, checkExists, isOk);
 
           case 15:
           case "end":
@@ -224,13 +264,14 @@ function validatePassword(value) {
   return (0, _utils.newElement)('div', {}, [msg, ul]);
 }
 
-function attachBlurEvent(_ref5) {
+function attachBlurEvent(_ref7) {
   var _input$dataset3;
 
-  var input = _ref5.input,
-      errorElement = _ref5.errorElement,
-      regex = _ref5.regex,
-      watchList = _ref5.watchList;
+  var input = _ref7.input,
+      errorElement = _ref7.errorElement,
+      regex = _ref7.regex,
+      watchList = _ref7.watchList,
+      isOk = _ref7.isOk;
   var inputName = ((_input$dataset3 = input.dataset) === null || _input$dataset3 === void 0 ? void 0 : _input$dataset3.name) || '';
   input.addEventListener('blur', /*#__PURE__*/(0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
     var value, message, checkExists;
@@ -258,7 +299,7 @@ function attachBlurEvent(_ref5) {
           case 7:
             checkExists = watchList.includes(input.name);
             _context3.next = 10;
-            return handleValidInput(input, errorElement, checkExists);
+            return handleValidInput(input, errorElement, checkExists, isOk);
 
           case 10:
           case "end":
@@ -285,6 +326,8 @@ function checkInputsValidity() {
 }
 
 function handleInvalidInput(input, errorElement, message) {
+  var _document$querySelect;
+
   var submitBtnId = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'btn-submit';
   input.classList.remove('is-valid');
   input.classList.add('is-invalid');
@@ -294,6 +337,7 @@ function handleInvalidInput(input, errorElement, message) {
     input.setCustomValidity(message);
   }
 
+  (_document$querySelect = document.querySelector(".root")) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.classList.add('root_error');
   var submitButton = document.querySelector("#".concat(submitBtnId));
   if (submitButton) submitButton.disabled = true;
 }
@@ -305,6 +349,7 @@ function handleValidInput(_x, _x2) {
 function _handleValidInput() {
   _handleValidInput = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(input, errorElement) {
     var check,
+        isOk,
         message,
         _args4 = arguments;
     return _regenerator["default"].wrap(function _callee4$(_context4) {
@@ -312,23 +357,34 @@ function _handleValidInput() {
         switch (_context4.prev = _context4.next) {
           case 0:
             check = _args4.length > 2 && _args4[2] !== undefined ? _args4[2] : false;
-            _context4.prev = 1;
-            _context4.t0 = check;
+            isOk = _args4.length > 3 && _args4[3] !== undefined ? _args4[3] : false;
+            _context4.prev = 2;
+            _context4.t1 = check;
 
-            if (!_context4.t0) {
-              _context4.next = 7;
+            if (!_context4.t1) {
+              _context4.next = 8;
               break;
             }
 
-            _context4.next = 6;
+            _context4.next = 7;
             return verifyValueIfUsed(input);
 
-          case 6:
-            _context4.t0 = _context4.sent;
-
           case 7:
+            _context4.t1 = _context4.sent;
+
+          case 8:
+            _context4.t0 = _context4.t1;
+
             if (!_context4.t0) {
               _context4.next = 11;
+              break;
+            }
+
+            _context4.t0 = !isOk;
+
+          case 11:
+            if (!_context4.t0) {
+              _context4.next = 15;
               break;
             }
 
@@ -336,24 +392,24 @@ function _handleValidInput() {
             handleInvalidInput(input, errorElement, message);
             return _context4.abrupt("return");
 
-          case 11:
+          case 15:
             removeErrorMessages(input, errorElement);
             activateSubmitButton();
-            _context4.next = 18;
+            _context4.next = 22;
             break;
 
-          case 15:
-            _context4.prev = 15;
-            _context4.t1 = _context4["catch"](1);
+          case 19:
+            _context4.prev = 19;
+            _context4.t2 = _context4["catch"](2);
             // eslint-disable-next-line no-console
-            console.log(_context4.t1);
+            console.log(_context4.t2);
 
-          case 18:
+          case 22:
           case "end":
             return _context4.stop();
         }
       }
-    }, _callee4, null, [[1, 15]]);
+    }, _callee4, null, [[2, 19]]);
   }));
   return _handleValidInput.apply(this, arguments);
 }
@@ -380,7 +436,7 @@ function _verifyValueIfUsed() {
           case 4:
             _yield$getData = _context5.sent;
             exist = _yield$getData.data;
-            return _context5.abrupt("return", !!exist);
+            return _context5.abrupt("return", exist);
 
           case 7:
           case "end":
@@ -393,8 +449,11 @@ function _verifyValueIfUsed() {
 }
 
 function removeErrorMessages(input, errorElement) {
+  var _document$querySelect2;
+
   input.classList.remove('is-invalid');
   input.classList.add('is-valid');
+  (_document$querySelect2 = document.querySelector(".root")) === null || _document$querySelect2 === void 0 ? void 0 : _document$querySelect2.classList.remove('root_error');
   if (errorElement) errorElement.textContent = '✔';
   input.setCustomValidity('');
 }

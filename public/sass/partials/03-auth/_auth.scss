@@ -86,6 +86,16 @@
   margin-block: 1rem 0;
 }
 
+.auth-success-msg {
+  color: rgb(42, 255, 106);
+  background-color: rgb(175, 231, 222);
+  padding-block: 0.5rem;
+  text-align: center;
+  border: 1px solid #bad7f2;
+  box-shadow: 0 0 9px 2px rgb(196, 253, 255);
+  margin-block: 1rem 0;
+}
+
 .auth-form {
   display: flex;
   flex-direction: column;
@@ -152,7 +162,7 @@
 }
 .root_error {
   .left-side {
-    background-color: v.$secondary_color;
+    background-color: v.$danger_color;
   }
   .right-side {
     background-image: linear-gradient(

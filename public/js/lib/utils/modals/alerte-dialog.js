@@ -134,7 +134,8 @@ var AlertDialog = /*#__PURE__*/function () {
         _this[elementName].addEventListener(event, callbackArr[index]);
 
         _this.events[elementName].push(event);
-      });
+      }); // eslint-disable-next-line no-console
+
       console.log("Events attached to ".concat(elementName));
     }
   }, {

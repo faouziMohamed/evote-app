@@ -59,7 +59,7 @@ function allGetRoutes(app) {
   };
 
   var isNotRootPath = function isNotRootPath(path) {
-    return !path.endsWith('/');
+    return !path.endsWith('GET /');
   };
 
   var isNotApiRoute = function isNotApiRoute(path) {
@@ -70,5 +70,7 @@ function allGetRoutes(app) {
     return isGetRoute(path) && isNotApiRoute(path);
   }).map(function (str) {
     return str.replace('GET ', '');
-  });
+  }).map(function (str) {
+    return str.replace(/\/$/, '');
+  }); // Remove trailing slash
 }

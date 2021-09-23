@@ -17,13 +17,13 @@ var _candidates = _interopRequireDefault(require("./api/candidates.router"));
 
 var _entities = _interopRequireDefault(require("./api/entities.router"));
 
+var _mailActivation = _interopRequireDefault(require("./api/mail-activation.router"));
+
 var _usersApi = _interopRequireDefault(require("./api/users-api.router"));
 
 var _voteProcess = _interopRequireDefault(require("./api/vote-process.router"));
 
 var _auth2 = _interopRequireDefault(require("./authentication/auth.router"));
-
-var _tokenAuth = _interopRequireDefault(require("./authentication/token-auth.route"));
 
 var _home = _interopRequireDefault(require("./home.router"));
 
@@ -32,6 +32,7 @@ var _admin = _interopRequireDefault(require("./logged-in/admin.router"));
 var _loggedIn = _interopRequireDefault(require("./logged-in/loggedIn.router"));
 
 var APIRoutes = function APIRoutes(app) {
+  app.use('/api/activate', _mailActivation["default"]);
   app.use('/api/users', _usersApi["default"]);
   app.use('/api/candidates', _candidates["default"]);
   app.use('/api/keys', _entities["default"]);
@@ -49,17 +50,13 @@ var configureRoutes = function configureRoutes(app) {
   app.use('/', _home["default"]);
   app.use(function (req, res, next) {
     // Handle 404
-    if (!GETroutes.includes(req.path)) {
-      return next();
-    }
-
+    if (!GETroutes.includes(req.path)) return next();
     return (0, _auth.routeProtecter)(req, res, next);
   });
-  app.use('/activate', _tokenAuth["default"]);
   APIRoutes(app);
+  app.use(_auth2["default"]);
   app.use(_loggedIn["default"]);
   app.use('/admin', _admin["default"]);
-  app.use(_auth2["default"]);
   GETroutes = (0, _routes.allGetRoutes)(app);
 };
 

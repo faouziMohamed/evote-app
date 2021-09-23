@@ -25,7 +25,7 @@ function runOnLoad() {
 
 function _runOnLoad() {
   _runOnLoad = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
-    var btn, _getUIDFromCookie, UID, cookieErr, _getCookie, isDone, _yield$getServerPubKe, serverArmoredPubKey, keyError, URL, _yield$fetchUserData, userData, userDataError, encryptor, encrypted, _yield$postData, postError;
+    var btn, _getUIDFromCookie, UID, cookieErr, userCookie, _yield$getServerPubKe, serverArmoredPubKey, keyError, URL, _yield$fetchUserData, userData, userDataError, encryptor, encrypted, _yield$postData, postError;
 
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
@@ -43,13 +43,13 @@ function _runOnLoad() {
             }
 
             btn.updateButton(function () {
-              return window.location.reload();
+              return (0, _utils.reloadPage)();
             }, 'Reload page', true);
             return _context.abrupt("return", (0, _newPair.displayError)(cookieErr));
 
           case 6:
-            _getCookie = getCookie(), isDone = _getCookie.isDone;
-            if (isDone) (0, _utils.redirectTo)('/vote');
+            userCookie = getCookie();
+            if (!userCookie) (0, _utils.redirectTo)('/vote');
             (0, _newPair.displayMessage)('Establishing communication with the server...');
             _context.next = 11;
             return getServerPubKey('/api/keys/public/server');
@@ -86,7 +86,7 @@ function _runOnLoad() {
             }
 
             btn.updateButton(function () {
-              return (0, _utils.redirectTo)('/register');
+              return (0, _utils.redirectTo)('/activate');
             }, 'Activate account', true);
             return _context.abrupt("return", (0, _newPair.displayError)(userDataError));
 
@@ -203,6 +203,16 @@ function _fetchUserData() {
                         });
 
                       case 7:
+                        if (data !== null && data !== void 0 && data.isFirstLogin) {
+                          _context2.next = 9;
+                          break;
+                        }
+
+                        return _context2.abrupt("return", {
+                          error: 'Generating Key done!'
+                        });
+
+                      case 9:
                         name = (0, _utils.getFullName)(data.name);
                         email = "".concat(data.email);
                         passphrase = (0, _aes.generateRandomString)(100);
@@ -215,7 +225,7 @@ function _fetchUserData() {
                           userData: userData
                         });
 
-                      case 12:
+                      case 14:
                       case "end":
                         return _context2.stop();
                     }

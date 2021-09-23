@@ -175,38 +175,46 @@ tokenRouter.post('/request', /*#__PURE__*/function () {
             throw new Error('User not found');
 
           case 13:
-            if (!(Number(user === null || user === void 0 ? void 0 : user.cin) !== Number(cin))) {
+            if (!(user !== null && user !== void 0 && user.isActivated)) {
               _context2.next = 15;
+              break;
+            }
+
+            throw new Error('User already activated, please contact an admin for more support');
+
+          case 15:
+            if (!(Number(user === null || user === void 0 ? void 0 : user.cin) !== Number(cin))) {
+              _context2.next = 17;
               break;
             }
 
             throw new Error('The combination of Email and CIN not found, ' + 'please make you sure you provided the right one');
 
-          case 15:
-            _context2.next = 17;
+          case 17:
+            _context2.next = 19;
             return (0, _index["default"])({
               user: user,
               msgType: 'activation'
             });
 
-          case 17:
+          case 19:
             return _context2.abrupt("return", res.status(200).send({
               data: 'A message with the activation link has been sent to your email,' + ' please check it in your inbox'
             }));
 
-          case 20:
-            _context2.prev = 20;
+          case 22:
+            _context2.prev = 22;
             _context2.t0 = _context2["catch"](0);
             return _context2.abrupt("return", res.status(400).send({
               error: _context2.t0.message
             }));
 
-          case 23:
+          case 25:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[0, 20]]);
+    }, _callee2, null, [[0, 22]]);
   }));
 
   return function (_x3, _x4) {

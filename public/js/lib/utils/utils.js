@@ -9,7 +9,7 @@ exports.getFullName = getFullName;
 exports.postData = postData;
 exports.getData = getData;
 exports.newElement = newElement;
-exports.isValidPassword = exports.isValidName = exports.isValidUsername = exports.isValidEmail = exports.isNotEmpty = exports.isEmpty = exports.isArrayOfStrings = exports.isAnArray = exports.isString = exports.removeExtraSpaces = exports.stripAll = exports.strip = exports.getPasswordRegex = exports.getNameRegex = exports.getUsernameRegex = exports.getEmailRegex = exports.capitalizeAll = exports.capitalize = exports.reloadPage = exports.redirectTo = exports.decodeCookie = exports.getDataFromCookie = void 0;
+exports.isValidPassword = exports.isValidName = exports.isValidUsername = exports.isValidEmail = exports.isNotEmpty = exports.isEmpty = exports.isArrayOfStrings = exports.isAnArray = exports.isString = exports.removeExtraSpaces = exports.stripAll = exports.strip = exports.getPasswordRegex = exports.getCINRegex = exports.getNameRegex = exports.getUsernameRegex = exports.getEmailRegex = exports.capitalizeAll = exports.capitalize = exports.reloadPage = exports.redirectTo = exports.decodeCookie = exports.getDataFromCookie = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -148,7 +148,7 @@ var getEmailRegex = function getEmailRegex() {
 exports.getEmailRegex = getEmailRegex;
 
 var getUsernameRegex = function getUsernameRegex() {
-  return /^[a-z][a-z0-9_]{3,}$/;
+  return /^[a-zA-Z][a-zA-Z0-9_]{4,}$/;
 };
 
 exports.getUsernameRegex = getUsernameRegex;
@@ -158,6 +158,12 @@ var getNameRegex = function getNameRegex() {
 };
 
 exports.getNameRegex = getNameRegex;
+
+var getCINRegex = function getCINRegex() {
+  return /^[0-9]{5,}$/;
+};
+
+exports.getCINRegex = getCINRegex;
 
 var getPasswordRegex = function getPasswordRegex() {
   return /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#%^$!%*?&])[\w\W@#%^$!%*?&]{7,}/;

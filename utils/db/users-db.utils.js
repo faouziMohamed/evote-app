@@ -333,7 +333,7 @@ function _verifyUserExists() {
               break;
             }
 
-            return _context14.abrupt("return", existsUserByCIN(cin));
+            return _context14.abrupt("return", existsUserByCIN(Number(cin)));
 
           case 9:
             throw new Error('No user to verify');

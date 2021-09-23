@@ -399,19 +399,22 @@ function readAndValidatePassword(req, genPassword) {
 
 function readAndVerifyUserInput(_ref7) {
   var username = _ref7.username,
-      email = _ref7.email;
-  var lowercasedUsername = (username === null || username === void 0 ? void 0 : username.toLowerCase().trim()) || '';
-  var lowercasedEmail = (email === null || email === void 0 ? void 0 : email.toLowerCase().trim()) || '';
-  var notValid = lowercasedUsername && !(0, _utils.getUsernameRegex)().test(lowercasedUsername) || lowercasedEmail && !(0, _utils.getEmailRegex)().test(lowercasedEmail);
+      email = _ref7.email,
+      cin = _ref7.cin;
+  var lUsername = (username === null || username === void 0 ? void 0 : username.toLowerCase().trim()) || '';
+  var lEmail = (email === null || email === void 0 ? void 0 : email.toLowerCase().trim()) || '';
+  var lCin = Number(cin);
+  var notValid = lUsername && !(0, _utils.getUsernameRegex)().test(lUsername) || lEmail && !(0, _utils.getEmailRegex)().test(lEmail) || lCin && !(0, _utils.getCINRegex)().test(lCin);
 
   if (notValid) {
-    var reason = lowercasedUsername ? 'invalidUsername' : 'invalidEmail';
+    var reason = lUsername ? 'invalidUsername' : 'invalidEmail';
     throw new Error((0, _authMsg.getAuthErrorMessage)(reason));
   }
 
   return {
-    username: lowercasedUsername,
-    email: lowercasedEmail
+    username: lUsername,
+    email: lEmail,
+    cin: lCin
   };
 }
 
