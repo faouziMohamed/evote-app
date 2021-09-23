@@ -75,6 +75,12 @@ Object.defineProperty(exports, "getNewCin", {
     return _usersDb.getNewCin;
   }
 });
+Object.defineProperty(exports, "updateUserById", {
+  enumerable: true,
+  get: function get() {
+    return _usersDb.updateUserById;
+  }
+});
 Object.defineProperty(exports, "verifyUserExists", {
   enumerable: true,
   get: function get() {
@@ -88,6 +94,6 @@ Object.defineProperty(exports, "addRandomUserToDB", {
   }
 });
 
-var _usersDb = require("./users/users-db.utils");
+var _usersDb = require("./db/users-db.utils");
 
-var _usersMock = require("./users/users-mock.utils");
+var _usersMock = require("./db/users-mock.utils");

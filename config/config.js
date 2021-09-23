@@ -9,6 +9,8 @@ exports["default"] = exports.debug = void 0;
 
 var _debug = _interopRequireDefault(require("debug"));
 
+var _ms = _interopRequireDefault(require("ms"));
+
 var _nanoid = require("nanoid");
 
 require('dotenv').config();
@@ -22,12 +24,20 @@ var BASE_URL = env === 'production' ? process.env.BASE_URL : "http://localhost:"
 var Config = {
   env: env,
   session: {
-    secret: process.env.SESSION_SECRET || (0, _nanoid.nanoid)(1000),
-    expiry: Number(process.env.SESSION_EXPIRY) || 15 * 24 * 60 * 60 * 1000,
+    secret: process.env.SESSION_SECRET || (0, _ms["default"])(),
+    expiry: Number(process.env.SESSION_EXPIRY) || (0, _ms["default"])('15d'),
     // 15 days
-    maxAge: Number(process.env.SESSION_MAXAGE) || 15 * 24 * 60 * 60 * 1000 // 15 days
+    maxAge: Number(process.env.SESSION_MAXAGE) || (0, _ms["default"])('15d') // 15 days
 
   },
+  jwt: {
+    secret: process.env.JWT_SECRET,
+    expiry: process.env.JWT_EXPIRY || '15m',
+    // 15 minutes,
+    algorithm: 'HS256'
+  },
+  DB_TOKEN_EXPIRY: process.env.DB_TOKEN_EXPIRY || '17m',
+  // 17 minutes,
   DEFAULT_CIN: Number(process.env.DEFAULT_CIN) || 10000,
   PORT: PORT,
   BASE_URL: BASE_URL,

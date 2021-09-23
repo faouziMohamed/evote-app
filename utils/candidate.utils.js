@@ -45,6 +45,12 @@ Object.defineProperty(exports, "findCandidateByCIN", {
     return _candidateDb.findCandidateByCIN;
   }
 });
+Object.defineProperty(exports, "findCandidateByCINPopulate", {
+  enumerable: true,
+  get: function get() {
+    return _candidateDb.findCandidateByCINPopulate;
+  }
+});
 Object.defineProperty(exports, "findCandidateById", {
   enumerable: true,
   get: function get() {
@@ -70,4 +76,4 @@ Object.defineProperty(exports, "incrementVoiceCount", {
   }
 });
 
-var _candidateDb = require("./candidates/candidate-db.utils");
+var _candidateDb = require("./db/candidate-db.utils");

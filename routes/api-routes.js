@@ -23,6 +23,8 @@ var _voteProcess = _interopRequireDefault(require("./api/vote-process.router"));
 
 var _auth2 = _interopRequireDefault(require("./authentication/auth.router"));
 
+var _tokenAuth = _interopRequireDefault(require("./authentication/token-auth.route"));
+
 var _home = _interopRequireDefault(require("./home.router"));
 
 var _admin = _interopRequireDefault(require("./logged-in/admin.router"));
@@ -53,6 +55,7 @@ var configureRoutes = function configureRoutes(app) {
 
     return (0, _auth.routeProtecter)(req, res, next);
   });
+  app.use('/activate', _tokenAuth["default"]);
   APIRoutes(app);
   app.use(_loggedIn["default"]);
   app.use('/admin', _admin["default"]);

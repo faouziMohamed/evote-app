@@ -101,13 +101,18 @@ var userSchema = new _mongoose.Schema({
   isActivated: {
     type: Boolean,
     "default": false
+  },
+  isLocked: {
+    type: Boolean,
+    "default": false
   }
 }, {
   timeStamp: true
 });
 userSchema.index({
   username: 1,
-  email: 1
+  email: 1,
+  cin: 1
 }, {
   unique: true
 });
@@ -131,7 +136,7 @@ function hashUserPassword(next, user) {
       next();
     });
   });
-} // Everytime a user is saved or the password is changed, hash the password
+} // Everytime a user is saved or the password is hashed
 
 
 userSchema.pre('save', function setPasswordHash(next) {

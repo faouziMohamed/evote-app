@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.verifyUserExists = verifyUserExists;
 exports.getNewCin = getNewCin;
-exports.deleteUser = exports.createUser = exports.existsUserByCIN = exports.existsUserByUsername = exports.existsUserByEmail = exports.existsUserById = exports.getCountUserActivated = exports.findAllUsers = exports.findUserByCIN = exports.findUserById = exports.findUserByUsername = exports.findUserByEmail = void 0;
+exports.updateUserById = exports.deleteUser = exports.createUser = exports.existsUserByCIN = exports.existsUserByUsername = exports.existsUserByEmail = exports.existsUserById = exports.getCountUserActivated = exports.findAllUsers = exports.findUserByCIN = exports.findUserById = exports.findUserByUsername = exports.findUserByEmail = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -295,55 +295,55 @@ function verifyUserExists(_x9) {
 }
 
 function _verifyUserExists() {
-  _verifyUserExists = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee13(_ref11) {
+  _verifyUserExists = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee14(_ref11) {
     var _id, email, username, cin;
 
-    return _regenerator["default"].wrap(function _callee13$(_context13) {
+    return _regenerator["default"].wrap(function _callee14$(_context14) {
       while (1) {
-        switch (_context13.prev = _context13.next) {
+        switch (_context14.prev = _context14.next) {
           case 0:
             _id = _ref11.id, email = _ref11.email, username = _ref11.username, cin = _ref11.cin;
 
             if (!_id) {
-              _context13.next = 3;
+              _context14.next = 3;
               break;
             }
 
-            return _context13.abrupt("return", existsUserById(_id));
+            return _context14.abrupt("return", existsUserById(_id));
 
           case 3:
             if (!email) {
-              _context13.next = 5;
+              _context14.next = 5;
               break;
             }
 
-            return _context13.abrupt("return", existsUserByEmail(email));
+            return _context14.abrupt("return", existsUserByEmail(email));
 
           case 5:
             if (!username) {
-              _context13.next = 7;
+              _context14.next = 7;
               break;
             }
 
-            return _context13.abrupt("return", existsUserByUsername(username));
+            return _context14.abrupt("return", existsUserByUsername(username));
 
           case 7:
             if (!cin) {
-              _context13.next = 9;
+              _context14.next = 9;
               break;
             }
 
-            return _context13.abrupt("return", existsUserByCIN(cin));
+            return _context14.abrupt("return", existsUserByCIN(cin));
 
           case 9:
             throw new Error('No user to verify');
 
           case 10:
           case "end":
-            return _context13.stop();
+            return _context14.stop();
         }
       }
-    }, _callee13);
+    }, _callee14);
   }));
   return _verifyUserExists.apply(this, arguments);
 }
@@ -353,28 +353,28 @@ function getNewCin(_x10) {
 }
 
 function _getNewCin() {
-  _getNewCin = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee14(UserModel) {
+  _getNewCin = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee15(UserModel) {
     var users, cin;
-    return _regenerator["default"].wrap(function _callee14$(_context14) {
+    return _regenerator["default"].wrap(function _callee15$(_context15) {
       while (1) {
-        switch (_context14.prev = _context14.next) {
+        switch (_context15.prev = _context15.next) {
           case 0:
-            _context14.next = 2;
+            _context15.next = 2;
             return UserModel.find({}).sort({
               cin: -1
             }).limit(1).exec();
 
           case 2:
-            users = _context14.sent;
+            users = _context15.sent;
             cin = users.length && Number(users[0].cin) + 1 || _config["default"].DEFAULT_CIN;
-            return _context14.abrupt("return", cin);
+            return _context15.abrupt("return", cin);
 
           case 5:
           case "end":
-            return _context14.stop();
+            return _context15.stop();
         }
       }
-    }, _callee14);
+    }, _callee15);
   }));
   return _getNewCin.apply(this, arguments);
 }
@@ -494,3 +494,33 @@ var deleteUser = /*#__PURE__*/function () {
 }();
 
 exports.deleteUser = deleteUser;
+
+var updateUserById = /*#__PURE__*/function () {
+  var _ref15 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee13(_id) {
+    var update,
+        _args13 = arguments;
+    return _regenerator["default"].wrap(function _callee13$(_context13) {
+      while (1) {
+        switch (_context13.prev = _context13.next) {
+          case 0:
+            update = _args13.length > 1 && _args13[1] !== undefined ? _args13[1] : {};
+            return _context13.abrupt("return", _users["default"].findByIdAndUpdate(_id, {
+              $set: update
+            }, {
+              "new": true
+            }).exec());
+
+          case 2:
+          case "end":
+            return _context13.stop();
+        }
+      }
+    }, _callee13);
+  }));
+
+  return function updateUserById(_x13) {
+    return _ref15.apply(this, arguments);
+  };
+}();
+
+exports.updateUserById = updateUserById;
