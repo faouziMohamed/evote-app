@@ -15,7 +15,7 @@ routerAPI.route(['/info/id/:id', '/info/cin/:cin']).get(async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
-      error: `Error getting candidate informations : ==> ${error}`,
+      error: `Error getting candidates informations : ==> ${error}`,
     });
   }
 });
@@ -27,7 +27,7 @@ routerAPI.route('/info/').get(async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      error: `Error getting All candidate informations : ==> ${error}`,
+      error: `Error getting All candidates informations : ==> ${error}`,
     });
   }
 });

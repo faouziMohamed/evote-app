@@ -20,9 +20,8 @@ export async function useCandidateModal({
 
   removeLoader();
   data.forEach((candidate) => {
-    const { openModalButton, closeModalButton, modal } =
-      candiateModalConstructor(candidate, lang, candidateWrapper);
-
+    const value = candiateModalConstructor(candidate, lang, candidateWrapper);
+    const { openModalButton, closeModalButton, modal } = value;
     useModal({
       modalContainerElment: modalContainer,
       openButtonElement: openModalButton,

@@ -32,8 +32,8 @@ class ActivationForm {
       });
     } else {
       showSuccessDialog({
-        modalTitle: 'Activation Success',
-        modalText: `Your account has been activated successfully! ${ok}`,
+        modalTitle: 'Activation link sent',
+        modalText: ok,
         parentEl: this.dialogParent,
         btnEventCallback: () => redirectTo('/'),
       });
