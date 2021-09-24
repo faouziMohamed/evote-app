@@ -271,7 +271,8 @@ var UserAddModal = /*#__PURE__*/function () {
       var opt = {
         type: type,
         name: name,
-        placeholder: placeholder,
+        'data-name': placeholder,
+        placeholder: '',
         id: id,
         required: required,
         "class": classname
