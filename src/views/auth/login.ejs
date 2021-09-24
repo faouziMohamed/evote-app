@@ -16,13 +16,14 @@
   <form action="/login" method="POST" class="auth-form" id="auth-form">
     <div class="form-floating">
       <input
+        data-name="<%= content[lang].usernameLabel %>"
         type="text"
         class="form-floating__input form-control"
         id="username"
         name="username"
-        placeholder="<%= content[lang].usernameLabel %>"
+        placeholder=""
         minlength="3"
-        pattern="^[a-z][a-z0-9_]{3,}$"
+        pattern="^[a-zA-Z][a-zA-Z0-9_]{3,}$"
         required
       />
       <label for="username" class="form-floating__label">
@@ -31,11 +32,12 @@
     </div>
     <div class="form-floating">
       <input
+        data-name="<%= content[lang].passwordLabel %>"
         type="password"
         name="password"
         class="form-floating__input form-control"
         id="password"
-        placeholder="<%= content[lang].passwordLabel %>"
+        placeholder=""
         required
       />
       <label for="password" name="password" class="form-floating__label">
