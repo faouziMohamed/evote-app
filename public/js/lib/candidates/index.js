@@ -88,11 +88,10 @@ function _useCandidateModal() {
             lang = localStorage.getItem('lang');
             removeLoader();
             data.forEach(function (candidate) {
-              var _candiateModalConstru = candiateModalConstructor(candidate, lang, candidateWrapper),
-                  openModalButton = _candiateModalConstru.openModalButton,
-                  closeModalButton = _candiateModalConstru.closeModalButton,
-                  modal = _candiateModalConstru.modal;
-
+              var value = candiateModalConstructor(candidate, lang, candidateWrapper);
+              var openModalButton = value.openModalButton,
+                  closeModalButton = value.closeModalButton,
+                  modal = value.modal;
               (0, _candidates.useModal)({
                 modalContainerElment: modalContainer,
                 openButtonElement: openModalButton,

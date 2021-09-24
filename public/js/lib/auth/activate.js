@@ -86,8 +86,8 @@ var ActivationForm = /*#__PURE__*/function () {
                   });
                 } else {
                   (0, _index.showSuccessDialog)({
-                    modalTitle: 'Activation Success',
-                    modalText: "Your account has been activated successfully! ".concat(ok),
+                    modalTitle: 'Activation link sent',
+                    modalText: ok,
                     parentEl: this.dialogParent,
                     btnEventCallback: function btnEventCallback() {
                       return (0, _utils.redirectTo)('/');

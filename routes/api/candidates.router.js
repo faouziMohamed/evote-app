@@ -49,7 +49,7 @@ routerAPI.route(['/info/id/:id', '/info/cin/:cin']).get( /*#__PURE__*/function (
             _context.prev = 10;
             _context.t3 = _context["catch"](0);
             res.status(400).json({
-              error: "Error getting candidate informations : ==> ".concat(_context.t3)
+              error: "Error getting candidates informations : ==> ".concat(_context.t3)
             });
 
           case 13:
@@ -90,7 +90,7 @@ routerAPI.route('/info/').get( /*#__PURE__*/function () {
             _context2.prev = 9;
             _context2.t3 = _context2["catch"](0);
             res.status(500).json({
-              error: "Error getting All candidate informations : ==> ".concat(_context2.t3)
+              error: "Error getting All candidates informations : ==> ".concat(_context2.t3)
             });
 
           case 12:
