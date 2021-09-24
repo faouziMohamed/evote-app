@@ -114,7 +114,7 @@ export default class UserAdd {
     });
     const { role } = form.elements;
     const { userType } = form.elements;
-    data.role = role ? 'admin' : 'user';
+    data.role = role.checked ? 'admin' : 'user';
     data.userType = userType.checked ? 'candidate' : 'voter';
     return data;
   }
