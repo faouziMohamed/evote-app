@@ -232,7 +232,15 @@ export class UserAddModal {
     pattern = null,
   }) {
     const classname = `${className} form-control form-floating__input`;
-    const opt = { type, name, placeholder, id, required, class: classname };
+    const opt = {
+      type,
+      name,
+      'data-name': placeholder,
+      placeholder: '',
+      id,
+      required,
+      class: classname,
+    };
     if (pattern) opt.pattern = pattern;
 
     return newElement('input', { ...opt });
