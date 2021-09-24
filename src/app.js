@@ -14,7 +14,6 @@ import path from 'path';
 import Config from './config/config';
 import { usePassportLocalStrategy } from './controllers/passport';
 import { configureRoutes } from './routes/api-routes';
-// import { addRandomUserToDB } from './utils/users.utils';
 
 const app = express();
 
