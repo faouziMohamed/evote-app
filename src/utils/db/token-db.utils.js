@@ -12,7 +12,13 @@ export const createToken = async ({
 
 export const getUserTokens = async ({ userId }) =>
   Token.find({ userId }).exec();
+
 export const existsToken = async ({ token }) => Token.exists({ token });
+
+export const getToken = async ({ userId, type }) =>
+  Token.findOne({ userId, type }).exec();
+
+export const findTokenByID = async (tid) => Token.findById(tid).exec();
 
 export const getUserIdFromToken = async ({ token, type }) => {
   if (!type) throw new Error('Token type is required');

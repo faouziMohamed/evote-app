@@ -40,7 +40,7 @@ function getMsgBody({
 }
 
 function getActivationMsg({ data = { token: '' }, user = userData }) {
-  const btnLink = `${process.env.BASE_URL}/activate/?token=${data.token}`;
+  const btnLink = `${process.env.BASE_URL}/api/activate/?token=${data.token}`;
   const btnContent = 'Verify account';
   const header = getHeaderTemplate({ data: { btnLink, btnContent } });
   const messageContent = getMsgBody({

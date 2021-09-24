@@ -128,7 +128,12 @@ export async function readUserData(req, genPassword = true) {
   return data;
 }
 
-function readAndvalidateWithRegex({ username, email, lastname, firstname }) {
+export function readAndvalidateWithRegex({
+  username,
+  email,
+  lastname,
+  firstname,
+}) {
   if (!username || !email || !lastname || !firstname) {
     throw new Error(getAuthErrorMessage('missinParams'));
   }
@@ -160,7 +165,7 @@ function readAndvalidateWithRegex({ username, email, lastname, firstname }) {
     name: { first, last },
   };
 }
-function readAndValidatePassword(req, genPassword) {
+export function readAndValidatePassword(req, genPassword = true) {
   if (genPassword) {
     return { password: generateRandomString(8) };
   }

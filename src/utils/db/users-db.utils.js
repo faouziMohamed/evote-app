@@ -75,10 +75,12 @@ export const deleteUser = async ({ id, cin, username, email }) => {
   else if (email) query.email = email;
   else throw new Error('No user id, cin, username or email provided');
   const user = await User.findOneAndDelete(query).exec();
-  if (user?.userType === 'candidate') {
-    await deleteCandidateByUserId(user._id);
-  }
+  if (user?.userType === 'candidate') await deleteCandidateByUserId(user._id);
 };
 
 export const updateUserById = async (_id, update = {}) =>
-  User.findByIdAndUpdate(_id, { $set: update }, { new: true }).exec();
+  User.findByIdAndUpdate(
+    _id,
+    { $set: update },
+    { select: '+password', new: true },
+  ).exec();

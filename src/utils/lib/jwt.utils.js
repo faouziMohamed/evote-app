@@ -4,7 +4,7 @@ import Config from '../../config/config';
 
 export const newToken = (user) => {
   const { secret, expiry } = Config.jwt;
-  const token = sign({ id: user._id, mama: 'Faouzi' }, secret, {
+  const token = sign({ id: user._id }, secret, {
     expiresIn: expiry,
   });
   return token;

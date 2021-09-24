@@ -1,3 +1,4 @@
+import cookie from 'cookie';
 import passport from 'passport';
 
 import Config from '../config/config';
@@ -9,12 +10,24 @@ import {
 import { getLoginPageData } from '../data/auth/login.cms';
 import { getNewPairPageData } from '../data/auth/newPaire.cms';
 import { getRegisterPageData } from '../data/auth/register.cms';
+import { getUpdateInfoPageData } from '../data/auth/update-info.cms';
+import { getToken } from '../utils/token.utils';
 import {
   createUser,
   existsUserByEmail,
   existsUserByUsername,
+  updateUserById,
 } from '../utils/users.utils';
-import { readUserData } from './users.controllers';
+import {
+  hashPassword,
+  invalidateCookie,
+  readValueFromCookies,
+} from '../utils/utils';
+import {
+  readAndValidatePassword,
+  readAndvalidateWithRegex,
+  readUserData,
+} from './users.controllers';
 
 export const loginGET = (req, res) => {
   const pageData = getLoginPageData({ user: req.user, layout: 'auth/layout' });
@@ -76,7 +89,6 @@ export const newPairGET = (req, res) => {
 
 export const activateGET = (req, res) => {
   const pageData = getActivatePageData({
-    user: req.user,
     isNewPaire_page: true,
     layout: 'auth/layout',
   });
@@ -86,11 +98,60 @@ export const activateGET = (req, res) => {
   res.render('auth/activate', pageData);
 };
 
+export const updateInfoGET = (req, res) => {
+  const c = cookie.parse(req.headers.cookie)?.uif;
+  if (!c) return res.redirect('/activate');
+  const pageData = getUpdateInfoPageData({
+    user: req.user,
+    layout: 'auth/layout',
+  });
+
+  [pageData.error] = req.flash('error');
+  [pageData.success] = req.flash('success');
+  return res.render('auth/update-info', pageData);
+};
+
+export const updateInfoPOST = async (req, res) => {
+  try {
+    const uifCookie = readValueFromCookies(req, 'uif');
+    const { UID: id, email, tid } = uifCookie;
+
+    if (!id) {
+      req.flash('error', getAuthErrorMessage('missingID'));
+      return res.redirect('/activate');
+    }
+    const tokDoc = await getToken({ userId: id, type: 'activation' });
+
+    if (String(tid) !== String(tokDoc._id)) {
+      req.flash('error', getAuthErrorMessage('invalidToken'));
+      return res.redirect('/activate');
+    }
+    const userData = readAndvalidateWithRegex({ ...req.body, email });
+    const alreadyUsed = await isFieldAlreadyUsed({ ...userData, email: null });
+    if (alreadyUsed) {
+      const tokUrl = `/api/activate/?token=${tokDoc.token}[${tid}]`;
+      req.flash('error', getAuthErrorMessage(alreadyUsed));
+      return res.redirect(tokUrl);
+    }
+    const { password } = readAndValidatePassword(req, false);
+    userData.isActivated = true;
+    userData.password = await hashPassword(password);
+    await updateUserById(id, userData);
+
+    invalidateCookie(res, 'uif');
+    req.flash('success', getAuthSuccessMessage('updateSuccess'));
+    return res.redirect('/login');
+  } catch (err) {
+    return res.status(400).json(err.message);
+  }
+};
+
 export const routeProtecter = (req, res, next) => {
-  const freePath = ['/api/users/verify', '/api/activate'];
-  const isProtectedPath = (path) => freePath.some((p) => !path.startsWith(p));
+  const freePath = ['/update-info', '/api/users/verify', '/api/activate'];
+  const isFreePath = (path) => freePath.some((p) => path.startsWith(p));
   let fn = next;
-  if (isProtectedPath(req.path)) {
+
+  if (!isFreePath(req.path)) {
     fn = !req.user
       ? () => useUnprotectedPath(req, res, next)
       : () => useProtectedPath(req, res, next);
@@ -110,25 +171,27 @@ function useUnprotectedPath(req, res, next) {
 function useProtectedPath(req, res, next) {
   const authPath = ['/login', '/activate', '/register'];
   const adminPath = ['/admin', '/api/admin'];
-  const { isAdmin } = req.user;
+  const { role } = req.user;
   const redirectTo = (path) => res.redirect(path);
   const isAuthPath = (path) => authPath.some((p) => path.startsWith(p));
   const isAdminPath = (path) => adminPath.some((p) => path.startsWith(p));
   let fn = next;
   if (isAuthPath(req.url)) fn = () => redirectTo('/vote');
-  else if (!isAdmin && isAdminPath(req.path)) {
+  else if (role !== 'admin' && isAdminPath(req.path)) {
     const error = getAuthErrorMessage('onlyAdminAllowed');
     fn = () => res.status(401).json({ error });
   }
   return fn();
 }
 
-async function isFieldAlreadyUsed({ username, email }) {
-  let userFound = await existsUserByUsername(username);
-  if (userFound) return 'usernameUsed';
+async function isFieldAlreadyUsed({ username = '', email = '' }) {
+  if (username && (await existsUserByUsername(username))) {
+    return 'usernameUsed';
+  }
 
-  userFound = await existsUserByEmail(email);
-  if (userFound) return 'emailUsed';
+  if (email && (await existsUserByEmail(email))) {
+    return 'emailUsed';
+  }
   return false;
 }
 

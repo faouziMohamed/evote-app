@@ -7,6 +7,7 @@ export function showDialog({
   modalText = 'Success',
   parentEl = document.body,
   forceNewParent = false,
+  btnEventCallback = null,
 }) {
   const options = {
     modalType,
@@ -18,6 +19,9 @@ export function showDialog({
   const dialogParent = dialog.getDialogWithParent();
   dialog.attachEventsTo('btnOk', 'click', () => {
     dialogParent.remove(dialogParent);
+    if (btnEventCallback) {
+      btnEventCallback();
+    }
   });
   const mainContent = document.querySelector('.main-content');
   if (forceNewParent) {
@@ -34,6 +38,7 @@ export function showSuccessDialog({
   modalOkBtnText = 'Close',
   modalTitle = 'User added',
   parentEl = document.body,
+  btnEventCallback = null,
 }) {
   showDialog({
     modalType: 'success',
@@ -41,6 +46,7 @@ export function showSuccessDialog({
     modalTitle,
     modalText,
     parentEl,
+    btnEventCallback,
   });
 }
 
@@ -49,6 +55,7 @@ export function showErrorDialog({
   modalOkBtnText = 'Ok',
   modalText = 'An error occured, please retry!',
   parentEl = document.body,
+  btnEventCallback = null,
 }) {
   showDialog({
     modalType: 'error',
@@ -56,5 +63,6 @@ export function showErrorDialog({
     modalOkBtnText,
     modalText,
     parentEl,
+    btnEventCallback,
   });
 }

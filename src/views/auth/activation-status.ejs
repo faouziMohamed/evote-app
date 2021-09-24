@@ -1,0 +1,24 @@
+<div class="spinner_preloader spinner_semi_transparent">
+  <div class="load_spinner"></div>
+</div>
+<header class="page-header">
+  <h1 class="page-header__title"><%= pageTitle %></h1>
+</header>
+
+<div class="alert-dialog-parent">
+  <div class="alert-dialog" style="max-width: 400px; width: 60%">
+    <h2 class="alert-dialog-title">Activation Error</h2>
+    <div class="alert-dialog-body">
+      <p class="alert-dialog-text"><%= errorMessage %></p>
+    </div>
+    <div class="alert-dialog-btn-container">
+      <a
+        href="/activate"
+        class="alert-dialog-btn btn-error"
+        style="text-align: center; text-decoration: none"
+      >
+        Ok
+      </a>
+    </div>
+  </div>
+</div>

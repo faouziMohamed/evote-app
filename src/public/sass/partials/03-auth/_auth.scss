@@ -29,6 +29,7 @@
 }
 
 .right-side {
+  position: relative;
   display: flex;
   flex-direction: column;
   padding: 0.5rem 1rem;
@@ -71,6 +72,7 @@
 }
 
 .auth-form-wrapper {
+  position: relative;
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -87,13 +89,14 @@
 }
 
 .auth-success-msg {
-  color: rgb(42, 255, 106);
-  background-color: rgb(175, 231, 222);
+  color: #00551a;
+  background-color: #b0fff7;
   padding-block: 0.5rem;
   text-align: center;
   border: 1px solid #bad7f2;
-  box-shadow: 0 0 9px 2px rgb(196, 253, 255);
+  box-shadow: 0 0 9px 2px #c4fdff;
   margin-block: 1rem 0;
+  font-weight: 600;
 }
 
 .auth-form {

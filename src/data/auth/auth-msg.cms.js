@@ -16,6 +16,7 @@ const messages = {
       invalidFirstName: 'The first name is invalid',
       invalidLastName: 'The last name is invalid',
       invalidValue: 'The value is invalid',
+      invalidToken: 'The token is invalid',
       missingID: 'Missing parameters, user id is required',
       missingUsername: 'Missing parameters, username is required',
       missinParams: 'Missing parameters, some fields are required',
@@ -40,6 +41,7 @@ const messages = {
       registrationSuccess:
         'Your account is now created, connect ' +
         'to your account to finish the registration process',
+      updateSuccess: 'Update succeed, you can now connect to your account',
       privateKeyUpdated: 'Your private key has been updated',
       accountUpdated: 'Your account has been updated',
     },
@@ -62,6 +64,7 @@ const messages = {
       invalidEmail: "L'email est invalide",
       invalidUsername: "Le nom d'utilisateur est invalide",
       invalidValue: 'La valeur est invalide',
+      invalidToken: 'Le jeton est invalide',
       missingID: "Paramètres manquants, l'identifiant est requis",
       missingUsername: "Paramètres manquants, le nom d'utilisateur est requis",
       missinParams: 'Paramètres manquants, certains champs sont requis',
@@ -88,6 +91,8 @@ const messages = {
       passWordReset: 'Votre mot de passe a été réinitialisé',
       registrationSuccess:
         "Votre compte a été créé, connectez vous à votre compte pour terminer le processus d'inscription",
+      updateSuccess:
+        'Mise à jour réussie, vous pouvez maintenant vous connecter à votre compte',
       privateKeyUpdated: 'Votre clé privée a été mise à jour',
       accountUpdated: 'Votre compte a été mis à jour',
     },

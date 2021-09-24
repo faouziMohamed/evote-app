@@ -5,9 +5,8 @@ import getActivationMsg from './activation.email';
 
 export default async function sendMessage({ user, msgType = 'activation' }) {
   const token = newToken(user);
-
-  await Token.create({ token, userId: user._id, type: msgType });
-  const mailOptions = getActivationMailOptions(user, token);
+  const doc = await Token.create({ token, userId: user._id, type: msgType });
+  const mailOptions = getActivationMailOptions(user, `${token}[${doc._id}]`);
   return sendMsg(mailOptions);
 }
 

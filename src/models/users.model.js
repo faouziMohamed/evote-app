@@ -2,6 +2,8 @@ import bcrypt from 'bcrypt';
 import { startCase, toLower } from 'lodash';
 import { model, Schema } from 'mongoose';
 
+import { hashPassword } from '../utils/utils';
+
 const userSchema = new Schema(
   {
     username: {
@@ -62,31 +64,17 @@ const userSchema = new Schema(
 
 userSchema.index({ username: 1, email: 1, cin: 1 }, { unique: true });
 
-function hashUserPassword(next, user) {
-  bcrypt.genSalt(10, (err, salt) => {
-    if (err) {
-      next(err);
-      return;
-    }
-    bcrypt.hash(user.password, salt, (error, hash) => {
-      if (error) {
-        next(error);
-        return;
-      }
-      user.set({ password: hash });
-      next();
-    });
-  });
-}
-
 // Everytime a user is saved or the password is hashed
-userSchema.pre('save', function setPasswordHash(next) {
+userSchema.pre('save', async function setPasswordHash(next) {
   const user = this;
-  if (!user.isModified('password')) {
-    next();
-    return;
+  if (!user.isModified('password')) return next();
+  try {
+    const password = await hashPassword(user.password);
+    user.set({ password });
+    return next();
+  } catch (error) {
+    return next(error);
   }
-  hashUserPassword(next, user);
 });
 
 userSchema.pre('save', async function lowerCaseEmail(next) {

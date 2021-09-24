@@ -1,6 +1,8 @@
 export {
   createToken,
   existsToken,
+  findTokenByID,
+  getToken,
   getUserIdFromToken,
   getUserTokens,
   removeAllTokens,
