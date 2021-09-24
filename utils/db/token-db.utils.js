@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.removeAllTokens = exports.getUserIdFromToken = exports.existsToken = exports.getUserTokens = exports.createToken = void 0;
+exports.removeAllTokens = exports.getUserIdFromToken = exports.findTokenByID = exports.getToken = exports.existsToken = exports.getUserTokens = exports.createToken = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -100,43 +100,20 @@ var existsToken = /*#__PURE__*/function () {
 
 exports.existsToken = existsToken;
 
-var getUserIdFromToken = /*#__PURE__*/function () {
+var getToken = /*#__PURE__*/function () {
   var _ref8 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_ref7) {
-    var token, type, doc;
+    var userId, type;
     return _regenerator["default"].wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
-            token = _ref7.token, type = _ref7.type;
-
-            if (type) {
-              _context4.next = 3;
-              break;
-            }
-
-            throw new Error('Token type is required');
-
-          case 3:
-            _context4.next = 5;
-            return _token["default"].findOne({
-              token: token,
+            userId = _ref7.userId, type = _ref7.type;
+            return _context4.abrupt("return", _token["default"].findOne({
+              userId: userId,
               type: type
-            }).lean().exec();
+            }).exec());
 
-          case 5:
-            doc = _context4.sent;
-
-            if (doc) {
-              _context4.next = 8;
-              break;
-            }
-
-            throw new Error('Token not found');
-
-          case 8:
-            return _context4.abrupt("return", doc.userId);
-
-          case 9:
+          case 2:
           case "end":
             return _context4.stop();
         }
@@ -144,26 +121,22 @@ var getUserIdFromToken = /*#__PURE__*/function () {
     }, _callee4);
   }));
 
-  return function getUserIdFromToken(_x4) {
+  return function getToken(_x4) {
     return _ref8.apply(this, arguments);
   };
 }();
 
-exports.getUserIdFromToken = getUserIdFromToken;
+exports.getToken = getToken;
 
-var removeAllTokens = /*#__PURE__*/function () {
-  var _ref10 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(_ref9) {
-    var userId;
+var findTokenByID = /*#__PURE__*/function () {
+  var _ref9 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(tid) {
     return _regenerator["default"].wrap(function _callee5$(_context5) {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
-            userId = _ref9.userId;
-            return _context5.abrupt("return", _token["default"].deleteMany({
-              userId: userId
-            }).exec());
+            return _context5.abrupt("return", _token["default"].findById(tid).exec());
 
-          case 2:
+          case 1:
           case "end":
             return _context5.stop();
         }
@@ -171,8 +144,86 @@ var removeAllTokens = /*#__PURE__*/function () {
     }, _callee5);
   }));
 
-  return function removeAllTokens(_x5) {
-    return _ref10.apply(this, arguments);
+  return function findTokenByID(_x5) {
+    return _ref9.apply(this, arguments);
+  };
+}();
+
+exports.findTokenByID = findTokenByID;
+
+var getUserIdFromToken = /*#__PURE__*/function () {
+  var _ref11 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(_ref10) {
+    var token, type, doc;
+    return _regenerator["default"].wrap(function _callee6$(_context6) {
+      while (1) {
+        switch (_context6.prev = _context6.next) {
+          case 0:
+            token = _ref10.token, type = _ref10.type;
+
+            if (type) {
+              _context6.next = 3;
+              break;
+            }
+
+            throw new Error('Token type is required');
+
+          case 3:
+            _context6.next = 5;
+            return _token["default"].findOne({
+              token: token,
+              type: type
+            }).lean().exec();
+
+          case 5:
+            doc = _context6.sent;
+
+            if (doc) {
+              _context6.next = 8;
+              break;
+            }
+
+            throw new Error('Token not found');
+
+          case 8:
+            return _context6.abrupt("return", doc.userId);
+
+          case 9:
+          case "end":
+            return _context6.stop();
+        }
+      }
+    }, _callee6);
+  }));
+
+  return function getUserIdFromToken(_x6) {
+    return _ref11.apply(this, arguments);
+  };
+}();
+
+exports.getUserIdFromToken = getUserIdFromToken;
+
+var removeAllTokens = /*#__PURE__*/function () {
+  var _ref13 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7(_ref12) {
+    var userId;
+    return _regenerator["default"].wrap(function _callee7$(_context7) {
+      while (1) {
+        switch (_context7.prev = _context7.next) {
+          case 0:
+            userId = _ref12.userId;
+            return _context7.abrupt("return", _token["default"].deleteMany({
+              userId: userId
+            }).exec());
+
+          case 2:
+          case "end":
+            return _context7.stop();
+        }
+      }
+    }, _callee7);
+  }));
+
+  return function removeAllTokens(_x7) {
+    return _ref13.apply(this, arguments);
   };
 }();
 

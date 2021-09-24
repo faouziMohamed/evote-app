@@ -17,6 +17,8 @@ var _lodash = require("lodash");
 
 var _mongoose = require("mongoose");
 
+var _utils = require("../utils/utils");
+
 var userSchema = new _mongoose.Schema({
   username: {
     type: String,
@@ -115,46 +117,61 @@ userSchema.index({
   cin: 1
 }, {
   unique: true
-});
+}); // Everytime a user is saved or the password is hashed
 
-function hashUserPassword(next, user) {
-  _bcrypt["default"].genSalt(10, function (err, salt) {
-    if (err) {
-      next(err);
-      return;
-    }
-
-    _bcrypt["default"].hash(user.password, salt, function (error, hash) {
-      if (error) {
-        next(error);
-        return;
-      }
-
-      user.set({
-        password: hash
-      });
-      next();
-    });
-  });
-} // Everytime a user is saved or the password is hashed
-
-
-userSchema.pre('save', function setPasswordHash(next) {
-  var user = this;
-
-  if (!user.isModified('password')) {
-    next();
-    return;
-  }
-
-  hashUserPassword(next, user);
-});
 userSchema.pre('save', /*#__PURE__*/function () {
-  var _lowerCaseEmail = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(next) {
-    var user, email;
+  var _setPasswordHash = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(next) {
+    var user, password;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
+          case 0:
+            user = this;
+
+            if (user.isModified('password')) {
+              _context.next = 3;
+              break;
+            }
+
+            return _context.abrupt("return", next());
+
+          case 3:
+            _context.prev = 3;
+            _context.next = 6;
+            return (0, _utils.hashPassword)(user.password);
+
+          case 6:
+            password = _context.sent;
+            user.set({
+              password: password
+            });
+            return _context.abrupt("return", next());
+
+          case 11:
+            _context.prev = 11;
+            _context.t0 = _context["catch"](3);
+            return _context.abrupt("return", next(_context.t0));
+
+          case 14:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, this, [[3, 11]]);
+  }));
+
+  function setPasswordHash(_x) {
+    return _setPasswordHash.apply(this, arguments);
+  }
+
+  return setPasswordHash;
+}());
+userSchema.pre('save', /*#__PURE__*/function () {
+  var _lowerCaseEmail = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(next) {
+    var user, email;
+    return _regenerator["default"].wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
           case 0:
             user = this;
             email = user.email;
@@ -165,13 +182,13 @@ userSchema.pre('save', /*#__PURE__*/function () {
 
           case 4:
           case "end":
-            return _context.stop();
+            return _context2.stop();
         }
       }
-    }, _callee, this);
+    }, _callee2, this);
   }));
 
-  function lowerCaseEmail(_x) {
+  function lowerCaseEmail(_x2) {
     return _lowerCaseEmail.apply(this, arguments);
   }
 
@@ -198,29 +215,29 @@ userSchema.pre('save', function lowercaseusername(next) {
 });
 
 userSchema.methods.comparePassword = /*#__PURE__*/function () {
-  var _comparePassword = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(password) {
+  var _comparePassword = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(password) {
     var hashedPassword, isMatch;
-    return _regenerator["default"].wrap(function _callee2$(_context2) {
+    return _regenerator["default"].wrap(function _callee3$(_context3) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context3.prev = _context3.next) {
           case 0:
             hashedPassword = this.password;
-            _context2.next = 3;
+            _context3.next = 3;
             return _bcrypt["default"].compare(password, hashedPassword);
 
           case 3:
-            isMatch = _context2.sent;
-            return _context2.abrupt("return", isMatch);
+            isMatch = _context3.sent;
+            return _context3.abrupt("return", isMatch);
 
           case 5:
           case "end":
-            return _context2.stop();
+            return _context3.stop();
         }
       }
-    }, _callee2, this);
+    }, _callee3, this);
   }));
 
-  function comparePassword(_x2) {
+  function comparePassword(_x3) {
     return _comparePassword.apply(this, arguments);
   }
 

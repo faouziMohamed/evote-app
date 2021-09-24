@@ -15,6 +15,18 @@ Object.defineProperty(exports, "existsToken", {
     return _tokenDb.existsToken;
   }
 });
+Object.defineProperty(exports, "findTokenByID", {
+  enumerable: true,
+  get: function get() {
+    return _tokenDb.findTokenByID;
+  }
+});
+Object.defineProperty(exports, "getToken", {
+  enumerable: true,
+  get: function get() {
+    return _tokenDb.getToken;
+  }
+});
 Object.defineProperty(exports, "getUserIdFromToken", {
   enumerable: true,
   get: function get() {

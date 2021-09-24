@@ -31,7 +31,9 @@ function showDialog(_ref) {
       _ref$parentEl = _ref.parentEl,
       parentEl = _ref$parentEl === void 0 ? document.body : _ref$parentEl,
       _ref$forceNewParent = _ref.forceNewParent,
-      forceNewParent = _ref$forceNewParent === void 0 ? false : _ref$forceNewParent;
+      forceNewParent = _ref$forceNewParent === void 0 ? false : _ref$forceNewParent,
+      _ref$btnEventCallback = _ref.btnEventCallback,
+      btnEventCallback = _ref$btnEventCallback === void 0 ? null : _ref$btnEventCallback;
   var options = {
     modalType: modalType,
     modalTitle: modalTitle,
@@ -42,6 +44,10 @@ function showDialog(_ref) {
   var dialogParent = dialog.getDialogWithParent();
   dialog.attachEventsTo('btnOk', 'click', function () {
     dialogParent.remove(dialogParent);
+
+    if (btnEventCallback) {
+      btnEventCallback();
+    }
   });
   var mainContent = document.querySelector('.main-content');
 
@@ -62,13 +68,16 @@ function showSuccessDialog(_ref2) {
       _ref2$modalTitle = _ref2.modalTitle,
       modalTitle = _ref2$modalTitle === void 0 ? 'User added' : _ref2$modalTitle,
       _ref2$parentEl = _ref2.parentEl,
-      parentEl = _ref2$parentEl === void 0 ? document.body : _ref2$parentEl;
+      parentEl = _ref2$parentEl === void 0 ? document.body : _ref2$parentEl,
+      _ref2$btnEventCallbac = _ref2.btnEventCallback,
+      btnEventCallback = _ref2$btnEventCallbac === void 0 ? null : _ref2$btnEventCallbac;
   showDialog({
     modalType: 'success',
     modalOkBtnText: modalOkBtnText,
     modalTitle: modalTitle,
     modalText: modalText,
-    parentEl: parentEl
+    parentEl: parentEl,
+    btnEventCallback: btnEventCallback
   });
 }
 
@@ -80,12 +89,15 @@ function showErrorDialog(_ref3) {
       _ref3$modalText = _ref3.modalText,
       modalText = _ref3$modalText === void 0 ? 'An error occured, please retry!' : _ref3$modalText,
       _ref3$parentEl = _ref3.parentEl,
-      parentEl = _ref3$parentEl === void 0 ? document.body : _ref3$parentEl;
+      parentEl = _ref3$parentEl === void 0 ? document.body : _ref3$parentEl,
+      _ref3$btnEventCallbac = _ref3.btnEventCallback,
+      btnEventCallback = _ref3$btnEventCallbac === void 0 ? null : _ref3$btnEventCallbac;
   showDialog({
     modalType: 'error',
     modalTitle: modalTitle,
     modalOkBtnText: modalOkBtnText,
     modalText: modalText,
-    parentEl: parentEl
+    parentEl: parentEl,
+    btnEventCallback: btnEventCallback
   });
 }

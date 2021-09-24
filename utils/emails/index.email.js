@@ -25,7 +25,7 @@ function sendMessage(_x) {
 
 function _sendMessage() {
   _sendMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_ref) {
-    var user, _ref$msgType, msgType, token, mailOptions;
+    var user, _ref$msgType, msgType, token, doc, mailOptions;
 
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
@@ -41,10 +41,11 @@ function _sendMessage() {
             });
 
           case 4:
-            mailOptions = getActivationMailOptions(user, token);
+            doc = _context.sent;
+            mailOptions = getActivationMailOptions(user, "".concat(token, "[").concat(doc._id, "]"));
             return _context.abrupt("return", sendMsg(mailOptions));
 
-          case 6:
+          case 7:
           case "end":
             return _context.stop();
         }

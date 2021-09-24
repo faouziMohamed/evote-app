@@ -17,9 +17,10 @@ router.route('/logout').get(function (req, res) {
   });
   res.redirect('/');
 });
-router.route('/activate').get(_auth.activateGET);
-router.route('/login').get(_auth.loginGET).post(_auth.loginPOST);
 router.route('/register').get(_auth.registerGET).post(_auth.registerPOST);
+router.route('/login').get(_auth.loginGET).post(_auth.loginPOST);
+router.route('/activate').get(_auth.activateGET);
+router.route('/update-info').get(_auth.updateInfoGET).post(_auth.updateInfoPOST);
 router.route('/new-pair').get(_auth.newPairGET);
 var _default = router;
 exports["default"] = _default;

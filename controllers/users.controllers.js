@@ -8,6 +8,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.getUserWithCallback = getUserWithCallback;
 exports.createDisplayableData = createDisplayableData;
 exports.readUserData = readUserData;
+exports.readAndvalidateWithRegex = readAndvalidateWithRegex;
+exports.readAndValidatePassword = readAndValidatePassword;
 exports.readAndVerifyUserInput = readAndVerifyUserInput;
 exports.getAllUsers = getAllUsers;
 exports.getUserByCIN = exports.getUserByID = exports.getUserByUsername = void 0;
@@ -378,7 +380,9 @@ function readAndvalidateWithRegex(_ref6) {
   };
 }
 
-function readAndValidatePassword(req, genPassword) {
+function readAndValidatePassword(req) {
+  var genPassword = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
   if (genPassword) {
     return {
       password: (0, _aes.generateRandomString)(8)

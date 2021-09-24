@@ -6,13 +6,17 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.checkBeforeLogin = checkBeforeLogin;
-exports.routeProtecter = exports.activateGET = exports.newPairGET = exports.registerPOST = exports.registerGET = exports.loginPOST = exports.loginGET = void 0;
+exports.routeProtecter = exports.updateInfoPOST = exports.updateInfoGET = exports.activateGET = exports.newPairGET = exports.registerPOST = exports.registerGET = exports.loginPOST = exports.loginGET = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
 var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
+
+var _cookie = _interopRequireDefault(require("cookie"));
 
 var _passport = _interopRequireDefault(require("passport"));
 
@@ -28,9 +32,19 @@ var _newPaire = require("../data/auth/newPaire.cms");
 
 var _register = require("../data/auth/register.cms");
 
+var _updateInfo = require("../data/auth/update-info.cms");
+
+var _token = require("../utils/token.utils");
+
 var _users = require("../utils/users.utils");
 
+var _utils = require("../utils/utils");
+
 var _users2 = require("./users.controllers");
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 var loginGET = function loginGET(req, res) {
   var pageData = (0, _login.getLoginPageData)({
@@ -173,7 +187,6 @@ exports.newPairGET = newPairGET;
 
 var activateGET = function activateGET(req, res) {
   var pageData = (0, _activate.getActivatePageData)({
-    user: req.user,
     isNewPaire_page: true,
     layout: 'auth/layout'
   });
@@ -194,18 +207,139 @@ var activateGET = function activateGET(req, res) {
 
 exports.activateGET = activateGET;
 
-var routeProtecter = function routeProtecter(req, res, next) {
-  var freePath = ['/api/users/verify', '/api/activate'];
+var updateInfoGET = function updateInfoGET(req, res) {
+  var _cookie$parse;
 
-  var isProtectedPath = function isProtectedPath(path) {
+  var c = (_cookie$parse = _cookie["default"].parse(req.headers.cookie)) === null || _cookie$parse === void 0 ? void 0 : _cookie$parse.uif;
+  if (!c) return res.redirect('/activate');
+  var pageData = (0, _updateInfo.getUpdateInfoPageData)({
+    user: req.user,
+    layout: 'auth/layout'
+  });
+
+  var _req$flash17 = req.flash('error');
+
+  var _req$flash18 = (0, _slicedToArray2["default"])(_req$flash17, 1);
+
+  pageData.error = _req$flash18[0];
+
+  var _req$flash19 = req.flash('success');
+
+  var _req$flash20 = (0, _slicedToArray2["default"])(_req$flash19, 1);
+
+  pageData.success = _req$flash20[0];
+  return res.render('auth/update-info', pageData);
+};
+
+exports.updateInfoGET = updateInfoGET;
+
+var updateInfoPOST = /*#__PURE__*/function () {
+  var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(req, res) {
+    var uifCookie, id, email, tid, tokDoc, userData, alreadyUsed, tokUrl, _readAndValidatePassw, password;
+
+    return _regenerator["default"].wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            uifCookie = (0, _utils.readValueFromCookies)(req, 'uif');
+            id = uifCookie.UID, email = uifCookie.email, tid = uifCookie.tid;
+
+            if (id) {
+              _context2.next = 6;
+              break;
+            }
+
+            req.flash('error', (0, _authMsg.getAuthErrorMessage)('missingID'));
+            return _context2.abrupt("return", res.redirect('/activate'));
+
+          case 6:
+            _context2.next = 8;
+            return (0, _token.getToken)({
+              userId: id,
+              type: 'activation'
+            });
+
+          case 8:
+            tokDoc = _context2.sent;
+
+            if (!(String(tid) !== String(tokDoc._id))) {
+              _context2.next = 12;
+              break;
+            }
+
+            req.flash('error', (0, _authMsg.getAuthErrorMessage)('invalidToken'));
+            return _context2.abrupt("return", res.redirect('/activate'));
+
+          case 12:
+            userData = (0, _users2.readAndvalidateWithRegex)(_objectSpread(_objectSpread({}, req.body), {}, {
+              email: email
+            }));
+            _context2.next = 15;
+            return isFieldAlreadyUsed(_objectSpread(_objectSpread({}, userData), {}, {
+              email: null
+            }));
+
+          case 15:
+            alreadyUsed = _context2.sent;
+
+            if (!alreadyUsed) {
+              _context2.next = 20;
+              break;
+            }
+
+            tokUrl = "/api/activate/?token=".concat(tokDoc.token, "[").concat(tid, "]");
+            req.flash('error', (0, _authMsg.getAuthErrorMessage)(alreadyUsed));
+            return _context2.abrupt("return", res.redirect(tokUrl));
+
+          case 20:
+            _readAndValidatePassw = (0, _users2.readAndValidatePassword)(req, false), password = _readAndValidatePassw.password;
+            userData.isActivated = true;
+            _context2.next = 24;
+            return (0, _utils.hashPassword)(password);
+
+          case 24:
+            userData.password = _context2.sent;
+            _context2.next = 27;
+            return (0, _users.updateUserById)(id, userData);
+
+          case 27:
+            (0, _utils.invalidateCookie)(res, 'uif');
+            req.flash('success', (0, _authMsg.getAuthSuccessMessage)('updateSuccess'));
+            return _context2.abrupt("return", res.redirect('/login'));
+
+          case 32:
+            _context2.prev = 32;
+            _context2.t0 = _context2["catch"](0);
+            return _context2.abrupt("return", res.status(400).json(_context2.t0.message));
+
+          case 35:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, null, [[0, 32]]);
+  }));
+
+  return function updateInfoPOST(_x3, _x4) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
+exports.updateInfoPOST = updateInfoPOST;
+
+var routeProtecter = function routeProtecter(req, res, next) {
+  var freePath = ['/update-info', '/api/users/verify', '/api/activate'];
+
+  var isFreePath = function isFreePath(path) {
     return freePath.some(function (p) {
-      return !path.startsWith(p);
+      return path.startsWith(p);
     });
   };
 
   var fn = next;
 
-  if (isProtectedPath(req.path)) {
+  if (!isFreePath(req.path)) {
     fn = !req.user ? function () {
       return useUnprotectedPath(req, res, next);
     } : function () {
@@ -237,7 +371,7 @@ function useUnprotectedPath(req, res, next) {
 function useProtectedPath(req, res, next) {
   var authPath = ['/login', '/activate', '/register'];
   var adminPath = ['/admin', '/api/admin'];
-  var isAdmin = req.user.isAdmin;
+  var role = req.user.role;
 
   var redirectTo = function redirectTo(path) {
     return res.redirect(path);
@@ -258,7 +392,7 @@ function useProtectedPath(req, res, next) {
   var fn = next;
   if (isAuthPath(req.url)) fn = function fn() {
     return redirectTo('/vote');
-  };else if (!isAdmin && isAdminPath(req.path)) {
+  };else if (role !== 'admin' && isAdminPath(req.path)) {
     var error = (0, _authMsg.getAuthErrorMessage)('onlyAdminAllowed');
 
     fn = function fn() {
@@ -270,54 +404,71 @@ function useProtectedPath(req, res, next) {
   return fn();
 }
 
-function isFieldAlreadyUsed(_x3) {
+function isFieldAlreadyUsed(_x5) {
   return _isFieldAlreadyUsed.apply(this, arguments);
 }
 
 function _isFieldAlreadyUsed() {
-  _isFieldAlreadyUsed = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_ref2) {
-    var username, email, userFound;
-    return _regenerator["default"].wrap(function _callee2$(_context2) {
+  _isFieldAlreadyUsed = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(_ref3) {
+    var _ref3$username, username, _ref3$email, email;
+
+    return _regenerator["default"].wrap(function _callee3$(_context3) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context3.prev = _context3.next) {
           case 0:
-            username = _ref2.username, email = _ref2.email;
-            _context2.next = 3;
+            _ref3$username = _ref3.username, username = _ref3$username === void 0 ? '' : _ref3$username, _ref3$email = _ref3.email, email = _ref3$email === void 0 ? '' : _ref3$email;
+            _context3.t0 = username;
+
+            if (!_context3.t0) {
+              _context3.next = 6;
+              break;
+            }
+
+            _context3.next = 5;
             return (0, _users.existsUserByUsername)(username);
 
-          case 3:
-            userFound = _context2.sent;
-
-            if (!userFound) {
-              _context2.next = 6;
-              break;
-            }
-
-            return _context2.abrupt("return", 'usernameUsed');
+          case 5:
+            _context3.t0 = _context3.sent;
 
           case 6:
-            _context2.next = 8;
-            return (0, _users.existsUserByEmail)(email);
-
-          case 8:
-            userFound = _context2.sent;
-
-            if (!userFound) {
-              _context2.next = 11;
+            if (!_context3.t0) {
+              _context3.next = 8;
               break;
             }
 
-            return _context2.abrupt("return", 'emailUsed');
+            return _context3.abrupt("return", 'usernameUsed');
 
-          case 11:
-            return _context2.abrupt("return", false);
+          case 8:
+            _context3.t1 = email;
+
+            if (!_context3.t1) {
+              _context3.next = 13;
+              break;
+            }
+
+            _context3.next = 12;
+            return (0, _users.existsUserByEmail)(email);
 
           case 12:
+            _context3.t1 = _context3.sent;
+
+          case 13:
+            if (!_context3.t1) {
+              _context3.next = 15;
+              break;
+            }
+
+            return _context3.abrupt("return", 'emailUsed');
+
+          case 15:
+            return _context3.abrupt("return", false);
+
+          case 16:
           case "end":
-            return _context2.stop();
+            return _context3.stop();
         }
       }
-    }, _callee2);
+    }, _callee3);
   }));
   return _isFieldAlreadyUsed.apply(this, arguments);
 }

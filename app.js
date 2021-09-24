@@ -37,7 +37,6 @@ var _passport2 = require("./controllers/passport");
 
 var _apiRoutes = require("./routes/api-routes");
 
-// import { addRandomUserToDB } from './utils/users.utils';
 var app = (0, _express["default"])();
 app.use((0, _helmet["default"])()); // view engine setup
 

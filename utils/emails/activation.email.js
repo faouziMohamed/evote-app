@@ -50,7 +50,7 @@ function getActivationMsg(_ref2) {
   } : _ref2$data,
       _ref2$user = _ref2.user,
       user = _ref2$user === void 0 ? userData : _ref2$user;
-  var btnLink = "".concat(process.env.BASE_URL, "/activate/?token=").concat(data.token);
+  var btnLink = "".concat(process.env.BASE_URL, "/api/activate/?token=").concat(data.token);
   var btnContent = 'Verify account';
   var header = (0, _header["default"])({
     data: {

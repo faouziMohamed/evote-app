@@ -1,3 +1,6 @@
+<div class="spinner_preloader spinner_semi_transparent">
+  <div class="load_spinner"></div>
+</div>
 <header class="page-header">
   <h1 class="page-header__title"><%= content[lang].pageTitle %></h1>
   <p class="auth__text">
@@ -7,6 +10,7 @@
 </header>
 <div class="auth-form-wrapper" id="form-parent">
   <%- include("./partials/_useServerMessage") %>
+
   <form class="auth-form" id="activation-form">
     <div class="form-floating">
       <input

@@ -507,6 +507,7 @@ var updateUserById = /*#__PURE__*/function () {
             return _context13.abrupt("return", _users["default"].findByIdAndUpdate(_id, {
               $set: update
             }, {
+              select: '+password',
               "new": true
             }).exec());
 

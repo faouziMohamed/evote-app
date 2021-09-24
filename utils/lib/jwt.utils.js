@@ -16,8 +16,7 @@ var newToken = function newToken(user) {
       secret = _Config$jwt.secret,
       expiry = _Config$jwt.expiry;
   var token = (0, _jsonwebtoken.sign)({
-    id: user._id,
-    mama: 'Faouzi'
+    id: user._id
   }, secret, {
     expiresIn: expiry
   });
