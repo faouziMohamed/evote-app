@@ -245,7 +245,7 @@ var UserAdd = /*#__PURE__*/function () {
       });
       var role = form.elements.role;
       var userType = form.elements.userType;
-      data.role = role ? 'admin' : 'user';
+      data.role = role.checked ? 'admin' : 'user';
       data.userType = userType.checked ? 'candidate' : 'voter';
       return data;
     }
