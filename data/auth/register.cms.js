@@ -18,7 +18,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 var content = {
   en: {
-    pageTitle: 'Activate your account',
+    pageTitle: 'Create an account',
     haveAnAccount: 'Already have an account?',
     signIn: 'Sign in',
     firstNameLabel: 'First name',
