@@ -14,7 +14,19 @@ export const content = {
     cinLabel: 'CIN',
     submitBtn: 'Sign up',
   },
-  fr: {},
+  fr: {
+    pageTitle: 'Créer un compte',
+    haveAnAccount: 'Vous avez déjà un compte?',
+    signIn: 'Se connecter',
+    firstNameLabel: 'Prénom',
+    lastNameLabel: 'Nom',
+    emailLabel: 'Email',
+    passwordLabel: 'Mot de passe',
+    usernameLabel: "Nom d'utilisateur",
+    birthdateLabel: 'Date de naissance',
+    cinLabel: 'CIN',
+    submitBtn: "S'inscrire",
+  },
 };
 
 const metadata = {
