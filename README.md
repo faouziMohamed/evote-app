@@ -60,10 +60,6 @@ Online voting App using basic nodejs, express and openPGP for encryption.
       PASSPHRASE_KEY = 'RANDOMw22PiTFHSECRET0vQdZzUHQvIR98OWbVwpw9qZT_h'
       SESSION_SECRET='cZk_slfK84QiDDo-vMARANDOM SECRET CODElKJRUs-v7QbxUW-4'
     ```
-1. Bundle javascript file for browser (using [webpack5](https://webpack.js.org/ 'Webpack official website')) by running : 
-   |npm |-| yarn|
-   |-----|-|----|
-   |`npm run wpack`|Or|`yarn wpack`|
 1. Then run tests on local typing:
    |npm |-| yarn|
    |-----|-|----|
