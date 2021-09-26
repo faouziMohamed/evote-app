@@ -2,7 +2,7 @@ import { addScriptTag, getCommonPageData } from '../cms.utils';
 
 export const content = {
   en: {
-    pageTitle: 'Activate your account',
+    pageTitle: 'Create an account',
     haveAnAccount: 'Already have an account?',
     signIn: 'Sign in',
     firstNameLabel: 'First name',
