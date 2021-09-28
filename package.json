@@ -9,13 +9,7 @@
     "type": "git",
     "url": "git+https://github.com/faouziMohamed/evote-app.git"
   },
-  "keywords": [
-    "vote",
-    "voting",
-    "elections",
-    "cryptography",
-    "openPGP"
-  ],
+  "keywords": ["vote", "voting", "elections", "cryptography", "openPGP"],
   "engines": {
     "node": ">=14.0.0 <15.0.0"
   },
@@ -84,7 +78,6 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.14.7",
     "@babel/plugin-transform-runtime": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
-    "@types/bcrypt": "^5.0.0",
     "@types/connect-flash": "^0.0.37",
     "@types/cors": "^2.8.12",
     "@types/crypto-js": "^4.0.2",
